@@ -1,0 +1,307 @@
+changes done:
+
+p > strong{
+      font-family: "PT Serif", sans-serif;
+   }
+
+
+.@my_orders>view> added new $getid function
+.@my_orders>view> added order_service in $orders also
+.@in front_model> added getIdbyPhone function
+.@in langauge files added order_service
+.@in view>home>add loop for product type
+.@add table in db product_type
+.@change product_type in submenu in db
+.@add product_type page in view
+.@change in routes for product_type
+.@in front_model add allProducttype, productTypeItems, getProductTypebyId 
+.@change product_type function in front controller
+.@in routes all-product-type
+.@in admin view > header > add all-product-type
+.@in admin view > add all_product_type
+.@in admin.js > add deleteProductType
+.@in admin controller add all_product_type, add_typebyId, update_typebyId, delete_product_type
+.@in admin model > add getAllProductType, getProductTypebyId, addProductType, updateProductType, deleteProductType
+.@in admin controller > update add_product and update_product add $data['product_type'] = $this->Admin_model->activeProductType();
+.@in admin model > add activeProductType
+.@update admin view> add_product, update_product- <label for="description">Type</label> section
+.@in front view> view_item> change quantity field
+.@in front view> footer_menu > change call staff and offer menu
+.@in db > update subscriber table > add call_or_offer
+.@in language file > add offers
+.@in admin view > dashboard > add For Dine In Service section
+.@in admin.js > add callOrOffers
+.@in admin controller > add call_or_offer
+.@in admin model > add > updateSubscriber
+.@in db > add table> offers
+.@in admin view > header > add offers
+.@in admin view > add > offers
+.@in admin controller >add> offers, add_offerbyId, update_offerbyId, delete_offer, offer_upload
+.@in admin model > add> getOffers, getOfferbyId, addOffer, updateOffer, deleteoffer
+.@in admin.js >add> deleteOffer
+.@in front controller in product_type function change productTypeItems to allProductTypeItems
+.@in front model add allProductTypeItems
+
+
+.@in admin view > update add_product and update_product pages with size fields and script at footer
+.@in admin controller add insert code of sizes in insert_product
+.@in admin controller add update code of sizes in update_product
+.@in admin model add insertSizes, getSizes, updateSizes, deleteSizes, getIngredients functions
+.@in db add ingredients table
+.@add quantity in language file
+.@add sizes in language file
+.@add ingredients in language file
+.@in front view > change view_item, tray, my_orders files
+.@in front controller > change functions > add_to_tray, change_quantity
+.@in front model > add getIngredients, getSizes, getSizeById
+.@in db add sizes, ingredients in tray table
+.@in front ajax > change functions > minusqty, addqty
+.@in cashier view > change tray file
+.@in cashier model > add function getSizeById
+.@in kitchen view > change tray file
+.@in kitchen model > add function getSizeById
+
+.@in db > add table > loyality_point
+.@in db > add loyality_point field in table orders
+.@in db > add loyality_point field in table tray
+.@in db > add actual_price field in table orders
+.@in front view > tray page > add loyality point loop 
+.@in front ajax > add addLoyalityPoint, validateTray
+.@in front controller > change place_order function add loyality point loops in both online and cash loops, payment_handler
+.@in front model > add getLoyalityPoints, updateLoyalityPoint
+.@in cashier controller > in confirm_status() > add loyality point section
+.@in cashier model > add getLoyalityPoints, updateLoyalityPoint
+.@in front controller > update profile function
+.@in front view > change profile page
+.@in kitchen controller > change >confirm_status()
+.@in kitchen model > add getOrderById, getLoyalityPoints, updateLoyalityPoint, insertLoyalityPoint
+.@in front view > change > tray, my_orders page
+
+add 10% loyality point on every purchase and user can redeem only if points are 50 or more
+
+To do:
+
+cancel order in cashier---
+url detect on signup---
+shipping address remove---
+page for admin payment successful---
+payment success messages in payment response conditions---
+pay later in user---
+notifications---
+images alignment on user homepage---
+add description---
+add call staff button---
+remember me---
+alerts change---
+payment---
+add notification bell in kitchen---
+check payment of subscriber---
+change currency on user---
+back button---
+stock limit---
+show cancel items to cashier---
+request sent---
+cash on superadmin---
+remove back button---
+dynamic signup image---
+
+notification on menubar---
+display currency on user pages multiple currency---
+dynamic payment option---
+
+language change
+report
+
+
+
+
+search items in user
+
+
+
+<?php
+$dbhost="localhost"; // Host name 
+$username="intelkfl_uit"; // Mysql username 
+$password="admin"; // Mysql password 
+$db="intelkfl_itmodelbook"; // Database name 
+
+
+$con = mysqli_connect("$dbhost","$username","$password","$db");
+
+if(!$con){
+  echo" database not connected";
+}
+?>
+
+//////////////////////////////////////////////////////////////////////////////////
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Audio</title>
+</head>
+<body>
+  <audio src="mysong.mp3" id="my_audio" loop="loop"></audio>
+  <script type="text/javascript">
+    setTimeout(function(){
+      document.getElementById("my_audio").play();
+      console.log('your audio is started just now');
+    }, 8000)
+  </script>
+</body>
+</html>
+
+
+tray->description
+customer->call_staff
+
+
+
+http://azohaa.com/client/smart_restaurant/8/Madina/signup/1/Dine-in/T-01
+
+Dear Merchant,
+
+This is in reference to your below mentioned mail,
+
+Your test account has been created as per your request, Kindly find the below api keys.
+
+merchant_id:     284175      
+ 
+Access Code
+This is the access code for your application. You must send this with each request.
+
+URL:https://www.oxcytech.com
+access_code:     AVPC96HK77BB24CPBB      
+ 
+URL:http://192.168.43.33:80
+access_code:     AVPC03HK55BU87CPUB      
+ 
+Working Key
+Below are the secret keys used for encrypting each request originating from your applications. Ensure you are using the correct key while encrypting requests from different URLs registered with us.
+
+URL:https://www.oxcytech.com
+Working key:     4A55EBD94712CA0B3E13FB21EAF6E444        
+ 
+URL:http://192.168.43.33:80
+Working key:     81942D05B109C03A76FC3A36874022B1        
+
+
+
+Feel free to revert in case of any concerns.
+
+
+Best Regards,
+
+Jyoti Gupta
+CCAvenue Technical Support Team
+Infibeam Avenues Limited
+Mumbai Corporate Office : Plaza Asiad, Level II, S. V. Road, Santa Cruz (West), Mumbai – 400054. India.
+Email: service@ccavenue.com | Phone: +91-22-67425555
+Customer Queries: 401/402/403/404
+Merchant Queries: 405/406/407/408/409/413/416/419
+Integration support : 421/422/423
+Visit us at www.ccavenue.com
+Live Support
+CCAvenue India
+On 11/21/2020 1:13 PM, arshad.sayyed@oxcytech.com wrote:
+I want to Test CC Avenue payment gateway on my localhost. This is my Localhost URL  http://192.168.43.33:80/ please add this URL on Web Store URL of CC Avenue and provide API Keys.
+Thank You.
+
+
+On 2020-11-20 07:46, service@ccavenue.com wrote:
+Dear Merchant,
+
+This is in reference to your below mentioned mail.
+
+Request you to kindly elaborate on your query in order to help us
+understand your concerns more precisely so that we can help you
+better.
+
+If you require any further assistance, please do not hesitate to
+contact us.
+
+         Best Regards,
+
+         RUPESH YADAV
+
+         CCAvenue Technical Support Team
+
+         Infibeam Avenues Limited
+
+         Mumbai Corporate Office : Plaza Asiad, Level II, S. V. Road, Santa
+Cruz (West), Mumbai – 400054. India.
+
+         Phone number - 022-67425555 Customer Queries: 401/402/403/404
+Merchant Queries and Integration Support : 405/406/407/408/409/413/421
+
+         Visit us at : www.ccavenue.com [1] | www.resavenue.com [2] |
+www.billavenue.com [3]
+
+On 11/20/2020 5:10 PM, arshad.sayyed@oxcytech.com wrote:
+
+Required localhost URL : http://192.168.43.33:80/
+
+
+Links:
+------
+[1] https://www.ccavenue.com/
+[2] https://www.resavenue.com/
+[3] https://www.billavenue.com/
+
+
+folder structure in codeigniter?
+explain me MVC in codeigniter?
+if i want to extend a class in controller other than my
+-controller, how do i do it. is it possible, will it work just by adding class name after extends?
+Explain me about controller in codeigniter?
+why do we use helpers in it. what are helpers in codeigniter?
+How will you call a constructor in CodeIgniter?
+
+application_master:
+application_id
+application_name
+created_by
+created_date
+updated_by
+updated_date
+is_active
+
+status_master:
+status_id
+status_name
+created_by
+created_date
+updated_by
+updated_date
+is_active
+
+tickets:
+id
+application_id
+customer_id
+organization_id
+facility_id
+status_id
+summary
+description
+mrn
+encounter
+created_by
+created_date
+updated_by
+updated_date
+
+
+tickets_conversation:
+id
+ticket_id
+message
+message_by
+status_id
+admin_notification
+created_by
+created_date
+updated_by
+updated_date
+
+

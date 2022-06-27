@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css?family=IBM+Plex+Sans:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i|Rubik:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap");
+.theme-primary a:hover, .theme-primary a:active, .theme-primary a:focus {
+  color: #3a70d4; }
+.theme-primary .btn-primary-cust {
+  background-color: #60c2b3;
+  border-color: #60c2b3;
+  color: #ffffff; }
+.theme-primary .text-danger {
+  color: #ff562f !important; }
+.theme-primary .nav-tabs .nav-link.active {
+  border-bottom-color: #3a70d4;
+  background-color: #3a70d4;
+  color: #ffffff; }
+.theme-primary .nav-tabs .nav-link.active:hover, .theme-primary .nav-tabs .nav-link.active:focus {
+    border-bottom-color: #60c2b3;
+    background-color: #60c2b3;
+    color: #ffffff; }
+.theme-primary .nav > li > a:hover, .theme-primary .nav > li > a:active, .theme-primary .nav > li > a:focus {
+  color: #3a70d4; }
+.theme-primary [type=checkbox]:checked + label:before {
+  border-right: 2px solid #3a70d4;
+  border-bottom: 2px solid #3a70d4; }
+.theme-primary .customtab2 li a.nav-link:hover, .theme-primary .customtab2 li a.nav-link:active, .theme-primary .customtab2 li a.nav-link.active {
+  background-color: #60c2b3; }
