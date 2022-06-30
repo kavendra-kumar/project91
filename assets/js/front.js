@@ -1,5 +1,5 @@
 //var base_url = 'http://91.demoserver.co.in/';
-var base_url = 'http://localhost/project91-main/';
+var base_url = 'http://localhost/project91/';
 $(document).ready(function(){
 
   // FOR LOGIN FORM -------------------------------------------------------

@@ -751,8 +751,9 @@ include 'sidebar.php';
 										<div class="form-group">
 											<div class="input-group mb-3">
 												<select id="event_repeat_option" name="event_repeat_option" class="form-control" onchange="showEndDate(this.value);">
-												<option value="Does not repeat">Does not repeat</option>
-												<option value="Daily">Daily</option>
+												<!-- <option value="Does not repeat">Does not repeat</option> -->
+												<option value="Does not repeat">Daily</option>
+												<!-- <option value="Daily">Daily</option> -->
 												<!-- <option value="Weekly">Weekly</option>
 												<option value="Monthly">Monthly</option>
 												<option value="Annually">Annually</option> -->

@@ -377,7 +377,11 @@ class Front_model extends CI_Model {
 
 	function deleteEvent($id)
 	{
+		// $this->db->where('id', $id);
+		// $this->db->delete('events');
 		$this->db->where('id', $id);
+    	$query=$this->db->get('events');
+		$this->db->where('unique_key', $query->row()->unique_key);
 		$this->db->delete('events');
 	}
 

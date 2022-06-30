@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 // $config['base_url'] = 'http://91.demoserver.co.in/';
-$config['base_url'] = 'http://localhost/project91-main/';
+$config['base_url'] = 'http://localhost/project91/';
 
 /*
 |--------------------------------------------------------------------------

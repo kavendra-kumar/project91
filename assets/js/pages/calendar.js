@@ -1,7 +1,7 @@
 //[calendar Javascript]
 
 // var base_url = 'http://91.demoserver.co.in/';
-var base_url = 'http://localhost/project91-main/';
+var base_url = 'http://localhost/project91/';
 
 
 
@@ -212,7 +212,7 @@ var base_url = 'http://localhost/project91-main/';
                   confirmButtonColor: "#04a08b",   
                   confirmButtonText: "Yes",   
                   closeOnConfirm: false 
-              }, function(){ 
+              }, function(){                
                   $.ajax({
                     type: "POST",
                     url: base_url+'front/delete_event',
@@ -226,8 +226,10 @@ var base_url = 'http://localhost/project91-main/';
                             return (ev._id == calEvent._id);   
                         });
                         $this.$viewEventModal.modal('hide');
+                        location.reload();
                     }
-                  });      
+                  });  
+                  
                 });
             });
             $this.$viewEventModal.find('.modal-header').find('.edit-event').unbind('click').click(function () {

@@ -17036,7 +17036,7 @@ time {
   border: 0; }
 
 .fc-widget-content {
-  border-color: rgba(96, 138, 207, 0) !important; }
+  border-color: rgb(221 221 221) !important}
   .fc-widget-content:first-of-type {
     border-left: 0;
     border-right: 0; }
@@ -17090,11 +17090,13 @@ time {
   z-index: 0; }
 
 .fc th.fc-widget-header {
-  color: #777777;
+  color: #fff;
   font-size: 1rem;
-  font-weight: 300;
+  font-weight: 800;
   line-height: 20px;
-  padding: 7px 0; }
+  padding: 7px 0; 
+  background: #336e6a !important;
+}
 .fc th.fc-fri, .fc th.fc-mon, .fc th.fc-sat, .fc th.fc-sun, .fc th.fc-thu, .fc th.fc-tue, .fc th.fc-wed {
   background: transparent; }
 
