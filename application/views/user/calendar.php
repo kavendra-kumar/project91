@@ -43,6 +43,49 @@ if($this->uri->segment(2) == 'myday'){
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 <script src="https://cdn.rawgit.com/kodie/moment-holiday/v1.2.0/moment-holiday.js"></script>
+<style type="text/css">
+		
+.selector{
+    position:relative;
+}
+.selecotr-item{
+    position:relative;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+.selector-item_radio{
+    appearance:none;
+    display:none;
+}
+.selector-item_label{
+	height: 30px !important;
+    width: 30px;
+    text-align: center;
+    border-radius: 9999px;
+    transform: none;
+    padding: 6px!important;
+    background: #f7f7f7;
+    color: #000;
+    line-height: initial !important;
+}
+.selector-item_label:after,
+.selector-item_label:before{
+	content: none !important;
+}
+
+.selector-item_radio:checked + .selector-item_label{
+    background-color:#4169e1;
+    color:#fff;
+    box-shadow:0 0 4px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.5);
+    transform:translateY(-2px);
+}
+@media (max-width:480px) {
+	.selector{
+		width: 90%;
+	}
+}
+	</style>
 
 </head>
 <body class="hold-transition light-skin sidebar-mini theme-primary fixed">
@@ -332,9 +375,10 @@ include 'sidebar.php';
 									<div class="form-group">
 										<div class="input-group mb-3">
 											<select id="event_repeat_option" name="event_repeat_option" class="form-control" onchange="showEndDate(this.value);">
-											<option value="Does not repeat">Does not repeat</option>
+											<!-- <option value="Does not repeat">Does not repeat</option> -->
 											<option value="Daily">Daily</option>
 											<option value="Every Weekday">Every Weekday (Monday to Friday)</option>
+											<option value="Custom">Custom</option>
 											<!-- <option value="Weekly">Weekly</option>
 											<option value="Annually">Annually</option> -->
 										  	</select>
@@ -347,11 +391,12 @@ include 'sidebar.php';
 								</div>
 								<div class="col-md-6">
 									<div class="form-group mt-2">
-										<input type="checkbox" name="event_allDay" id="event_allDay" class="filled-in chk-col-success">
+										<input type="checkbox" name="event_allDay" id="event_allDay" class="filled-in chk-col-success" onclick="check_reminder(this.value)">
 										<label class="control-label" for="event_allDay">All Day</label>
 										<span id="event_allDayErr" class="text-danger"></span>
 									</div>
 								</div>
+								<input type="hidden" name="checkbox_value_get" id="checkbox_value_get" value="true" >
 							</div>	
 							<div class="row end-date-class" style="display: none;">
 								<div class="col-md-12">
@@ -366,8 +411,48 @@ include 'sidebar.php';
 									</div>
 								</div>
 							</div>					
+							<div class="row custom-class" style="display: none;">
+								<div class="col-md-12">
+									<div class="form-group">
+										<div class="input-group mb-3">
+										<div class="cus_radioBTN">
+											<div class="selector">
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio1" name="custom_check" class="selector-item_radio"  value="sunday" checked>
+													<label for="radio1" class="selector-item_label">S</label>
+												</div>
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio2" name="custom_check" class="selector-item_radio" value="monday">
+													<label for="radio2" class="selector-item_label">M</label>
+												</div>
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio3" name="custom_check" class="selector-item_radio" value="tuesday">
+													<label for="radio3" class="selector-item_label">T</label>
+												</div>
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio4" name="custom_check" class="selector-item_radio" value="wednesday">
+													<label for="radio4" class="selector-item_label">W</label>
+												</div>
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio5" name="custom_check" class="selector-item_radio" value="thursday">
+													<label for="radio5" class="selector-item_label">T</label>
+												</div>
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio6" name="custom_check" class="selector-item_radio" value="friday">
+													<label for="radio6" class="selector-item_label">F</label>
+												</div>
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio7" name="custom_check" class="selector-item_radio" value="saturday">
+													<label for="radio7" class="selector-item_label">S</label>
+												</div>
+											</div>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-6" id="old_reminder">
 									<div class="form-group">
 										<div class="input-group mb-3">
 											<select id="event_reminder" name="event_reminder" class="form-control">
@@ -380,6 +465,28 @@ include 'sidebar.php';
 											<option value="1 day before">1 day before</option>
 											<option value="2 days before">2 days before</option>
 											<option value="1 week before">1 week before</option>
+										  	</select>
+										  	<div class="input-group-append">
+												<span class="input-group-text"><i class="fa fa-bell-o"></i></span>
+											</div>
+										</div>
+										  	<span id="event_reminderErr" class="text-danger"></span>
+									</div>
+								</div>
+								<div class="col-md-6" id="new_reminder">
+									<div class="form-group">
+										<div class="input-group mb-3">
+											<select id="event_reminder" name="event_reminder" class="form-control">
+											<option value="No reminder">No reminder</option>
+											<?php
+												if($time_12hrs){
+													foreach ($time_12hrs as $t12hrs) {
+														?>
+														<option value="<?php echo $t12hrs->time; ?>"><?php echo $t12hrs->time; ?></option>
+														<?php
+													}
+												}
+											?>
 										  	</select>
 										  	<div class="input-group-append">
 												<span class="input-group-text"><i class="fa fa-bell-o"></i></span>
@@ -1454,13 +1561,34 @@ function showPriority(i){
 	  });
 </script>
 <script type="text/javascript">
+	$('#new_reminder').hide();
 	function showEndDate(value) 
 	{
-		if(value == 'Daily'){
-			$('.end-date-class').css('display','block');
+		console.log("FEd");
+		// if(value == 'Daily'){
+		// 	$('.end-date-class').css('display','block');
+		// }else{
+		// 	$('.end-date-class').css('display','none');
+		// }
+		if(value == 'Custom'){
+			$('.custom-class').css('display','block');
 		}else{
-			$('.end-date-class').css('display','none');
+			$('.custom-class').css('display','none');
 		}
+	}
+	function check_reminder(value){
+		
+		var check_new_value = $('#checkbox_value_get').val();
+		if(check_new_value == 'true'){
+			$('#checkbox_value_get').val("false");
+			$('#old_reminder').hide();
+			$('#new_reminder').show();
+		}else{
+			$('#checkbox_value_get').val("true");
+			$('#old_reminder').show();
+			$('#new_reminder').hide();
+		}
+
 	}
 </script>	
 </body>
