@@ -1,4 +1,5 @@
-var base_url = 'http://91.demoserver.co.in/';
+// var base_url = 'http://91.demoserver.co.in/';
+var base_url = 'http://localhost/project91-main/';
 $(document).ready(function(){
 // SHOW EVENT HIDE TIME FIELD FOR CREATE ----------------------------------------
   $("#event_allDay").click(function () {
