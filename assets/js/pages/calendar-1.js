@@ -1,6 +1,7 @@
 //[calendar Javascript]
 // var base_url = 'http://91.demoserver.co.in/';
 var base_url = 'http://localhost/project91/';
+// var base_url = 'https://project91.isynbus.com/';
 !function($) {
     "use strict";
 

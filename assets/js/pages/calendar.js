@@ -253,13 +253,20 @@ var base_url = 'http://localhost/project91/';
                         $this.$updateEventModal.find("select[name=event_end_time]").val(moment(calEvent.event_end_time, "HH:mm").format('hh:mm A'));
                         $this.$updateEventModal.find("select[name=event_end_time]").select2().trigger('change');
                         $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', false);
+                        $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('true');
                         $("#date-time-section1").show();
+                        $("#old_reminder_update").show();
+                        $("#new_reminder_update").hide();
                     }else{
                         $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', true);
+                        $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('false');
                         $("#date-time-section1").hide();
+                        $("#new_reminder_update").show();
+                        $("#old_reminder_update").hide();
                     }
                     $this.$updateEventModal.find("select[name='event_repeat_option']").val(calEvent.event_repeat_option); 
-                    $this.$updateEventModal.find("select[name='event_reminder']").val(calEvent.event_reminder); 
+                    $this.$updateEventModal.find("select[name='event_reminder']").val(calEvent.event_reminder);
+                    $this.$updateEventModal.find("select[name='event_reminder_new']").val(calEvent.event_reminder); 
                     if(calEvent.draggable_event == 'on'){
                         $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', true);
                     }else{

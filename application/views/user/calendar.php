@@ -476,7 +476,7 @@ include 'sidebar.php';
 								<div class="col-md-6" id="new_reminder">
 									<div class="form-group">
 										<div class="input-group mb-3">
-											<select id="event_reminder" name="event_reminder" class="form-control">
+											<select id="event_reminder" name="event_reminder_new" class="form-control">
 											<option value="No reminder">No reminder</option>
 											<?php
 												if($time_12hrs){
@@ -767,7 +767,7 @@ include 'sidebar.php';
 									</div>
 									<div class="col-md-6">
 										<div class="form-group mt-2">
-											<input type="checkbox" name="event_allDay" id="event_allDay1" class="filled-in chk-col-success">
+											<input type="checkbox" name="event_allDay" id="event_allDay1" class="filled-in chk-col-success" onclick="check_reminder_update(this.value)">
 											<label class="control-label" for="event_allDay1">All Day</label>
 											<span id="event_allDayErr" class="text-danger"></span>
 										</div>
@@ -787,7 +787,7 @@ include 'sidebar.php';
 									</div>
 								</div>					
 								<div class="row">
-									<div class="col-md-6">
+									<div class="col-md-6" id="old_reminder_update">
 										<div class="form-group">
 											<div class="input-group mb-3">
 												<select id="event_reminder" name="event_reminder" class="form-control">
@@ -808,6 +808,30 @@ include 'sidebar.php';
 											  	<span id="event_reminderErr" class="text-danger"></span>
 										</div>
 									</div>
+									
+									<div class="col-md-6" id="new_reminder_update">
+									<div class="form-group">
+										<div class="input-group mb-3">
+											<select id="event_reminder" name="event_reminder_new" class="form-control">
+											<option value="No reminder">No reminder</option>
+											<?php
+												if($time_12hrs){
+													foreach ($time_12hrs as $t12hrs) {
+														?>
+														<option value="<?php echo $t12hrs->time; ?>"><?php echo $t12hrs->time; ?></option>
+														<?php
+													}
+												}
+											?>
+										  	</select>
+										  	<div class="input-group-append">
+												<span class="input-group-text"><i class="fa fa-bell-o"></i></span>
+											</div>
+										</div>
+										  	<span id="event_reminderErr" class="text-danger"></span>
+									</div>
+									
+								</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<input type="checkbox" name="draggable_event" id="draggable_event1" class="filled-in chk-col-success" checked="">
@@ -818,6 +842,7 @@ include 'sidebar.php';
 								</div>	
 							</div>
 						</div>
+						<input type="hidden" name="checkbox_value_get_update" id="checkbox_value_get_update" value="" >
 						<input type="hidden" name="draggable_id" id="draggable_id">
 						<input type="hidden" name="type" id="type" value="event">
 						<input type="hidden" name="event_id" id="event_id">
@@ -1577,8 +1602,7 @@ function showPriority(i){
 			$('.custom-class').css('display','none');
 		}
 	}
-	function check_reminder(value){
-		
+	function check_reminder(value){		
 		var check_new_value = $('#checkbox_value_get').val();
 		if(check_new_value == 'true'){
 			$('#checkbox_value_get').val("false");
@@ -1588,6 +1612,19 @@ function showPriority(i){
 			$('#checkbox_value_get').val("true");
 			$('#old_reminder').show();
 			$('#new_reminder').hide();
+		}
+
+	}
+	function check_reminder_update(value){		
+		var check_new_value = $('#checkbox_value_get_update').val();
+		if(check_new_value == 'true'){
+			$('#checkbox_value_get_update').val("false");
+			$('#old_reminder_update').hide();
+			$('#new_reminder_update').show();
+		}else{
+			$('#checkbox_value_get_update').val("true");
+			$('#old_reminder_update').show();
+			$('#new_reminder_update').hide();
 		}
 
 	}

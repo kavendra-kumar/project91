@@ -8,6 +8,7 @@
 		  <!-- logo-->
 		  <div class="logo-lg">
 			  <!-- <span class="light-logo"><img src="<?php echo base_url('assets/');?>images/logo-dark-text1.png" alt="logo"></span> -->
+			 Project91 
 			  <span class="light-logo-m"><img src="<?php echo base_url('assets/');?>images/logo-dark-text2.png" alt="logo"></span>
 			  <span class="dark-logo"><img src="<?php echo base_url('assets/');?>images/logo-dark-text1.png" alt="logo"></span>
 		  </div>

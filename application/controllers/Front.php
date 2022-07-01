@@ -389,6 +389,13 @@ class Front extends MY_Controller {
 
     public function insert_draggable_event() //Insert Draggable Event Details
     {
+        
+        if($this->input->post('event_allDay') == 'on'){
+            $event_reminder = $this->input->post('event_reminder_new');
+        }else{
+            $event_reminder = $this->input->post('event_reminder') ;
+        }
+        
         $unique_key = uniqid();
         $this->form_validation->set_rules('event_name','Event Name','trim|required');
         $this->form_validation->set_rules('event_color','Event Color','trim|required');
@@ -465,7 +472,7 @@ class Front extends MY_Controller {
                                     'event_end_time' => $event_end_time,
                                     'event_repeat_option' => $this->input->post('event_repeat_option'),
                                     'event_allDay' => $allDay,
-                                    'event_reminder' => $this->input->post('event_reminder'),
+                                    'event_reminder' => $event_reminder,
                                     'show_draggable_event' => 1,
                                     'status' => 'active',
                                     'date' => date('Y-m-d H:i:s')
@@ -493,7 +500,7 @@ class Front extends MY_Controller {
                                     'unique_key' => $unique_key,
                                     'event_repeat_option' => 'Does not repeat',
                                     'event_allDay' => $allDay,
-                                    'event_reminder' => $this->input->post('event_reminder'),
+                                    'event_reminder' => $event_reminder,
                                     'draggable_event' => $this->input->post('draggable_event'),
                                     'draggable_id' => $response['drag_id'],
                                     'type' => $this->input->post('type'),
@@ -565,7 +572,7 @@ class Front extends MY_Controller {
                                     'event_end_time' => $event_end_time,
                                     'event_repeat_option' => 'Does not repeat',
                                     'event_allDay' => $allDay,
-                                    'event_reminder' => $this->input->post('event_reminder'),
+                                    'event_reminder' => $event_reminder,
                                     'draggable_event' => $this->input->post('draggable_event'),
                                     'draggable_id' => $response['drag_id'],
                                     'unique_key' => $unique_key,
@@ -623,7 +630,7 @@ class Front extends MY_Controller {
             $response['event_end_time'] = $event_end_time;              
             $response['event_repeat_option'] = $this->input->post('event_repeat_option');
             $response['event_allDay'] = $allDay; 
-            $response['event_reminder'] = $this->input->post('event_reminder');         
+            $response['event_reminder'] = $event_reminder;         
             $response['draggable_event'] = $this->input->post('draggable_event');       
             $response['draggable_id'] = $response['drag_id'];                   
             $response['status'] = TRUE;
@@ -696,6 +703,12 @@ class Front extends MY_Controller {
 
     public function update_event_form() //Update Event Details
     {
+        if($this->input->post('event_allDay') == 'on'){
+            $event_reminder = $this->input->post('event_reminder_new');
+        }else{
+            $event_reminder = $this->input->post('event_reminder') ;
+        }
+         
         $this->form_validation->set_rules('event_name','Event Name','trim|required');
         $this->form_validation->set_rules('event_color','Event Color','trim|required');
         
@@ -783,7 +796,7 @@ class Front extends MY_Controller {
                                 'event_end_time' => $event_end_time,
                                 'event_repeat_option' => $this->input->post('event_repeat_option'),
                                 'event_allDay' => $allDay,
-                                'event_reminder' => $this->input->post('event_reminder'),
+                                'event_reminder' => $event_reminder,
                                 'show_draggable_event' => 1,
                                 'status' => 'active',
                                 'date' => date('Y-m-d H:i:s')
@@ -810,7 +823,7 @@ class Front extends MY_Controller {
                             'event_end_time' => $event_end_time,
                             'event_repeat_option' => $this->input->post('event_repeat_option'),
                             'event_allDay' => $allDay,
-                            'event_reminder' => $this->input->post('event_reminder'),
+                            'event_reminder' => $event_reminder,
                             'draggable_event' => $this->input->post('draggable_event'),
                             'draggable_id' => $draggable_id,
                             'type' => $this->input->post('type'),
@@ -861,7 +874,7 @@ class Front extends MY_Controller {
                 $response['event_end_time'] = $event_end_time;              
                 $response['event_repeat_option'] = $this->input->post('event_repeat_option');
                 $response['event_allDay'] = $allDay;                
-                $response['event_reminder'] = $this->input->post('event_reminder');
+                $response['event_reminder'] = $event_reminder;
                 $response['type'] = $this->input->post('type'); 
                 $response['draggable_event'] = $this->input->post('draggable_event');       
                 $response['draggable_id'] = $draggable_id;      
