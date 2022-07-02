@@ -290,7 +290,19 @@ var base_url = 'http://localhost/project91/';
             var input_edate=input_dd[1];
             var input_stime=$this.$updateEventModal.find("select[name=event_start_time]").val();
             var input_etime=$this.$updateEventModal.find("select[name=event_end_time]").val();
+            var event_repeat_option_value=$this.$updateEventModal.find("#event_repeat_option").val();
 
+            if(event_repeat_option_value == "Custom"){
+                var start_update = new Date(input_sdate),
+                end_update   = new Date(input_edate),
+                diff_update  = new Date(end_update - start_update),
+                days_update  = diff_update/1000/60/60/24;
+                if(days_update<= 7){
+                    $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                    return false;
+                }
+            }
+            
             var op_sdate = new Date(input_sdate+' '+input_stime);
             var op_edate = new Date(input_edate+' '+input_etime);
             if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
@@ -369,6 +381,7 @@ var base_url = 'http://localhost/project91/';
                                         // setTimeout(function(){ 
                                         //    $.CalendarApp.init()
                                         // }, 1000);
+                                        location.reload();
                                         return false;
                                     } 
                                 }                   
@@ -1082,10 +1095,22 @@ var base_url = 'http://localhost/project91/';
             e.preventDefault(); // Stop page from refreshing
             var input_allday = $this.$categoryForm.find("input[name=event_allDay]");
             var ip_sedate=$this.$categoryForm.find("input[name=event_start_end_date]").val();
+           // var event_repeat_option_value=$this.$categoryForm.find("input[name=event_repeat_option]").val();
+            var event_repeat_option_value=$this.$categoryForm.find("#event_repeat_option").val();
             var input_dd = ip_sedate.split(' - ');
 
             var input_sdate=input_dd[0];
             var input_edate=input_dd[1];
+            if(event_repeat_option_value == "Custom"){
+                var start = new Date(input_sdate),
+                end   = new Date(input_edate),
+                diff  = new Date(end - start),
+                days  = diff/1000/60/60/24;
+                if(days<= 7){
+                    $this.$categoryForm.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                    return false;
+                }
+            }
             var input_stime=$this.$categoryForm.find("select[name=event_start_time]").val();
             var input_etime=$this.$categoryForm.find("select[name=event_end_time]").val();
 
@@ -1211,6 +1236,32 @@ var base_url = 'http://localhost/project91/';
             var input_etime=$this.$dragEventForm.find("select[name=event_end_time]").val();
             var op_sdate = new Date('2021-05-05 '+input_stime);
             var op_edate = new Date('2021-05-05 '+input_etime);
+
+            var ip_sedate_update=$this.$categoryForm.find("input[name=event_start_end_date]").val();
+           // var event_repeat_option_value=$this.$categoryForm.find("input[name=event_repeat_option]").val();
+            var event_repeat_option_value=$this.$categoryForm.find("#event_repeat_option").val();
+            var input_dd_update = ip_sedate_update.split(' - ');
+
+            var input_sdate_update=input_dd_update[0];
+            var input_edate_update=input_dd_update[1];
+            console.log("input_edate_update");
+            console.log(input_edate_update);
+            if(event_repeat_option_value == "Custom"){
+                var start_update = new Date(input_sdate_update),
+                end_update   = new Date(input_edate_update),
+                diff_update  = new Date(end_update - start_update),
+                days_update  = diff_update/1000/60/60/24;
+                console.log("days_update");
+            console.log(days_update);
+                if(days_update<= 7){
+                    $this.$dragEventForm.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                    return false;
+                }
+            }
+            console.log("event_repeat_option_value");
+            console.log(event_repeat_option_value);
+            return false;
+            
             if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
             {
                 var formData = new FormData(this);             
