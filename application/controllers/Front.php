@@ -1772,6 +1772,7 @@ class Front extends MY_Controller {
                                     'draggable_event' => $d->draggable_event,
                                     'draggable_id' => $d->draggable_id,
                                     'type' => $d->type,
+                                    'unique_key' => $d->unique_key,
 
                                  );
                     $data_array[] = $data1;

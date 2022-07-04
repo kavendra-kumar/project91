@@ -223,6 +223,12 @@ var base_url = 'http://localhost/project91/';
                     success: function(html){
                         swal("Deleted!", "Successfully.", "success"); 
                         $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                            console.log("ev");
+                            console.log(ev);
+                            console.log("calEvent._id");
+                            console.log(calEvent._id);
+                            console.log("ev._id");
+                            console.log(ev._id);
                             return (ev._id == calEvent._id);   
                         });
                         $this.$viewEventModal.modal('hide');
@@ -399,7 +405,7 @@ var base_url = 'http://localhost/project91/';
         var $this = this;
         $this.$categoryModal.modal({
             backdrop: 'static'
-        });
+        }); 
 
         var startd = $.fullCalendar.formatDate(start, "Y-MM-DD");
         // $this.$categoryModal.find("input[name=event_start_end_date]").val(startd+ ' - ' +startd);
