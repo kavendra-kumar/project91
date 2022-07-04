@@ -223,16 +223,10 @@ var base_url = 'http://localhost/project91/';
                     success: function(html){
                         swal("Deleted!", "Successfully.", "success"); 
                         $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
-                            console.log("ev");
-                            console.log(ev);
-                            console.log("calEvent._id");
-                            console.log(calEvent._id);
-                            console.log("ev._id");
-                            console.log(ev._id);
-                            return (ev._id == calEvent._id);   
+                            return (ev.unique_key == calEvent.unique_key);   
                         });
                         $this.$viewEventModal.modal('hide');
-                        location.reload();
+                        //location.reload();
                     }
                   });  
                   
