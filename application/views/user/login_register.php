@@ -77,12 +77,12 @@ $title_name = 'Login - Register';
                           </div>
                           <span id="login_passwordErr" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                           <div class="input-group mb-3">
                             <div class="g-recaptcha" data-sitekey="6Ldw3zocAAAAAG3QmoHLPRc-Y2CBq-SSIFtZE8hf"></div>
                           </div>
                           <span id="recaptchaErr" class="text-danger"></span>
-                        </div>
+                        </div> -->
                         <div class="row">
                           <div class="col-6">
                             <div class="checkbox">

@@ -1,7 +1,7 @@
 //[calendar Javascript]
 
 // var base_url = 'http://91.demoserver.co.in/';
-var base_url = 'http://localhost/project91-main/';
+var base_url = 'http://localhost/project91/';
 
 
 
@@ -212,7 +212,7 @@ var base_url = 'http://localhost/project91-main/';
                   confirmButtonColor: "#04a08b",   
                   confirmButtonText: "Yes",   
                   closeOnConfirm: false 
-              }, function(){ 
+              }, function(){                
                   $.ajax({
                     type: "POST",
                     url: base_url+'front/delete_event',
@@ -223,11 +223,19 @@ var base_url = 'http://localhost/project91-main/';
                     success: function(html){
                         swal("Deleted!", "Successfully.", "success"); 
                         $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                            console.log("ev");
+                            console.log(ev);
+                            console.log("calEvent._id");
+                            console.log(calEvent._id);
+                            console.log("ev._id");
+                            console.log(ev._id);
                             return (ev._id == calEvent._id);   
                         });
                         $this.$viewEventModal.modal('hide');
+                        location.reload();
                     }
-                  });      
+                  });  
+                  
                 });
             });
             $this.$viewEventModal.find('.modal-header').find('.edit-event').unbind('click').click(function () {
@@ -251,13 +259,20 @@ var base_url = 'http://localhost/project91-main/';
                         $this.$updateEventModal.find("select[name=event_end_time]").val(moment(calEvent.event_end_time, "HH:mm").format('hh:mm A'));
                         $this.$updateEventModal.find("select[name=event_end_time]").select2().trigger('change');
                         $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', false);
+                        $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('true');
                         $("#date-time-section1").show();
+                        $("#old_reminder_update").show();
+                        $("#new_reminder_update").hide();
                     }else{
                         $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', true);
+                        $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('false');
                         $("#date-time-section1").hide();
+                        $("#new_reminder_update").show();
+                        $("#old_reminder_update").hide();
                     }
                     $this.$updateEventModal.find("select[name='event_repeat_option']").val(calEvent.event_repeat_option); 
-                    $this.$updateEventModal.find("select[name='event_reminder']").val(calEvent.event_reminder); 
+                    $this.$updateEventModal.find("select[name='event_reminder']").val(calEvent.event_reminder);
+                    $this.$updateEventModal.find("select[name='event_reminder_new']").val(calEvent.event_reminder); 
                     if(calEvent.draggable_event == 'on'){
                         $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', true);
                     }else{
@@ -281,7 +296,19 @@ var base_url = 'http://localhost/project91-main/';
             var input_edate=input_dd[1];
             var input_stime=$this.$updateEventModal.find("select[name=event_start_time]").val();
             var input_etime=$this.$updateEventModal.find("select[name=event_end_time]").val();
+            var event_repeat_option_value=$this.$updateEventModal.find("#event_repeat_option").val();
 
+            if(event_repeat_option_value == "Custom"){
+                var start_update = new Date(input_sdate),
+                end_update   = new Date(input_edate),
+                diff_update  = new Date(end_update - start_update),
+                days_update  = diff_update/1000/60/60/24;
+                if(days_update<= 7){
+                    $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                    return false;
+                }
+            }
+            
             var op_sdate = new Date(input_sdate+' '+input_stime);
             var op_edate = new Date(input_edate+' '+input_etime);
             if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
@@ -360,6 +387,7 @@ var base_url = 'http://localhost/project91-main/';
                                         // setTimeout(function(){ 
                                         //    $.CalendarApp.init()
                                         // }, 1000);
+                                        location.reload();
                                         return false;
                                     } 
                                 }                   
@@ -377,7 +405,7 @@ var base_url = 'http://localhost/project91-main/';
         var $this = this;
         $this.$categoryModal.modal({
             backdrop: 'static'
-        });
+        }); 
 
         var startd = $.fullCalendar.formatDate(start, "Y-MM-DD");
         // $this.$categoryModal.find("input[name=event_start_end_date]").val(startd+ ' - ' +startd);
@@ -1073,10 +1101,22 @@ var base_url = 'http://localhost/project91-main/';
             e.preventDefault(); // Stop page from refreshing
             var input_allday = $this.$categoryForm.find("input[name=event_allDay]");
             var ip_sedate=$this.$categoryForm.find("input[name=event_start_end_date]").val();
+           // var event_repeat_option_value=$this.$categoryForm.find("input[name=event_repeat_option]").val();
+            var event_repeat_option_value=$this.$categoryForm.find("#event_repeat_option").val();
             var input_dd = ip_sedate.split(' - ');
 
             var input_sdate=input_dd[0];
             var input_edate=input_dd[1];
+            if(event_repeat_option_value == "Custom"){
+                var start = new Date(input_sdate),
+                end   = new Date(input_edate),
+                diff  = new Date(end - start),
+                days  = diff/1000/60/60/24;
+                if(days<= 7){
+                    $this.$categoryForm.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                    return false;
+                }
+            }
             var input_stime=$this.$categoryForm.find("select[name=event_start_time]").val();
             var input_etime=$this.$categoryForm.find("select[name=event_end_time]").val();
 
@@ -1202,6 +1242,32 @@ var base_url = 'http://localhost/project91-main/';
             var input_etime=$this.$dragEventForm.find("select[name=event_end_time]").val();
             var op_sdate = new Date('2021-05-05 '+input_stime);
             var op_edate = new Date('2021-05-05 '+input_etime);
+
+            var ip_sedate_update=$this.$categoryForm.find("input[name=event_start_end_date]").val();
+           // var event_repeat_option_value=$this.$categoryForm.find("input[name=event_repeat_option]").val();
+            var event_repeat_option_value=$this.$categoryForm.find("#event_repeat_option").val();
+            var input_dd_update = ip_sedate_update.split(' - ');
+
+            var input_sdate_update=input_dd_update[0];
+            var input_edate_update=input_dd_update[1];
+            console.log("input_edate_update");
+            console.log(input_edate_update);
+            if(event_repeat_option_value == "Custom"){
+                var start_update = new Date(input_sdate_update),
+                end_update   = new Date(input_edate_update),
+                diff_update  = new Date(end_update - start_update),
+                days_update  = diff_update/1000/60/60/24;
+                console.log("days_update");
+            console.log(days_update);
+                if(days_update<= 7){
+                    $this.$dragEventForm.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                    return false;
+                }
+            }
+            console.log("event_repeat_option_value");
+            console.log(event_repeat_option_value);
+            return false;
+            
             if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
             {
                 var formData = new FormData(this);             
