@@ -2,6 +2,7 @@
 
 // var base_url = 'http://91.demoserver.co.in/';
 var base_url = 'http://localhost/project91/';
+// var base_url = 'https://project91.isynbus.com/';
 
 
 
@@ -402,9 +403,11 @@ var base_url = 'http://localhost/project91/';
         }); 
 
         var startd = $.fullCalendar.formatDate(start, "Y-MM-DD");
-        // $this.$categoryModal.find("input[name=event_start_end_date]").val(startd+ ' - ' +startd);
+        var ended = $.fullCalendar.formatDate(end.subtract(1, 'days'), "Y-MM-DD");
+        // $this.$categoryModal.find("input[name=event_start_end_date]").val(startd+ ' - ' +ended);
         $this.$categoryModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(startd);
-        $this.$categoryModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(startd);
+        $this.$categoryModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(ended);
+        
 
         var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm");
         var minutesToAdd=15;
