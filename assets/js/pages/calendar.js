@@ -407,13 +407,15 @@ var base_url = 'http://localhost/project91/';
         // $this.$categoryModal.find("input[name=event_start_end_date]").val(startd+ ' - ' +ended);
         $this.$categoryModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(startd);
         $this.$categoryModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(ended);
+        $this.$categoryModal.find("input[name=event_start_end_date_new]").val(startd);
         
 
         var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm");
-        var minutesToAdd=15;
+        //var minutesToAdd=15;
         var currentDate = new Date(start);
-        var end = new Date(currentDate.getTime() + minutesToAdd*60000);
+       // var end = new Date(currentDate.getTime() + minutesToAdd*60000);
         var start = moment(currentDate).format("hh:mm A"); 
+        var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm");; 
         var end = moment(end).format("hh:mm A"); 
         if(start == '12:00 AM'){
             var start = '11:00 AM';
@@ -1261,9 +1263,9 @@ var base_url = 'http://localhost/project91/';
                     return false;
                 }
             }
-            console.log("event_repeat_option_value");
-            console.log(event_repeat_option_value);
-            return false;
+            // console.log("event_repeat_option_value");
+            // console.log(event_repeat_option_value);
+            // return false;
             
             if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
             {

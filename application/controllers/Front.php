@@ -401,6 +401,9 @@ class Front extends MY_Controller {
         $unique_key = uniqid();
         $this->form_validation->set_rules('event_name','Event Name','trim|required');
         $this->form_validation->set_rules('event_color','Event Color','trim|required');
+        // if($this->input->post('event_repeat_option') == 'Does not repeat'){
+        //     $this->form_validation->set_rules('event_start_end_date_new','event_start_end_date_new','trim|required');       
+        // }
         
         if ($this->form_validation->run() == FALSE)
         {
@@ -423,6 +426,7 @@ class Front extends MY_Controller {
         }
         else
         {
+            
             $type = $this->input->post('type');         
                 $event_start_end_date = $this->input->post('event_start_end_date');
                 $sdd = explode(' - ',$event_start_end_date);
@@ -486,8 +490,33 @@ class Front extends MY_Controller {
                 }else{
                     $response['drag_id'] = 'no_drag_id';
                 }
+                if($this->input->post('event_repeat_option') == 'Does not repeat'){
+                    $data1[] = array( 'student_id' => $this->session->userdata('student_id'),
+                                    'event_name' => $this->input->post('event_name'),
+                                    'event_color' => $this->input->post('event_color'),
+                                    'event_note' => $this->input->post('event_note'),
+                                    'event_start_date' => $this->input->post('event_start_end_date_new'),
+                                    'event_end_date' => $this->input->post('event_start_end_date_new'),
+                                    'date_array' => $date_array,
+                                    // 'end_date' => $end_date,
+                                    'end_date' => $this->input->post('event_start_end_date_new'),
+                                    'event_start_time' => $event_start_time,
+                                    'event_end_time' => $event_end_time,
+                                    // 'event_repeat_option' => $this->input->post('event_repeat_option'),
+                                    'unique_key' => $unique_key,
+                                    'event_repeat_option' => 'Does not repeat',
+                                    'event_allDay' => $allDay,
+                                    'event_reminder' => $event_reminder,
+                                    'draggable_event' => $this->input->post('draggable_event'),
+                                    'draggable_id' => $response['drag_id'],
+                                    'type' => $this->input->post('type'),
+                                    'status' => 'active',
+                                    'event_repeat_option_type' => '1',
+                                    'date' => date('Y-m-d H:i:s')
+                                );
 
-                $data1[] = array( 'student_id' => $this->session->userdata('student_id'),
+                }else{
+                    $data1[] = array( 'student_id' => $this->session->userdata('student_id'),
                                     'event_name' => $this->input->post('event_name'),
                                     'event_color' => $this->input->post('event_color'),
                                     'event_note' => $this->input->post('event_note'),
@@ -508,9 +537,9 @@ class Front extends MY_Controller {
                                     'type' => $this->input->post('type'),
                                     'status' => 'active',
                                     'date' => date('Y-m-d H:i:s')
-                                 );
-
-
+                                );
+                }
+                
                 if($this->input->post('event_repeat_option') == 'Every Weekday')
                     {
                     $start=$event_start_date;
@@ -885,7 +914,8 @@ class Front extends MY_Controller {
                                         'event_reminder' => $event_reminder,
                                         'show_draggable_event' => 1,
                                         'status' => 'active',
-                                        'date' => date('Y-m-d H:i:s')
+                                        'date' => date('Y-m-d H:i:s'),
+                                        'event_repeat_option_type' =>'0',
                                      );
                         $data = $this->security->xss_clean($data); // xss filter
                         $this->Front_model->insertDraggableEvent($data);
@@ -915,7 +945,8 @@ class Front extends MY_Controller {
                                         'draggable_id' => $response['drag_id'],
                                         'type' => $this->input->post('type'),
                                         'status' => 'active',
-                                        'date' => date('Y-m-d H:i:s')
+                                        'date' => date('Y-m-d H:i:s'),
+                                        'event_repeat_option_type' =>'0',
                                      );
     
     
@@ -988,7 +1019,8 @@ class Front extends MY_Controller {
                                         'unique_key' => $unique_key,
                                         'type' => $this->input->post('type'),
                                         'status' => 'active',
-                                        'date' => date('Y-m-d H:i:s')
+                                        'date' => date('Y-m-d H:i:s'),
+                                        'event_repeat_option_type' =>'0',
                                      );
                             }
     
@@ -1021,7 +1053,8 @@ class Front extends MY_Controller {
                              'task_category' => $this->input->post('task_category'),
                              'priority' => $this->input->post('priority'),
                              'status' => 'active',
-                             'date' => date('Y-m-d H:i:s')
+                             'date' => date('Y-m-d H:i:s'),
+                             'event_repeat_option_type' =>'0',
                           );
                 $data = $this->security->xss_clean($data); // xss filter
                 $this->Front_model->insertTask($data);
@@ -1135,7 +1168,8 @@ class Front extends MY_Controller {
                                         'event_reminder' => $event_reminder,
                                         'show_draggable_event' => 1,
                                         'status' => 'active',
-                                        'date' => date('Y-m-d H:i:s')
+                                        'date' => date('Y-m-d H:i:s'),
+                                        'event_repeat_option_type' =>'0',
                                      );
                         $data = $this->security->xss_clean($data); // xss filter
                         $this->Front_model->insertDraggableEvent($data);
@@ -1165,7 +1199,8 @@ class Front extends MY_Controller {
                                         'draggable_id' => $response['drag_id'],
                                         'type' => $this->input->post('type'),
                                         'status' => 'active',
-                                        'date' => date('Y-m-d H:i:s')
+                                        'date' => date('Y-m-d H:i:s'),
+                                        'event_repeat_option_type' =>'0',
                                      );
             
             
@@ -1238,7 +1273,8 @@ class Front extends MY_Controller {
                                         'unique_key' => $unique_key,
                                         'type' => $this->input->post('type'),
                                         'status' => 'active',
-                                        'date' => date('Y-m-d H:i:s')
+                                        'date' => date('Y-m-d H:i:s'),
+                                        'event_repeat_option_type' =>'0',
                                      );
                             }
             
@@ -1331,7 +1367,8 @@ class Front extends MY_Controller {
                                         'unique_key' => $unique_key,
                                         'type' => $this->input->post('type'),
                                         'status' => 'active',
-                                        'date' => date('Y-m-d H:i:s')
+                                        'date' => date('Y-m-d H:i:s'),
+                                        'event_repeat_option_type' =>'0',
                                      );
                             }
             
@@ -1422,6 +1459,161 @@ class Front extends MY_Controller {
                 header('Content-type: application/json');
                 //echo json_encode($response);
                 exit(json_encode($response));
+            }elseif($this->input->post('event_repeat_option') == 'Does not repeat'){
+                //  print_r($this->input->post());
+                //  die;
+                $type = $this->input->post('type');
+                $event_start_end_date = $this->input->post('event_start_end_date_new');
+                $sdd = explode(' - ',$event_start_end_date);
+                $event_start_date = $this->input->post('event_start_end_date_new');
+                $event_end_date = $this->input->post('event_start_end_date_new');
+
+                if($this->input->post('event_repeat_option') == 'Does not repeat'){
+                    $end_date = $event_end_date;
+                }else{
+                    if($event_start_date <= $this->input->post('end_date')){
+                        $end_date = $this->input->post('event_start_end_date_new');
+                    }else{
+                    $end_date = $event_end_date;
+                    }
+                }
+
+                function displayDates($date1, $date2, $format = 'Y-m' ) {
+                $dates = array();
+                $date1  = date("Y-m", strtotime($date1));
+                $date2  = date("Y-m", strtotime($date2));
+                $current = strtotime($date1);
+                $date2 = strtotime($date2);
+                $stepVal = '+1 months';
+                while( $current <= $date2 ) {
+                    $dates[] = date($format, $current);
+                    $current = strtotime($stepVal, $current);
+                }
+                return $dates;
+                }
+                $date = displayDates($event_start_date, $end_date);
+
+                $date_array = json_encode($date);
+
+                $event_start_time  = date("H:i:s", strtotime($this->input->post('event_start_time')));
+                $event_end_time  = date("H:i:s", strtotime($this->input->post('event_end_time')));
+
+                $allDay = $this->input->post('event_allDay');
+                if($allDay == 'on'){
+                    $allDay = 'true';
+                    $event_start_time  = '00:00:00';
+                    $event_end_time  = '00:00:00';
+                }else{
+                    $allDay = 'false';
+                    $event_start_date = $event_start_date.' '.$event_start_time;
+                    $event_end_date = $event_end_date.' '.$event_end_time;
+                }
+
+                $draggable_id = $this->input->post('draggable_id');
+
+                $de = $this->Front_model->getDraggableEventsCount($this->session->userdata('student_id'),$this->input->post('event_name'));
+                if(($this->input->post('draggable_event') != "") && ($de <= 0)){
+                    $data = array(  'student_id' => $this->session->userdata('student_id'),
+                                    'event_name' => $this->input->post('event_name'),
+                                    'event_color' => $this->input->post('event_color'),
+                                    'event_note' => $this->input->post('event_note'),
+                                    'event_start_date' =>$this->input->post('event_start_end_date_new'),
+                                    'event_end_date' => $this->input->post('event_start_end_date_new'),
+                                    'date_array' => $date_array,
+                                    'end_date' => $this->input->post('event_start_end_date_new'),
+                                    'event_start_time' => $event_start_time,
+                                    'event_end_time' => $event_end_time,
+                                    'event_repeat_option' => 'Does not repeat',
+                                    'event_allDay' => $allDay,
+                                    'event_reminder' => $event_reminder,
+                                    'show_draggable_event' => 1,
+                                    'status' => 'active',
+                                    'date' => date('Y-m-d H:i:s'),
+                                    'event_repeat_option_type' =>'1',
+                                );
+                    $data = $this->security->xss_clean($data); // xss filter
+                    $this->Front_model->insertDraggableEvent($data);
+                    $inserted_id = $this->db->insert_id();
+                    $draggable_id = $inserted_id;
+                    $response['drag_id'] = $inserted_id;
+                }else if($this->input->post('draggable_event') == ""){
+                    $drag_id = $this->input->post('draggable_id');
+                    $this->Front_model->deleteDraggableEvent($drag_id);
+                    $response['drag_id'] = 'no_drag_id';
+                }else{
+                    $response['drag_id'] = $this->input->post('draggable_id');
+                }               
+                $data1 = array( 'student_id' => $this->session->userdata('student_id'),
+                                'event_name' => $this->input->post('event_name'),
+                                'event_color' => $this->input->post('event_color'),
+                                'event_note' => $this->input->post('event_note'),
+                                'event_start_date' =>$this->input->post('event_start_end_date_new'),
+                                'event_end_date' => $this->input->post('event_start_end_date_new'),
+                                'event_start_time' => $event_start_time,
+                                'event_end_time' => $event_end_time,
+                                'event_repeat_option' => 'Does not repeat',
+                                'event_allDay' => $allDay,
+                                'event_reminder' => $event_reminder,
+                                'draggable_event' => $this->input->post('draggable_event'),
+                                'draggable_id' => $draggable_id,
+                                'type' => $this->input->post('type'),
+                                'event_repeat_option_type' =>'1',
+                            );
+
+                $event_id = $this->input->post('event_id');
+                    $data1 = $this->security->xss_clean($data1); // xss filter
+                    $this->Front_model->updateEvent($data1,$event_id);
+            if($this->input->post('task_name') != ""){
+            $task_start_date  = $this->input->post('task_start_date');
+            $task_start_time  = date("H:i:s", strtotime($this->input->post('task_start_time')));
+
+            $task_allDay = $this->input->post('task_allDay');
+            if($task_allDay == 'on'){
+                $task_allDay = 'true';
+                $task_start_time  = '00:00:00';
+            }else{
+                $task_allDay = 'false';
+            }
+
+            $data = array( 'student_id' => $this->session->userdata('student_id'),
+                            'event_id' => $this->input->post('event_id'),
+                            'task_name' => $this->input->post('task_name'),
+                            'task_note' => $this->input->post('task_note'),
+                            'task_start_date' => $this->input->post('task_start_date'),
+                            'task_start_time' => $task_start_time,
+                            'task_allDay' => $task_allDay,
+                            'task_reminder' => $this->input->post('task_reminder'),
+                            'task_category' => $this->input->post('task_category'),
+                            'priority' => $this->input->post('priority'),
+                            'status' => 'active',
+                            'date' => date('Y-m-d H:i:s')
+                        );
+            $data = $this->security->xss_clean($data); // xss filter
+            $this->Front_model->insertTask($data);
+            $inserted_id = $this->db->insert_id();
+            $response['task_id'] = $inserted_id;
+            $response['task_allDay'] = $task_allDay;
+            }
+                    $response['event_id'] = $event_id;
+                    $response['allDay'] = $allDay;              
+                    $response['start_date'] = $event_start_date;                
+                    $response['end_date'] = $event_end_date;                
+                    $response['event_start_date'] = $this->input->post('event_start_end_date_new');                
+                    $response['event_end_date'] = $this->input->post('event_start_end_date_new');              
+                    $response['event_note'] = $this->input->post('event_note');             
+                    $response['event_start_time'] = $this->input->post('event_start_end_date_new');              
+                    $response['event_end_time'] = $this->input->post('event_start_end_date_new');              
+                    $response['event_repeat_option'] = 'Does not repeat';
+                    $response['event_allDay'] = $allDay;                
+                    $response['event_reminder'] = $event_reminder;
+                    $response['type'] = $this->input->post('type'); 
+                    $response['draggable_event'] = $this->input->post('draggable_event');       
+                    $response['draggable_id'] = $draggable_id;      
+                $response['status'] = TRUE;        
+            $this->session->set_flashdata('message', 'Successfully Updated'); 
+                header('Content-type: application/json');
+                echo json_encode($response); 
+
             }
             else
             {
@@ -1486,12 +1678,13 @@ class Front extends MY_Controller {
                                     'end_date' => $end_date,
                                     'event_start_time' => $event_start_time,
                                     'event_end_time' => $event_end_time,
-                                    'event_repeat_option' => $this->input->post('event_repeat_option'),
+                                    'event_repeat_option' => 'Does not repeat',
                                     'event_allDay' => $allDay,
                                     'event_reminder' => $event_reminder,
                                     'show_draggable_event' => 1,
                                     'status' => 'active',
-                                    'date' => date('Y-m-d H:i:s')
+                                    'date' => date('Y-m-d H:i:s'),
+                                    'event_repeat_option_type' =>'0',
                                 );
                     $data = $this->security->xss_clean($data); // xss filter
                     $this->Front_model->insertDraggableEvent($data);
@@ -1513,12 +1706,13 @@ class Front extends MY_Controller {
                                 'event_end_date' => $sdd[1],
                                 'event_start_time' => $event_start_time,
                                 'event_end_time' => $event_end_time,
-                                'event_repeat_option' => $this->input->post('event_repeat_option'),
+                                'event_repeat_option' => 'Does not repeat',
                                 'event_allDay' => $allDay,
                                 'event_reminder' => $event_reminder,
                                 'draggable_event' => $this->input->post('draggable_event'),
                                 'draggable_id' => $draggable_id,
                                 'type' => $this->input->post('type'),
+                                'event_repeat_option_type' =>'0',
                             );
 
                 $event_id = $this->input->post('event_id');
@@ -1564,7 +1758,7 @@ class Front extends MY_Controller {
                     $response['event_note'] = $this->input->post('event_note');             
                     $response['event_start_time'] = $event_start_time;              
                     $response['event_end_time'] = $event_end_time;              
-                    $response['event_repeat_option'] = $this->input->post('event_repeat_option');
+                    $response['event_repeat_option'] = 'Does not repeat';
                     $response['event_allDay'] = $allDay;                
                     $response['event_reminder'] = $event_reminder;
                     $response['type'] = $this->input->post('type'); 
@@ -1773,6 +1967,7 @@ class Front extends MY_Controller {
                                     'draggable_id' => $d->draggable_id,
                                     'type' => $d->type,
                                     'unique_key' => $d->unique_key,
+                                    'event_repeat_option_type' => $d->event_repeat_option_type,
 
                                  );
                     $data_array[] = $data1;

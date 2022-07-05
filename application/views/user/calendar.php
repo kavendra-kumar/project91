@@ -309,6 +309,67 @@ include 'sidebar.php';
 							<div class="row">
 								<div class="col-md-12">
 									<div class="form-group">
+										<div class="input-group mb-3">
+											<select id="event_repeat_option" name="event_repeat_option" class="form-control" onchange="showEndDate(this.value);">
+											<option value="Does not repeat">Does not repeat</option>
+											<option value="Daily">Daily</option>
+											<option value="Every Weekday">Every Weekday (Monday to Friday)</option>
+											<option value="Custom">Custom</option>
+											<!-- <option value="Weekly">Weekly</option>
+											<option value="Annually">Annually</option> -->
+										  	</select>
+										  	<div class="input-group-append">
+												<span class="input-group-text"><i class="fa fa-repeat"></i></span>
+											</div>
+										</div>
+										  	<span id="event_repeat_optionErr" class="text-danger"></span>
+									</div>
+								</div>
+								
+							</div>
+							<div class="row custom-class" style="display: none;">
+								<div class="col-md-12">
+									<div class="form-group">
+										<div class="input-group mb-3">
+										<div class="cus_radioBTN">
+											<div class="selector">
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio1" name="custom_check[]" class="selector-item_radio"  value="Sun" checked>
+													<label for="radio1" class="selector-item_label">S</label>
+												</div>
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio2" name="custom_check[]" class="selector-item_radio" value="Mon">
+													<label for="radio2" class="selector-item_label">M</label>
+												</div>
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio3" name="custom_check[]" class="selector-item_radio" value="Tue">
+													<label for="radio3" class="selector-item_label">T</label>
+												</div>
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio4" name="custom_check[]" class="selector-item_radio" value="Wed">
+													<label for="radio4" class="selector-item_label">W</label>
+												</div>
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio5" name="custom_check[]" class="selector-item_radio" value="Thu">
+													<label for="radio5" class="selector-item_label">T</label>
+												</div>
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio6" name="custom_check[]" class="selector-item_radio" value="Fri">
+													<label for="radio6" class="selector-item_label">F</label>
+												</div>
+												<div class="selecotr-item">
+													<input type="checkbox" id="radio7" name="custom_check[]" class="selector-item_radio" value="Sat">
+													<label for="radio7" class="selector-item_label">S</label>
+												</div>
+											</div>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row"  id="event_start_end_date_select">
+								<div class="col-md-12">
+									<div class="form-group">
 										<div class="input-group">
 										  <input type="text" name="event_start_end_date" class="form-control" id="reservation" value="" required="">	
 										  <div class="input-group-addon">
@@ -316,6 +377,18 @@ include 'sidebar.php';
 										  </div>	
 										</div>
 										<span id="event_start_end_dateErr" class="text-danger" ></span>
+									 </div>
+								</div>
+							</div>
+							<div class="row" id="event_start_end_date_div">
+								<div class="col-md-12">
+									<div class="form-group">
+										<div class="input-group">
+										  <input type="date" name="event_start_end_date_new" class="form-control" id="event_start_end_date_new" value="event_start_end_date_new">	
+										  <div class="input-group-addon">
+										  </div>	
+										</div>
+										<span id="event_start_end_date_new" class="text-danger" ></span>
 									 </div>
 								</div>
 							</div>
@@ -371,28 +444,17 @@ include 'sidebar.php';
 							</div>					
 							<div class="row">
 								<div class="col-md-6">
-									<div class="form-group">
-										<div class="input-group mb-3">
-											<select id="event_repeat_option" name="event_repeat_option" class="form-control" onchange="showEndDate(this.value);">
-											<!-- <option value="Does not repeat">Does not repeat</option> -->
-											<option value="Daily">Daily</option>
-											<option value="Every Weekday">Every Weekday (Monday to Friday)</option>
-											<option value="Custom">Custom</option>
-											<!-- <option value="Weekly">Weekly</option>
-											<option value="Annually">Annually</option> -->
-										  	</select>
-										  	<div class="input-group-append">
-												<span class="input-group-text"><i class="fa fa-repeat"></i></span>
-											</div>
-										</div>
-										  	<span id="event_repeat_optionErr" class="text-danger"></span>
-									</div>
-								</div>
-								<div class="col-md-6">
 									<div class="form-group mt-2">
 										<input type="checkbox" name="event_allDay" id="event_allDay" class="filled-in chk-col-success" onclick="check_reminder(this.value)">
 										<label class="control-label" for="event_allDay">All Day</label>
 										<span id="event_allDayErr" class="text-danger"></span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group mt-2">
+										<input type="checkbox" name="draggable_event" id="draggable_event" class="filled-in chk-col-success">
+										<label class="control-label" for="draggable_event">Draggable Event</label>
+										<span id="draggable_eventErr" class="text-danger"></span>
 									</div>
 								</div>
 								<input type="hidden" name="checkbox_value_get" id="checkbox_value_get" value="true" >
@@ -410,46 +472,6 @@ include 'sidebar.php';
 									</div>
 								</div>
 							</div>					
-							<div class="row custom-class" style="display: none;">
-								<div class="col-md-12">
-									<div class="form-group">
-										<div class="input-group mb-3">
-										<div class="cus_radioBTN">
-											<div class="selector">
-												<div class="selecotr-item">
-													<input type="checkbox" id="radio1" name="custom_check[]" class="selector-item_radio"  value="Sun" checked>
-													<label for="radio1" class="selector-item_label">S</label>
-												</div>
-												<div class="selecotr-item">
-													<input type="checkbox" id="radio2" name="custom_check[]" class="selector-item_radio" value="Mon">
-													<label for="radio2" class="selector-item_label">M</label>
-												</div>
-												<div class="selecotr-item">
-													<input type="checkbox" id="radio3" name="custom_check[]" class="selector-item_radio" value="Tue">
-													<label for="radio3" class="selector-item_label">T</label>
-												</div>
-												<div class="selecotr-item">
-													<input type="checkbox" id="radio4" name="custom_check[]" class="selector-item_radio" value="Wed">
-													<label for="radio4" class="selector-item_label">W</label>
-												</div>
-												<div class="selecotr-item">
-													<input type="checkbox" id="radio5" name="custom_check[]" class="selector-item_radio" value="Thu">
-													<label for="radio5" class="selector-item_label">T</label>
-												</div>
-												<div class="selecotr-item">
-													<input type="checkbox" id="radio6" name="custom_check[]" class="selector-item_radio" value="Fri">
-													<label for="radio6" class="selector-item_label">F</label>
-												</div>
-												<div class="selecotr-item">
-													<input type="checkbox" id="radio7" name="custom_check[]" class="selector-item_radio" value="Sat">
-													<label for="radio7" class="selector-item_label">S</label>
-												</div>
-											</div>
-										</div>
-										</div>
-									</div>
-								</div>
-							</div>
 							<div class="row">
 								<div class="col-md-6" id="old_reminder">
 									<div class="form-group">
@@ -494,13 +516,13 @@ include 'sidebar.php';
 										  	<span id="event_reminderErr" class="text-danger"></span>
 									</div>
 								</div>
-								<div class="col-md-6">
+								<!-- <div class="col-md-6">
 									<div class="form-group">
 										<input type="checkbox" name="draggable_event" id="draggable_event" class="filled-in chk-col-success">
 										<label class="control-label" for="draggable_event">Draggable Event</label>
 										<span id="draggable_eventErr" class="text-danger"></span>
 									</div>
-								</div>
+								</div> -->
 							</div>	
 						</div>
 						<br>
@@ -683,6 +705,68 @@ include 'sidebar.php';
 								</div>
 								<div class="row">
 									<div class="col-md-12">
+											<div class="form-group">
+												<div class="input-group mb-3">
+													<select id="event_repeat_option" name="event_repeat_option" class="form-control" onchange="showEndDateUpdate(this.value);">
+													<!-- <option value="Does not repeat">Daily</option> -->
+													<option value="Daily">Daily</option>
+													<option value="Does not repeat">Does not repeat</option>
+													<!-- <option value="Daily">Daily</option> -->
+													<option value="Every Weekday">Every Weekday (Monday to Friday)</option>
+													<option value="Custom">Custom</option>
+													<!--<option value="Monthly">Monthly</option>
+													<option value="Annually">Annually</option> -->
+													</select>
+													<div class="input-group-append">
+														<span class="input-group-text"><i class="fa fa-repeat"></i></span>
+													</div>
+												</div>
+													<span id="event_repeat_optionErr" class="text-danger"></span>
+											</div>
+									</div>
+								</div>
+								<div class="row custom-class-update" style="display: none;">
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="input-group mb-3">
+											<div class="cus_radioBTN">
+												<div class="selector">
+													<div class="selecotr-item">
+														<input type="checkbox" id="radioupdate1" name="custom_check_update[]" class="selector-item_radio"  value="Sun">
+														<label for="radioupdate1" class="selector-item_label">S</label>
+													</div>
+													<div class="selecotr-item">
+														<input type="checkbox" id="radioupdate2" name="custom_check_update[]" class="selector-item_radio" value="Mon">
+														<label for="radioupdate2" class="selector-item_label">M</label>
+													</div>
+													<div class="selecotr-item">
+														<input type="checkbox" id="radioupdate3" name="custom_check_update[]" class="selector-item_radio" value="Tue">
+														<label for="radioupdate3" class="selector-item_label">T</label>
+													</div>
+													<div class="selecotr-item">
+														<input type="checkbox" id="radioupdate4" name="custom_check_update[]" class="selector-item_radio" value="Wed">
+														<label for="radioupdate4" class="selector-item_label">W</label>
+													</div>
+													<div class="selecotr-item">
+														<input type="checkbox" id="radioupdate5" name="custom_check_update[]" class="selector-item_radio" value="Thu">
+														<label for="radioupdate5" class="selector-item_label">T</label>
+													</div>
+													<div class="selecotr-item">
+														<input type="checkbox" id="radioupdate6" name="custom_check_update[]" class="selector-item_radio" value="Fri">
+														<label for="radioupdate6" class="selector-item_label">F</label>
+													</div>
+													<div class="selecotr-item">
+														<input type="checkbox" id="radioupdate7" name="custom_check_update[]" class="selector-item_radio" value="Sat">
+														<label for="radioupdate7" class="selector-item_label">S</label>
+													</div>
+												</div>
+											</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" id="event_start_end_date_select_update">
+									<div class="col-md-12">
 										<div class="form-group">
 											<div class="input-group">
 											  <input type="text" name="event_start_end_date" class="form-control" id="reservation1" required="">	
@@ -694,6 +778,19 @@ include 'sidebar.php';
 										 </div>
 									</div>
 								</div>
+								<div class="row" id="event_start_end_date_div_update">
+								    <div class="col-md-12">
+									<div class="form-group">
+										<div class="input-group">
+										  <input type="date" name="event_start_end_date_new" class="form-control" id="event_start_end_date_new" value="event_start_end_date_new">	
+										  <div class="input-group-addon">
+										  </div>	
+										</div>
+										<span id="event_start_end_date_new" class="text-danger" ></span>
+									 </div>
+								   </div>
+							    </div>
+								
 								<div class="row" id="date-time-section1">
 									<div class="col-md-6">
 										<div class="bootstrap-timepicker">
@@ -745,34 +842,23 @@ include 'sidebar.php';
 									</div>
 								</div>					
 								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<div class="input-group mb-3">
-												<select id="event_repeat_option" name="event_repeat_option" class="form-control" onchange="showEndDateUpdate(this.value);">
-												<!-- <option value="Does not repeat">Does not repeat</option> -->
-												<option value="Does not repeat">Daily</option>
-												<!-- <option value="Daily">Daily</option> -->
-												<option value="Every Weekday">Every Weekday (Monday to Friday)</option>
-												<option value="Custom">Custom</option>
-												<!--<option value="Monthly">Monthly</option>
-												<option value="Annually">Annually</option> -->
-											  	</select>
-											  	<div class="input-group-append">
-													<span class="input-group-text"><i class="fa fa-repeat"></i></span>
-												</div>
-											</div>
-											  	<span id="event_repeat_optionErr" class="text-danger"></span>
-										</div>
-									</div>
-									<div class="col-md-6">
+								<div class="col-md-6">
 										<div class="form-group mt-2">
 											<input type="checkbox" name="event_allDay" id="event_allDay1" class="filled-in chk-col-success" onclick="check_reminder_update(this.value)">
 											<label class="control-label" for="event_allDay1">All Day</label>
 											<span id="event_allDayErr" class="text-danger"></span>
 										</div>
 									</div>
+									<div class="col-md-6">
+										<div class="form-group mt-2">
+											<input type="checkbox" name="draggable_event" id="draggable_event1" class="filled-in chk-col-success" checked="">
+											<label class="control-label" for="draggable_event1">Draggable Event</label>
+											<span id="draggable_eventErr" class="text-danger"></span>
+										</div>
+									</div>
+									
 								</div>		
-								<div class="row custom-class-update" style="display: none;">
+								<!-- <div class="row custom-class-update" style="display: none;">
 								<div class="col-md-12">
 									<div class="form-group">
 										<div class="input-group mb-3">
@@ -811,7 +897,7 @@ include 'sidebar.php';
 										</div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 								<div class="row end-date-class" style="display: none;">
 									<div class="col-md-12">
 										<div class="form-group">
@@ -871,13 +957,13 @@ include 'sidebar.php';
 									</div>
 									
 								</div>
-									<div class="col-md-6">
+									<!-- <div class="col-md-6">
 										<div class="form-group">
 											<input type="checkbox" name="draggable_event" id="draggable_event1" class="filled-in chk-col-success" checked="">
 											<label class="control-label" for="draggable_event1">Draggable Event</label>
 											<span id="draggable_eventErr" class="text-danger"></span>
 										</div>
-									</div>
+									</div> -->
 								</div>	
 							</div>
 						</div>
@@ -1627,6 +1713,8 @@ function showPriority(i){
 </script>
 <script type="text/javascript">
 	$('#new_reminder').hide();
+	$('#event_start_end_date_select').hide();
+	$('#event_start_end_date_div').show();
 	function showEndDate(value) 
 	{
 		// if(value == 'Daily'){
@@ -1635,8 +1723,16 @@ function showPriority(i){
 		// 	$('.end-date-class').css('display','none');
 		// }
 		if(value == 'Custom'){
+			$('#event_start_end_date_select').show();
+			$('#event_start_end_date_div').hide();
 			$('.custom-class').css('display','block');
+		}else if(value == 'Does not repeat'){
+			$('#event_start_end_date_select').hide();
+			$('#event_start_end_date_div').show();
+			$('.custom-class').css('display','none');
 		}else{
+			$('#event_start_end_date_select').show();
+			$('#event_start_end_date_div').hide();
 			$('.custom-class').css('display','none');
 		}
 	}
@@ -1648,8 +1744,16 @@ function showPriority(i){
 		// 	$('.end-date-class').css('display','none');
 		// }
 		if(value == 'Custom'){
+			$('#event_start_end_date_select_update').show();
+			$('#event_start_end_date_div_update').hide();
 			$('.custom-class-update').css('display','block');
+		}else if(value == 'Does not repeat'){
+			$('#event_start_end_date_select_update').hide();
+			$('#event_start_end_date_div_update').show();
+			$('.custom-class').css('display','none');
 		}else{
+			$('#event_start_end_date_select_update').show();
+			$('#event_start_end_date_div_update').hide();
 			$('.custom-class-update').css('display','none');
 		}
 	}
@@ -1678,6 +1782,9 @@ function showPriority(i){
 			$('#new_reminder_update').hide();
 		}
 
+	}
+	function dateChange(value){
+		alert(value);
 	}
 </script>	
 </body>
