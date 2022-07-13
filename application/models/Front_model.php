@@ -375,14 +375,20 @@ class Front_model extends CI_Model {
 		return $query->result();
 	}
 
-	function deleteEvent($id)
+	function deleteEvent($id,$delete_check)
 	{
 		// $this->db->where('id', $id);
 		// $this->db->delete('events');
-		$this->db->where('id', $id);
-    	$query=$this->db->get('events');
-		$this->db->where('unique_key', $query->row()->unique_key);
-		$this->db->delete('events');
+		if($delete_check == 0){
+			$this->db->where('id', $id);
+			$this->db->delete('events');
+		}else{
+			$this->db->where('id', $id);
+			$query=$this->db->get('events');
+			$this->db->where('unique_key', $query->row()->unique_key);
+			$this->db->delete('events');
+		}
+		
 	}
 
 	function getEventById($id)

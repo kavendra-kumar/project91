@@ -709,8 +709,8 @@ include 'sidebar.php';
 												<div class="input-group mb-3">
 													<select id="event_repeat_option" name="event_repeat_option" class="form-control" onchange="showEndDateUpdate(this.value);">
 													<!-- <option value="Does not repeat">Daily</option> -->
-													<option value="Daily">Daily</option>
 													<option value="Does not repeat">Does not repeat</option>
+													<option value="Daily">Daily</option>
 													<!-- <option value="Daily">Daily</option> -->
 													<option value="Every Weekday">Every Weekday (Monday to Friday)</option>
 													<option value="Custom">Custom</option>
@@ -732,31 +732,31 @@ include 'sidebar.php';
 											<div class="cus_radioBTN">
 												<div class="selector">
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate1" name="custom_check_update[]" class="selector-item_radio"  value="Sun">
+														<input type="checkbox" id="radioupdate1" name="custom_check[]" class="selector-item_radio"  value="Sun">
 														<label for="radioupdate1" class="selector-item_label">S</label>
 													</div>
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate2" name="custom_check_update[]" class="selector-item_radio" value="Mon">
+														<input type="checkbox" id="radioupdate2" name="custom_check[]" class="selector-item_radio" value="Mon">
 														<label for="radioupdate2" class="selector-item_label">M</label>
 													</div>
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate3" name="custom_check_update[]" class="selector-item_radio" value="Tue">
+														<input type="checkbox" id="radioupdate3" name="custom_check[]" class="selector-item_radio" value="Tue">
 														<label for="radioupdate3" class="selector-item_label">T</label>
 													</div>
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate4" name="custom_check_update[]" class="selector-item_radio" value="Wed">
+														<input type="checkbox" id="radioupdate4" name="custom_check[]" class="selector-item_radio" value="Wed">
 														<label for="radioupdate4" class="selector-item_label">W</label>
 													</div>
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate5" name="custom_check_update[]" class="selector-item_radio" value="Thu">
+														<input type="checkbox" id="radioupdate5" name="custom_check[]" class="selector-item_radio" value="Thu">
 														<label for="radioupdate5" class="selector-item_label">T</label>
 													</div>
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate6" name="custom_check_update[]" class="selector-item_radio" value="Fri">
+														<input type="checkbox" id="radioupdate6" name="custom_check[]" class="selector-item_radio" value="Fri">
 														<label for="radioupdate6" class="selector-item_label">F</label>
 													</div>
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate7" name="custom_check_update[]" class="selector-item_radio" value="Sat">
+														<input type="checkbox" id="radioupdate7" name="custom_check[]" class="selector-item_radio" value="Sat">
 														<label for="radioupdate7" class="selector-item_label">S</label>
 													</div>
 												</div>
@@ -1713,8 +1713,8 @@ function showPriority(i){
 </script>
 <script type="text/javascript">
 	$('#new_reminder').hide();
-	$('#event_start_end_date_select').hide();
-	$('#event_start_end_date_div').show();
+	// $('#event_start_end_date_select').hide();
+	// $('#event_start_end_date_div').show();
 	function showEndDate(value) 
 	{
 		// if(value == 'Daily'){
@@ -1750,7 +1750,7 @@ function showPriority(i){
 		}else if(value == 'Does not repeat'){
 			$('#event_start_end_date_select_update').hide();
 			$('#event_start_end_date_div_update').show();
-			$('.custom-class').css('display','none');
+			$('.custom-class-update').css('display','none');
 		}else{
 			$('#event_start_end_date_select_update').show();
 			$('#event_start_end_date_div_update').hide();

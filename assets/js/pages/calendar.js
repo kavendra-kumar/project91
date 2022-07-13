@@ -205,35 +205,72 @@ var base_url = 'http://localhost/project91/';
                   });
             $this.$viewEventModal.find('.modal-header').find('.delete-event').unbind('click').click(function () {
             var event_id = event_div.find("input[name=event_id]").val(); 
-            swal({   
+           swal({   
                   title: "Are you sure?",   
                   text: "You want to delete the event !",   
-                  type: "info",   
+                  type: "info",  
+                  cancelButtonText : 'Delete One', 
                   showCancelButton: true,   
                   confirmButtonColor: "#04a08b",   
-                  confirmButtonText: "Yes",   
+                  confirmButtonText: "Delete All",   
                   closeOnConfirm: false 
-              }, function(){                
+              }, function(isConfirm){
+                if (isConfirm) { 
+                    console.log("ssss");               
                   $.ajax({
                     type: "POST",
                     url: base_url+'front/delete_event',
                     type: 'POST',
                     data: {
-                        event_id:event_id 
+                        event_id:event_id,
+                        delete_check : 1
                     }, 
                     success: function(html){
                         swal("Deleted!", "Successfully.", "success"); 
                         $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
-                            return (ev.unique_key == calEvent.unique_key);   
+                            return (ev.unique_key === calEvent.unique_key);   
                         });
                         $this.$viewEventModal.modal('hide');
                         //location.reload();
                     }
                   });  
+                }else{
+                    $.ajax({
+                        type: "POST",
+                        url: base_url+'front/delete_event',
+                        type: 'POST',
+                        data: {
+                            event_id:event_id,
+                            delete_check : 0
+                        }, 
+                        success: function(html){
+                            swal("Deleted!", "Successfully.", "success"); 
+                            $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                                return (ev.event_id === calEvent.event_id);   
+                            });
+                            $this.$viewEventModal.modal('hide');
+                            //location.reload();
+                        }
+                      });
+                }
                   
                 });
             });
             $this.$viewEventModal.find('.modal-header').find('.edit-event').unbind('click').click(function () {
+                if(calEvent.event_repeat_option_type == 'Does not repeat'){
+                    $('#event_start_end_date_div_update').show();
+                    $('#event_start_end_date_select_update').hide();                    
+                }else{
+                    $('#event_start_end_date_div_update').hide();
+                    $('#event_start_end_date_select_update').show();
+                }
+                // if(calEvent.event_repeat_option_type == 'Custom'){
+                //     $('.custom-class-update').css('display','block');
+                //     var day_cal = new Date(calEvent.event_start_date);
+                    
+                // }
+                
+                $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(calEvent.event_start_date);                
                 $this.$viewEventModal.modal('hide');
                 $this.$updateEventModal.modal('show');
                  
@@ -265,7 +302,7 @@ var base_url = 'http://localhost/project91/';
                         $("#new_reminder_update").show();
                         $("#old_reminder_update").hide();
                     }
-                    $this.$updateEventModal.find("select[name='event_repeat_option']").val(calEvent.event_repeat_option); 
+                    $this.$updateEventModal.find("select[name='event_repeat_option']").val(calEvent.event_repeat_option_type); 
                     $this.$updateEventModal.find("select[name='event_reminder']").val(calEvent.event_reminder);
                     $this.$updateEventModal.find("select[name='event_reminder_new']").val(calEvent.event_reminder); 
                     if(calEvent.draggable_event == 'on'){
@@ -408,6 +445,17 @@ var base_url = 'http://localhost/project91/';
         $this.$categoryModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(startd);
         $this.$categoryModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(ended);
         $this.$categoryModal.find("input[name=event_start_end_date_new]").val(startd);
+        if(startd === ended){
+            console.log('test');
+            $('#event_start_end_date_div').show();
+            $('#event_start_end_date_select').hide();
+            $this.$categoryModal.find("select[name='event_repeat_option']").val('Does not repeat');
+        }else{
+            console.log("ffff");
+            $('#event_start_end_date_select').show();
+            $('#event_start_end_date_div').hide();
+            $this.$categoryModal.find("select[name='event_repeat_option']").val('Daily');
+        }
         
 
         var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm");
@@ -815,7 +863,8 @@ var base_url = 'http://localhost/project91/';
             droppable: true, // this allows things to be dropped onto the calendar !!!
             eventLimit: 3, // allow "more" link when too many events
             selectable: true,
-            eventDrop: function (event, delta) {          
+            eventDrop: function (event, delta) {    
+                console.log("fd");      
                 var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
                 if(event.end == null && event.allDay == false){
                    var minutesToAdd=15;
