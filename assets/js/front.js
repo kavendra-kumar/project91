@@ -640,7 +640,7 @@ function editModalTask(task_id)
     data: {task_id: task_id},
     success: function(data){
       $("#edit-task").modal('show');
-      var edittask = $("#edit-task");
+      var edittask = $("#edit-task"); 
       edittask.find("input[name=task_name]").val(data.task_name); 
       edittask.find("textarea[name=task_note]").val(data.task_note); 
       edittask.find("input[name=task_category]").val(data.task_category); 

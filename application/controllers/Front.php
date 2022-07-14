@@ -836,7 +836,8 @@ class Front extends MY_Controller {
     }
     public function update_event_form() //Update Event Details
     {
-        $this->Front_model->deleteEvent($this->input->post('event_id'));
+        $delete_check = 1;
+        $this->Front_model->deleteEvent($this->input->post('event_id'),$delete_check);
         $this->insert_draggable_event();
     }
 
@@ -2506,7 +2507,19 @@ class Front extends MY_Controller {
     {
         $data['student_id'] = $this->session->userdata('student_id');
         $data['event_id']  = $this->input->post('event_id');
+        
         $response['task_data'] = $this->load->view('user/task_data',$data);
+    }
+    public function task_data_new() //Task Details
+    {
+        $event_id = $this->input->post('event_id');
+        $event_data  = $this->Front_model->getTaskDataNew($event_id);
+        $response['task_start_date'] = $event_data[0]->event_start_date;
+        $response['task_end_date'] = array_slice($event_data, -1)[0]->event_end_date;
+        // print_r($response);
+        // die;
+        header('Content-type: application/json');
+        echo json_encode($response);
     }
 
     public function get_task_data() //Task Details

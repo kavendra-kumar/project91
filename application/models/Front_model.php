@@ -391,6 +391,16 @@ class Front_model extends CI_Model {
 		
 	}
 
+	function getTaskDataNew($id)
+	{
+		$this->db->where('id', $id);
+		$event_data=$this->db->get('events');
+		$this->db->where('unique_key', $event_data->row()->unique_key);
+		$query = $this->db->get('events');
+		return $query->result();
+		
+	}
+
 	function getEventById($id)
 	{
 		$this->db->where('id', $id);
