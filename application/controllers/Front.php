@@ -2082,6 +2082,7 @@ class Front extends MY_Controller {
                                         'draggable_id' => $d->draggable_id,
                                         'type' => $d->type,
                                         'unique_key' => $d->unique_key,
+                                        'event_repeat_option_type' => $d->event_repeat_option_type,
                                      );
                         $data_array[] = $data1;
                     }
@@ -2137,6 +2138,7 @@ class Front extends MY_Controller {
                                             'draggable_id' => $d->draggable_id,
                                             'type' => $d->type,
                                             'unique_key' => $d->unique_key,
+                                            'event_repeat_option_type' => $d->event_repeat_option_type,
                                          );
                             $data_array[] = $data1;
                             $start_date = strtotime($stepVal, $start_date);
@@ -2200,6 +2202,7 @@ class Front extends MY_Controller {
                                         'draggable_id' => $d->draggable_id,
                                         'type' => $d->type,
                                         'unique_key' => $d->unique_key,
+                                        'event_repeat_option_type' => $d->event_repeat_option_type,
                                      );
                         $data_array[] = $data1;
                     }
@@ -2253,6 +2256,7 @@ class Front extends MY_Controller {
                                             'draggable_id' => $d->draggable_id,
                                             'type' => $d->type,
                                             'unique_key' => $d->unique_key,
+                                            'event_repeat_option_type' => $d->event_repeat_option_type,
                                         );
                             $data_array[] = $data1;
                             $start_date = strtotime($stepVal, $start_date);
@@ -2316,6 +2320,7 @@ class Front extends MY_Controller {
                                         'draggable_id' => $d->draggable_id,
                                         'type' => $d->type,
                                         'unique_key' => $d->unique_key,
+                                        'event_repeat_option_type' => $d->event_repeat_option_type,
                                      );
                         $data_array[] = $data1;
                     }
@@ -2370,6 +2375,7 @@ class Front extends MY_Controller {
                                             'draggable_id' => $d->draggable_id,
                                             'type' => $d->type,
                                             'unique_key' => $d->unique_key,
+                                            'event_repeat_option_type' => $d->event_repeat_option_type,
                                          );
                             $data_array[] = $data1;
                             $start_date = strtotime($stepVal, $start_date);
