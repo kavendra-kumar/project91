@@ -449,9 +449,11 @@ class Front extends MY_Controller {
                         }
                     }
 
-                
-                $date = $this->displayDates($event_start_date, $end_date);
+                // $date = $this->displayDates($event_start_date, $end_date);
+                $date = $this->displayDates($event_start_date, $event_end_date);
                 $date_array = json_encode($date);
+                // print_r($date_array);
+                // die;
 
                 $event_start_time  = date("H:i:s", strtotime($this->input->post('event_start_time')));
                 $event_end_time  = date("H:i:s", strtotime($this->input->post('event_end_time')));
@@ -658,6 +660,7 @@ class Front extends MY_Controller {
                     //         }
                     //     }
                     $custom_check_array = $this->input->post('custom_check');
+                    
                   // print_r ($custom_check_array[0]);
                 //    foreach($custom_check_array as $custom_check_array_new){
                 //     echo $custom_check_array_new;
@@ -692,6 +695,288 @@ class Front extends MY_Controller {
                             // print_r($date_array);
                             // die;
                     
+                            $data1[] = array( 'student_id' => $this->session->userdata('student_id'),
+                                    'event_name' => $this->input->post('event_name'),
+                                    'event_color' => $this->input->post('event_color'),
+                                    'event_note' => $this->input->post('event_note'),
+                                    'event_start_date' => $d[0],
+                                    'event_end_date' => $d[0],
+                                    'date_array' => $date_array,
+                                    'end_date' => $d[0],
+                                    'event_start_time' => $event_start_time,
+                                    'event_end_time' => $event_end_time,
+                                    'event_repeat_option' => 'Does not repeat',
+                                    'event_allDay' => $allDay,
+                                    'event_reminder' => $event_reminder,
+                                    'draggable_event' => $this->input->post('draggable_event'),
+                                    'draggable_id' => $response['drag_id'],
+                                    'unique_key' => $unique_key,
+                                    'type' => $this->input->post('type'),
+                                    'status' => 'active',
+                                    'date' => date('Y-m-d H:i:s'),
+                                    'event_repeat_option_type' => $this->input->post('event_repeat_option'),
+                                 );
+                        }
+
+                    }
+                    //////////Weekly  store
+                    if($this->input->post('event_repeat_option') == 'Weekly')
+                    {
+                    $start=$event_start_date;
+                    $end=$event_end_date;
+                    $format = 'Y-m-d';
+
+                    // Declare an empty array
+                    $array = array();
+                      
+                    // Variable that store the date interval
+                    // of period 1 day
+                    $interval = new DateInterval('P1D');
+                  
+                    $realEnd = new DateTime($end);
+                    $realEnd->add($interval);
+
+                    $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
+                  
+                    // Use loop to store date into array
+                    foreach($period as $date) {                 
+                        $timestamp = strtotime($date->format($format));
+                        $day = date('D', $timestamp);
+
+                        $array[] = [$date->format($format),$day]; 
+                    }
+                    $custom_date_weekly = $array[0][1];
+                    
+                    // Return the array elements
+                    $d_array=$array;
+                    $weekday_date=[];
+                   
+                    // foreach($d_array as $d)
+                    //     {
+                    //     if($d[1]='Sat')
+                    //         {
+                    //         $weekday_date[]=$d;  
+                    //         }
+                    //     }
+
+                    //$custom_check_array = $this->input->post('custom_check');
+                    $custom_check_array = array($custom_date_weekly);
+                    // print_r($custom_check_array);
+                    // die;
+                  
+                   foreach($d_array as $d)
+                        {
+                            foreach($custom_check_array as $custom_check_array_new){
+                            if($d[1]==$custom_check_array_new)
+                                {
+                                $weekday_date[]=$d;  
+                                }
+                            }
+                        }
+                  // print_r ($weekday_date);
+                    //die;   
+
+                    $final=[];
+                    $array_key=0;
+                    foreach($weekday_date as $wd)
+                        {
+                        $final[$array_key][]=$wd[0];
+                        if($wd[1]=='Fri'){$array_key++;}    
+                        } 
+
+                    $data1=[];    
+                    foreach($weekday_date as $d)
+                        {
+                            
+                            // $da = $this->displayDates($d[0], $d[array_key_last($d)]);
+                            $da = $this->displayDates($d[0], $d[0]);
+                            $date_array = json_encode($da);
+                            // print_r($date_array);
+                            // die;
+                    
+                            $data1[] = array( 'student_id' => $this->session->userdata('student_id'),
+                                    'event_name' => $this->input->post('event_name'),
+                                    'event_color' => $this->input->post('event_color'),
+                                    'event_note' => $this->input->post('event_note'),
+                                    'event_start_date' => $d[0],
+                                    'event_end_date' => $d[0],
+                                    'date_array' => $date_array,
+                                    'end_date' => $d[0],
+                                    'event_start_time' => $event_start_time,
+                                    'event_end_time' => $event_end_time,
+                                    'event_repeat_option' => 'Does not repeat',
+                                    'event_allDay' => $allDay,
+                                    'event_reminder' => $event_reminder,
+                                    'draggable_event' => $this->input->post('draggable_event'),
+                                    'draggable_id' => $response['drag_id'],
+                                    'unique_key' => $unique_key,
+                                    'type' => $this->input->post('type'),
+                                    'status' => 'active',
+                                    'date' => date('Y-m-d H:i:s'),
+                                    'event_repeat_option_type' => $this->input->post('event_repeat_option'),
+                                 );
+                        }
+
+                    }
+                    //////////Monthly  store
+                    if($this->input->post('event_repeat_option') == 'Monthly')
+                    {
+                    $start=$event_start_date;
+                    $end=$event_end_date;
+                    $format = 'Y-m-d';
+
+                    // Declare an empty array
+                    $array = array();
+                      
+                    // Variable that store the date interval
+                    // of period 1 day
+                    $interval = new DateInterval('P1D');
+                  
+                    $realEnd = new DateTime($end);
+                    $realEnd->add($interval);
+
+                    $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
+                  
+                    // Use loop to store date into array
+                    foreach($period as $date) {                 
+                        $timestamp = strtotime($date->format($format));
+                        $day = date('D', $timestamp);
+
+                        $array[] = [$date->format($format),$day]; 
+                    }
+                    $custom_date_monthly = $array;
+                    $first_date_get = $custom_date_monthly[0][0];
+                    foreach($custom_date_monthly as $custom_date_monthly_new){
+                        $new_date_get[] = $custom_date_monthly_new[0];
+                    }
+                    $i =0;
+                    foreach($new_date_get as $new_date_get_new){
+                        $newDate = date('Y-m-d', strtotime($first_date_get. ' + '.$i.' months'));
+                        // print_r($new_date_get_new);
+                        //     die;
+                        if($newDate === $new_date_get_new){
+                            $new_array_monthly_date[] = $newDate;
+                            $i++;
+                        }else{
+                        }
+                    }
+                    $d_array=$array;
+                    $weekday_date=[];
+                   $custom_check_array = $new_array_monthly_date;
+                   foreach($d_array as $d)
+                        {
+                            foreach($custom_check_array as $custom_check_array_new){
+                            if($d[0]==$custom_check_array_new)
+                                {
+                                $weekday_date[]=$d;  
+                                }
+                            }
+                        }
+                    $final=[];
+                    $array_key=0;
+                    foreach($weekday_date as $wd)
+                        {
+                        $final[$array_key][]=$wd[0];
+                        if($wd[1]=='Fri'){$array_key++;}    
+                        } 
+
+                    $data1=[];    
+                    foreach($weekday_date as $d)
+                        {
+                            $da = $this->displayDates($d[0], $d[0]);
+                            $date_array = json_encode($da);
+                            $data1[] = array( 'student_id' => $this->session->userdata('student_id'),
+                                    'event_name' => $this->input->post('event_name'),
+                                    'event_color' => $this->input->post('event_color'),
+                                    'event_note' => $this->input->post('event_note'),
+                                    'event_start_date' => $d[0],
+                                    'event_end_date' => $d[0],
+                                    'date_array' => $date_array,
+                                    'end_date' => $d[0],
+                                    'event_start_time' => $event_start_time,
+                                    'event_end_time' => $event_end_time,
+                                    'event_repeat_option' => 'Does not repeat',
+                                    'event_allDay' => $allDay,
+                                    'event_reminder' => $event_reminder,
+                                    'draggable_event' => $this->input->post('draggable_event'),
+                                    'draggable_id' => $response['drag_id'],
+                                    'unique_key' => $unique_key,
+                                    'type' => $this->input->post('type'),
+                                    'status' => 'active',
+                                    'date' => date('Y-m-d H:i:s'),
+                                    'event_repeat_option_type' => $this->input->post('event_repeat_option'),
+                                 );
+                        }
+
+                    }
+                    //////////Yearly  store
+                    if($this->input->post('event_repeat_option') == 'Yearly')
+                    {
+                    $start=$event_start_date;
+                    $end=$event_end_date;
+                    $format = 'Y-m-d';
+
+                    // Declare an empty array
+                    $array = array();
+                      
+                    // Variable that store the date interval
+                    // of period 1 day
+                    $interval = new DateInterval('P1D');
+                  
+                    $realEnd = new DateTime($end);
+                    $realEnd->add($interval);
+
+                    $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
+                  
+                    // Use loop to store date into array
+                    foreach($period as $date) {                 
+                        $timestamp = strtotime($date->format($format));
+                        $day = date('D', $timestamp);
+
+                        $array[] = [$date->format($format),$day]; 
+                    }
+                    $custom_date_monthly = $array;
+                    $first_date_get = $custom_date_monthly[0][0];
+                    foreach($custom_date_monthly as $custom_date_monthly_new){
+                        $new_date_get[] = $custom_date_monthly_new[0];
+                    }
+                    $i =0;
+                    foreach($new_date_get as $new_date_get_new){
+                        $newDate = date('Y-m-d', strtotime($first_date_get. ' + '.$i.' year'));
+                        // print_r($new_date_get_new);
+                        //     die;
+                        if($newDate === $new_date_get_new){
+                            $new_array_monthly_date[] = $newDate;
+                            $i++;
+                        }else{
+                        }
+                    }
+                    $d_array=$array;
+                    $weekday_date=[];
+                    //print_r($new_array_monthly_date);
+                   $custom_check_array = $new_array_monthly_date;
+                   foreach($d_array as $d)
+                        {
+                            foreach($custom_check_array as $custom_check_array_new){
+                            if($d[0]==$custom_check_array_new)
+                                {
+                                $weekday_date[]=$d;  
+                                }
+                            }
+                        }
+                    $final=[];
+                    $array_key=0;
+                    foreach($weekday_date as $wd)
+                        {
+                        $final[$array_key][]=$wd[0];
+                        if($wd[1]=='Fri'){$array_key++;}    
+                        } 
+
+                    $data1=[];    
+                    foreach($weekday_date as $d)
+                        {
+                            $da = $this->displayDates($d[0], $d[0]);
+                            $date_array = json_encode($da);
                             $data1[] = array( 'student_id' => $this->session->userdata('student_id'),
                                     'event_name' => $this->input->post('event_name'),
                                     'event_color' => $this->input->post('event_color'),
