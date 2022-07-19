@@ -315,56 +315,178 @@ var base_url = 'http://localhost/project91/';
             //       });
             $this.$viewEventModal.find('.modal-header').find('.delete-event').unbind('click').click(function () {
             //var event_id = event_div.find("input[name=event_id]").val(); 
-            var event_id = calEvent.event_id; 
-           swal({   
-                  title: "Are you sure?",   
-                  text: "You want to delete the event !",   
-                  type: "info",  
-                  cancelButtonText : 'Delete only this', 
-                  showCancelButton: true,   
-                  confirmButtonColor: "#04a08b",   
-                  confirmButtonText: "Delete All",   
-                  closeOnConfirm: false 
-              }, function(isConfirm){
-                if (isConfirm) { 
-                  $.ajax({
-                    type: "POST",
-                    url: base_url+'front/delete_event',
-                    type: 'POST',
-                    data: {
-                        event_id:event_id,
-                        delete_check : 1
-                    }, 
-                    success: function(html){
-                        swal("Deleted!", "Successfully.", "success"); 
-                        $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
-                            return (ev.unique_key === calEvent.unique_key);   
-                        });
-                        $this.$viewEventModal.modal('hide');
-                        //location.reload();
-                    }
-                  });  
-                }else{
-                    $.ajax({
-                        type: "POST",
-                        url: base_url+'front/delete_event',
-                        type: 'POST',
-                        data: {
-                            event_id:event_id,
-                            delete_check : 0
-                        }, 
-                        success: function(html){
-                            swal("Deleted!", "Successfully.", "success"); 
-                            $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
-                                return (ev.event_id === calEvent.event_id);   
+            var event_id = calEvent.event_id;
+                if(calEvent.event_repeat_option_type == 'Does not repeat' || calEvent.event_repeat_option_type == 'Daily'){
+                    swal("Are you sure to delete?", {
+                        icon: 'warning',
+                        buttons: {
+                          cancel: "Cancel",
+                          confirm: true,
+                        },
+                      })
+                      .then((value) => {
+                        switch (value) {
+                          case true:
+                            $.ajax({
+                                type: "POST",
+                                url: base_url+'front/delete_event',
+                                type: 'POST',
+                                data: {
+                                    event_id:event_id,
+                                    delete_check : 1
+                                }, 
+                                success: function(html){
+                                    swal("Deleted!", "Successfully.", "success"); 
+                                    $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                                        return (ev.unique_key === calEvent.unique_key);   
+                                    });
+                                    $this.$viewEventModal.modal('hide');
+                                    //location.reload();
+                                }
                             });
-                            $this.$viewEventModal.modal('hide');
-                            //location.reload();
+                            break;
+                       
+                          
                         }
                       });
-                }
-                  
-                });
+                    // swal({   
+                    //     title: "Are you sure?",   
+                    //     text: "You want to delete the event !",   
+                    //     type: "info",   
+                    //     showCancelButton: true,   
+                    //     confirmButtonColor: "#04a08b",   
+                    //     confirmButtonText: "Yes",   
+                    //     closeOnConfirm: false 
+                    // }, function(){ 
+                    //     $.ajax({
+                    //       type: "POST",
+                    //       url: base_url+'front/delete_event',
+                    //       type: 'POST',
+                    //       data: {
+                    //           event_id:event_id,
+                    //           delete_check : 1
+                    //       }, 
+                    //       success: function(html){
+                    //           swal("Deleted!", "Successfully.", "success"); 
+                    //           $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                    //               return (ev._id == calEvent._id);   
+                    //           });
+                    //           $this.$viewEventModal.modal('hide');
+                    //       }
+                    //     });      
+                    //   });
+                }else{
+                    swal("Are you sure to delete?", {
+                        icon: 'warning',
+                        buttons: {
+                          cancel: "Cancel",
+                          catch: {
+                            text: "Delete only this",
+                            value: "catch",
+                          },
+                          delete: {
+                            text: "Delete all",
+                            value: "delete_all",
+
+                          },
+                          //delete: true,
+                          
+                        },
+                      })
+                      .then((value) => {
+                        switch (value) {
+                       
+                          case "delete_all":
+                            $.ajax({
+                                type: "POST",
+                                url: base_url+'front/delete_event',
+                                type: 'POST',
+                                data: {
+                                    event_id:event_id,
+                                    delete_check : 1
+                                }, 
+                                success: function(html){
+                                    swal("Deleted!", "Successfully.", "success"); 
+                                    $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                                        return (ev.unique_key === calEvent.unique_key);   
+                                    });
+                                    $this.$viewEventModal.modal('hide');
+                                    //location.reload();
+                                }
+                            });
+                            break;
+                       
+                          case "catch":
+                                $.ajax({
+                                    type: "POST",
+                                    url: base_url+'front/delete_event',
+                                    type: 'POST',
+                                    data: {
+                                        event_id:event_id,
+                                        delete_check : 0
+                                    }, 
+                                    success: function(html){
+                                        swal("Deleted!", "Successfully.", "success"); 
+                                        $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                                            return (ev.event_id === calEvent.event_id);   
+                                        });
+                                        $this.$viewEventModal.modal('hide');
+                                        //location.reload();
+                                    }
+                                });
+                            break;
+                        }
+                      });
+                    // swal({   
+                    //     title: "Are you sure?",   
+                    //     text: "You want to delete the event !",   
+                    //     type: "info",  
+                    //     cancelButtonText : 'Delete only this', 
+                    //     showCancelButton: true,   
+                    //     confirmButtonColor: "#04a08b",   
+                    //     confirmButtonText: "Delete All",   
+                    //     closeOnConfirm: false 
+                    //     }, function(isConfirm){
+                    //         if (isConfirm) { 
+                    //         $.ajax({
+                    //             type: "POST",
+                    //             url: base_url+'front/delete_event',
+                    //             type: 'POST',
+                    //             data: {
+                    //                 event_id:event_id,
+                    //                 delete_check : 1
+                    //             }, 
+                    //             success: function(html){
+                    //                 swal("Deleted!", "Successfully.", "success"); 
+                    //                 $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                    //                     return (ev.unique_key === calEvent.unique_key);   
+                    //                 });
+                    //                 $this.$viewEventModal.modal('hide');
+                    //                 //location.reload();
+                    //             }
+                    //         });  
+                    //         }else{
+                    //             $.ajax({
+                    //                 type: "POST",
+                    //                 url: base_url+'front/delete_event',
+                    //                 type: 'POST',
+                    //                 data: {
+                    //                     event_id:event_id,
+                    //                     delete_check : 0
+                    //                 }, 
+                    //                 success: function(html){
+                    //                     swal("Deleted!", "Successfully.", "success"); 
+                    //                     $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                    //                         return (ev.event_id === calEvent.event_id);   
+                    //                     });
+                    //                     $this.$viewEventModal.modal('hide');
+                    //                     //location.reload();
+                    //                 }
+                    //             });
+                    //         }
+                            
+                    // });
+                }  
             });
             $this.$viewEventModal.find('.modal-header').find('.edit-event').unbind('click').click(function () {
                 var event_new_id = calEvent.event_id;

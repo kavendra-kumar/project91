@@ -1637,7 +1637,7 @@ include 'sidebar.php';
 <script src="<?php echo base_url('assets/css_js/calendar/vendor_components/fullcalendar/fullcalendar.js');?>"></script>
 <script src="<?php echo base_url('assets/css_js/calendar/vendor_components/fullcalendar/lib/moment.min.js');?>"></script>
 <script src="<?php echo base_url('assets/css_js/calendar/vendor_components/fullcalendar/fullcalendar.min.js');?>"></script>
-<script src="<?php echo base_url('assets/css_js/calendar/vendor_components/sweetalert/sweetalert.min.js');?>"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="<?php echo base_url('assets/css_js/calendar/vendor_components/jquery-toast-plugin-master/src/jquery.toast.js');?>"></script>
 <script src="<?php echo base_url('assets/css_js/calendar/vendor_components/bootstrap-daterangepicker/daterangepicker.js');?>"></script>
 <script src="<?php echo base_url('assets/css_js/calendar/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js');?>"></script>
