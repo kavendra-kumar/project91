@@ -968,6 +968,7 @@ var base_url = 'http://localhost/project91/';
                                 },
                                 url: base_url+'front/get_allcalendar_events',            
                                 success: function(data){
+                                    console.log("gfgg");
                                     console.log(data);
                                     var db_events = data; 
                                     function renameKey(obj, old_key, new_key) {   
@@ -1054,6 +1055,7 @@ var base_url = 'http://localhost/project91/';
                                 },
                                 url: base_url+'front/get_allcalendar_events',            
                                 success: function(data){
+                                    console.log("qwqwqw");
                                     var db_events = data; 
                                     function renameKey(obj, old_key, new_key) {   
                                         // check if old key = new key  
@@ -1206,6 +1208,7 @@ var base_url = 'http://localhost/project91/';
                     },
                     url: base_url+'front/get_allcalendar_events',            
                     success: function(data){
+                        console.log("testt");
                         var db_events = data; 
                         function renameKey(obj, old_key, new_key) {   
                             // check if old key = new key  
@@ -1275,6 +1278,7 @@ var base_url = 'http://localhost/project91/';
                     },
                     url: base_url+'front/get_allcalendar_events',            
                     success: function(data){
+                        console.log("ssss");
                         var db_events = data; 
                         function renameKey(obj, old_key, new_key) {   
                             // check if old key = new key  
@@ -1344,6 +1348,7 @@ var base_url = 'http://localhost/project91/';
                     },
                     url: base_url+'front/get_allcalendar_events',            
                     success: function(data){
+                        console.log("asasa");
                         var db_events = data; 
                         function renameKey(obj, old_key, new_key) {   
                             // check if old key = new key  
