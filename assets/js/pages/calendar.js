@@ -215,107 +215,44 @@ var base_url = 'http://localhost/project91/';
                     }
         });
 
-        // var start_date = $.fullCalendar.formatDate(calEvent.start, "Y-MM-DD HH:mm:ss");
-        // var allDay = calEvent.allDay;
-        // if(allDay == false){
-        //     var end_date = $.fullCalendar.formatDate(calEvent.end, "Y-MM-DD HH:mm:ss");
-
-        //     if(calEvent.event_start_date == calEvent.event_end_date){
-        //         var date1 = moment(calEvent.event_start_date, 'Y-MM-DD').format('dddd, MMMM DD YYYY');
-        //         var time1 = moment(calEvent.event_start_time, 'HH:mm').format('hh:mm A');
-        //         var time2 = moment(calEvent.event_end_time, 'HH:mm').format('hh:mm A');
-        //         var eventdate = date1 + ', ' + time1+ ' - ' + time2;
-        //     }else{
-        //         var date1 = moment(calEvent.event_start_date, 'Y-MM-DD').format('dddd, MMMM DD YYYY');
-        //         var date2 = moment(calEvent.event_end_date, 'Y-MM-DD').format('dddd, MMMM DD YYYY');
-        //         var time1 = moment(calEvent.event_start_time, 'HH:mm').format('hh:mm A');
-        //         var time2 = moment(calEvent.event_end_time, 'HH:mm').format('hh:mm A');
-        //         var eventdate = date1 + ', ' + time1 + ' - ' + date2 + ', ' + time2;
-        //     }
-        //     var eventallDay = '';
-        // }else{
-        //     var end_date = calEvent.event_end_date + ' 00:00:00';
-        //     if(calEvent.event_start_date == calEvent.event_end_date){
-        //         var date1 = moment(calEvent.event_start_date, 'Y-MM-DD').format('dddd, MMMM DD YYYY');
-        //         var eventdate = date1;
-        //     }else{
-        //         var date1 = moment(calEvent.event_start_date, 'Y-MM-DD').format('dddd, MMMM DD YYYY');
-        //         var date2 = moment(calEvent.event_end_date, 'Y-MM-DD').format('dddd, MMMM DD YYYY');
-        //         var eventdate = date1 +' - '+ date2;
-        //     }
-        //     var eventallDay = 'All Day Event';
-        // }  
-        // if(calEvent.event_reminder != 'No reminder'){
-        //     var eventReminder = '<div class="col-md-1"><i class="fa fa-bell-o"></i></div><div class="col-md-11"><p class="event-reminder">' + calEvent.event_reminder + '</p></div>';
-        // }else{
-        //     var eventReminder = '';
-        // }  
-        // if(calEvent.event_repeat_option != 'Does not repeat'){
-        //     var eventRepeatOption = '<div class="col-md-1"><i class="fa fa-repeat"></div><div class="col-md-11"></i><p class="event-repeatoption">' + calEvent.event_repeat_option + '</p></div>';
-        // }else{
-        //     var eventRepeatOption = '';
-        // } 
-        // if(calEvent.title != ''){
-        //     if(calEvent.title.length > 80){  
-        //     var typee = "'event_name'";  
-        //         var eventTitle = calEvent.title.substr(0, 80) +'<a class="readmore read-moreevent_name'+calEvent.event_id+'" onclick="return readMoreContent('+typee+','+calEvent.event_id+');"> Read more</a><span class="show-moreevent_name'+calEvent.event_id+'" style="display: none;">'+calEvent.title.substr(80)+' <a class="readless read-lessevent_name'+calEvent.event_id+'" onclick="return readLess('+typee+','+calEvent.event_id+');">Read less</a></span>';
-        //       }else{
-        //         var eventTitle = calEvent.title;
-        //       }
-            
-        // }else{
-        //     var eventTitle = '';
-        // }
-
-        // if(calEvent.event_note != ''){
-        //     if(calEvent.event_note.length > 120){  
-        //     var typee = "'event'";  
-        //         var eventNote = '<div class="col-md-1"><i class="fa fa-align-left"></i></div><div class="col-md-11"><p class="event-note">'+ calEvent.event_note.substr(0, 120) +'<a class="readmore read-moreevent'+calEvent.event_id+'" onclick="return readMoreContent('+typee+','+calEvent.event_id+');"> Read more</a><span class="show-moreevent'+calEvent.event_id+'" style="display: none;">'+calEvent.event_note.substr(120)+' <a class="readless read-lessevent'+calEvent.event_id+'" onclick="return readLess('+typee+','+calEvent.event_id+');">Read less</a></span></p></div>';
-        //       }else{
-        //         var eventNote = '<div class="col-md-1"><i class="fa fa-align-left"></i></div><div class="col-md-11"><p class="event-note">'+ calEvent.event_note +'</p></div>';
-        //       }
-            
-        // }else{
-        //     var eventNote = '';
-        // } 
-
-        // var event_color = calEvent.className[0];
-        // var event_div = $('<div class="event-modal"></div>');
-        //     event_div.append('<div class="row first-row"></div>');
-        //     event_div.find('.first-row')
-        //              .append('<div class="col-md-12"><h3 class="event-title">' + eventTitle + '</h3><small class="event-datetime">' + eventdate + '</small><br><br><small class="event-allday">' + eventallDay + '</small></div>');
-        //     event_div.append('<br><br><div class="row second-row"></div>');   
-        //     event_div.find('.second-row')    
-        //              .append(eventNote)
-        //              .append(eventReminder)
-        //              .append(eventRepeatOption)
-        //              .append('<div class="col-md-1"><i class="fa fa-list"></i></div><div class="col-md-11"><p class="event-task"> My ' + calEvent.type + '</p></div><input type="hidden" name="event_id" value="' + calEvent.event_id + '" >');
-               
-        //     $this.$viewEventModal.modal({
-        //         backdrop: 'static'
-        //     });
-        //     $this.$viewEventModal.find('.modal-body').empty().prepend(event_div).end();
-        //     $('#add-task').find("select[name=event_id]").val(calEvent.event_id); 
-        //     $('#add-task').find("#event_id").select2().trigger('change');
-           // var event_new_id = calEvent.event_id;
-            // $.ajax({
-            //         type: "POST",
-            //         url: base_url+'front/task_data_new',
-            //         type: 'POST',
-            //         data: {
-            //             event_id:event_new_id 
-            //         }, 
-            //         success: function(data){
-            //            var task_start_date = data.task_start_date;
-            //            var task_end_date = data.task_end_date;
-            //            console.log("success");
-            //            console.log(task_start_date);
-            //            // $this.$viewEventModal.find('.modal-body1').empty().prepend(data).end();
-            //         }
-            //       });
-            $this.$viewEventModal.find('.modal-header').find('.delete-event').unbind('click').click(function () {
+        $this.$viewEventModal.find('.modal-header').find('.delete-event').unbind('click').click(function () {
             //var event_id = event_div.find("input[name=event_id]").val(); 
             var event_id = calEvent.event_id;
+                if(calEvent.array_count == 1){
+                    swal("Are you sure to delete?", {
+                        icon: 'warning',
+                        buttons: {
+                          cancel: "Cancel",
+                          confirm: true,
+                        },
+                      })
+                      .then((value) => {
+                        switch (value) {
+                          case true:
+                            $.ajax({
+                                type: "POST",
+                                url: base_url+'front/delete_event',
+                                type: 'POST',
+                                data: {
+                                    event_id:event_id,
+                                    delete_check : 1
+                                }, 
+                                success: function(html){
+                                    swal("Deleted!", "Successfully.", "success"); 
+                                    $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                                        return (ev.unique_key === calEvent.unique_key);   
+                                    });
+                                    $this.$viewEventModal.modal('hide');
+                                    //location.reload();
+                                }
+                            });
+                            break;
+                       
+                          
+                        }
+                      });
+                }else{
+                 
                 if(calEvent.event_repeat_option_type == 'Does not repeat' || calEvent.event_repeat_option_type == 'Daily'){
                     swal("Are you sure to delete?", {
                         icon: 'warning',
@@ -487,6 +424,7 @@ var base_url = 'http://localhost/project91/';
                             
                     // });
                 }  
+            }
             });
             $this.$viewEventModal.find('.modal-header').find('.edit-event').unbind('click').click(function () {
                 var event_new_id = calEvent.event_id;
@@ -509,6 +447,15 @@ var base_url = 'http://localhost/project91/';
                 if(calEvent.event_repeat_option_type == 'Does not repeat'){
                     $('#event_start_end_date_div_update').show();
                     $('#event_start_end_date_select_update').hide();                    
+                }else if(calEvent.event_repeat_option_type == 'Custom'){
+                    const split_string = calEvent.custom_all_day.split(",");
+                    split_string.forEach(myFunction);
+                    function myFunction(value, index, array) {
+                        $("#radioupdate_"+value).prop('checked', true);
+                    }
+                    $('.custom-class-update').show();
+                    $('#event_start_end_date_div_update').hide();
+                    $('#event_start_end_date_select_update').show();
                 }else{
                     $('#event_start_end_date_div_update').hide();
                     $('#event_start_end_date_select_update').show();
@@ -672,6 +619,9 @@ var base_url = 'http://localhost/project91/';
                                         return false;
                                     } 
                                 }                   
+                            },
+                            error: function() {
+                                alert("Something went Wrong...");
                             }
                         });
                     }else{

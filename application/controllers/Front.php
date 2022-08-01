@@ -392,7 +392,6 @@ class Front extends MY_Controller {
     {
         // print_r($this->input->post());
         // die;
-        
         if($this->input->post('event_allDay') == 'on'){
             $event_reminder = $this->input->post('event_reminder_new');
         }else{
@@ -623,7 +622,6 @@ class Front extends MY_Controller {
                     //////////custom store
                     if($this->input->post('event_repeat_option') == 'Custom')
                     {
-                    
                     $start=$event_start_date;
                     $end=$event_end_date;
                     $format = 'Y-m-d';
@@ -652,20 +650,9 @@ class Front extends MY_Controller {
                     $d_array=$array;
                     $weekday_date=[];
                    
-                    // foreach($d_array as $d)
-                    //     {
-                    //     if($d[1]='Sat')
-                    //         {
-                    //         $weekday_date[]=$d;  
-                    //         }
-                    //     }
                     $custom_check_array = $this->input->post('custom_check');
-                    
-                  // print_r ($custom_check_array[0]);
-                //    foreach($custom_check_array as $custom_check_array_new){
-                //     echo $custom_check_array_new;
-                //    }
-                   foreach($d_array as $d)
+                    $custom_all_day = implode(",",$custom_check_array);
+                    foreach($d_array as $d)
                         {
                             foreach($custom_check_array as $custom_check_array_new){
                             if($d[1]==$custom_check_array_new)
@@ -714,6 +701,7 @@ class Front extends MY_Controller {
                                     'type' => $this->input->post('type'),
                                     'status' => 'active',
                                     'date' => date('Y-m-d H:i:s'),
+                                    'custom_all_day' => $custom_all_day,
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
                                  );
                         }
@@ -1121,9 +1109,19 @@ class Front extends MY_Controller {
     }
     public function update_event_form() //Update Event Details
     {
-        $delete_check = 1;
-        $this->Front_model->deleteEvent($this->input->post('event_id'),$delete_check);
-        $this->insert_draggable_event();
+        try {
+            $delete_check = 1;
+            $this->Front_model->deleteEvent($this->input->post('event_id'),$delete_check);
+            $this->insert_draggable_event();
+          }
+          
+          //catch exception
+          catch(Exception $e) {
+            $this->session->set_flashdata('message', 'Something went wrong'); 
+          }
+        // $delete_check = 1;
+        // $this->Front_model->deleteEvent($this->input->post('event_id'),$delete_check);
+        // $this->insert_draggable_event();
     }
 
     // public function update_event_form() //Update Event Details
@@ -2246,9 +2244,10 @@ class Front extends MY_Controller {
         $format = 'Y-m-d';
         $data_array = array();
         if($data){
-
             foreach ($data as $d)
                 {
+                $all_data = $this->Front_model->getDataByUniqueId($d->unique_key);
+                $array_count = count($all_data);
                 if($d->event_repeat_option == 'Does not repeat')
                 {              
                     $event_start_date = date($format, strtotime($d->event_start_date));
@@ -2270,7 +2269,9 @@ class Front extends MY_Controller {
                                     'draggable_id' => $d->draggable_id,
                                     'type' => $d->type,
                                     'unique_key' => $d->unique_key,
+                                    'custom_all_day' => $d->custom_all_day,
                                     'event_repeat_option_type' => $d->event_repeat_option_type,
+                                    'array_count' => $array_count,
 
                                  );
                     $data_array[] = $data1;
@@ -2314,7 +2315,9 @@ class Front extends MY_Controller {
                                         'event_reminder' => $d->event_reminder,
                                         'draggable_event' => $d->draggable_event,
                                         'draggable_id' => $d->draggable_id,
+                                        'custom_all_day' => $d->custom_all_day,
                                         'type' => $d->type,
+                                        'array_count' => $array_count,
                                      );
                         $data_array[] = $data1;
                         $start_date = strtotime($stepVal, $start_date);
@@ -2325,11 +2328,6 @@ class Front extends MY_Controller {
         header('Content-type: application/json');
         echo json_encode($data_array);  
 
-    //     $obj=array(
-    //     "data" => $data_array,
-    //     "data1" => $data_array_cyc
-    // );
-        // echo json_encode($obj);
     }
 
     public function get_allcalendar_events()
@@ -2347,6 +2345,8 @@ class Front extends MY_Controller {
             $data_array = array();
             if($data){
                 foreach ($data as $d) {
+                    $all_data = $this->Front_model->getDataByUniqueId($d->unique_key);
+                    $array_count = count($all_data);
                     if($d->event_repeat_option == 'Does not repeat')
                     {              
                         $event_start_date = date($format, strtotime($d->event_start_date));
@@ -2366,8 +2366,10 @@ class Front extends MY_Controller {
                                         'draggable_event' => $d->draggable_event,
                                         'draggable_id' => $d->draggable_id,
                                         'type' => $d->type,
+                                        'custom_all_day' => $d->custom_all_day,
                                         'unique_key' => $d->unique_key,
                                         'event_repeat_option_type' => $d->event_repeat_option_type,
+                                        'array_count' => $array_count,
                                      );
                         $data_array[] = $data1;
                     }
@@ -2423,7 +2425,9 @@ class Front extends MY_Controller {
                                             'draggable_id' => $d->draggable_id,
                                             'type' => $d->type,
                                             'unique_key' => $d->unique_key,
+                                            'custom_all_day' => $d->custom_all_day,
                                             'event_repeat_option_type' => $d->event_repeat_option_type,
+                                            'array_count' => $array_count,
                                          );
                             $data_array[] = $data1;
                             $start_date = strtotime($stepVal, $start_date);
@@ -2487,6 +2491,7 @@ class Front extends MY_Controller {
                                         'draggable_id' => $d->draggable_id,
                                         'type' => $d->type,
                                         'unique_key' => $d->unique_key,
+                                        'custom_all_day' => $d->custom_all_day,
                                         'event_repeat_option_type' => $d->event_repeat_option_type,
                                      );
                         $data_array[] = $data1;
@@ -2541,6 +2546,7 @@ class Front extends MY_Controller {
                                             'draggable_id' => $d->draggable_id,
                                             'type' => $d->type,
                                             'unique_key' => $d->unique_key,
+                                            'custom_all_day' => $d->custom_all_day,
                                             'event_repeat_option_type' => $d->event_repeat_option_type,
                                         );
                             $data_array[] = $data1;
@@ -2606,6 +2612,7 @@ class Front extends MY_Controller {
                                         'draggable_id' => $d->draggable_id,
                                         'type' => $d->type,
                                         'unique_key' => $d->unique_key,
+                                        'custom_all_day' => $d->custom_all_day,
                                         'event_repeat_option_type' => $d->event_repeat_option_type,
                                      );
                         $data_array[] = $data1;
@@ -2661,6 +2668,7 @@ class Front extends MY_Controller {
                                             'draggable_id' => $d->draggable_id,
                                             'type' => $d->type,
                                             'unique_key' => $d->unique_key,
+                                            'custom_all_day' => $d->custom_all_day,
                                             'event_repeat_option_type' => $d->event_repeat_option_type,
                                          );
                             $data_array[] = $data1;

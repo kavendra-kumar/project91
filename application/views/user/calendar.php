@@ -738,32 +738,32 @@ include 'sidebar.php';
 											<div class="cus_radioBTN">
 												<div class="selector">
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate1" name="custom_check[]" class="selector-item_radio"  value="Sun">
-														<label for="radioupdate1" class="selector-item_label">S</label>
+														<input type="checkbox" id="radioupdate_Sun" name="custom_check[]" class="selector-item_radio"  value="Sun">
+														<label for="radioupdate_Sun" class="selector-item_label">S</label>
 													</div>
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate2" name="custom_check[]" class="selector-item_radio" value="Mon">
-														<label for="radioupdate2" class="selector-item_label">M</label>
+														<input type="checkbox" id="radioupdate_Mon" name="custom_check[]" class="selector-item_radio" value="Mon">
+														<label for="radioupdate_Mon" class="selector-item_label">M</label>
 													</div>
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate3" name="custom_check[]" class="selector-item_radio" value="Tue">
-														<label for="radioupdate3" class="selector-item_label">T</label>
+														<input type="checkbox" id="radioupdate_Tue" name="custom_check[]" class="selector-item_radio" value="Tue">
+														<label for="radioupdate_Tue" class="selector-item_label">T</label>
 													</div>
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate4" name="custom_check[]" class="selector-item_radio" value="Wed">
-														<label for="radioupdate4" class="selector-item_label">W</label>
+														<input type="checkbox" id="radioupdate_Wed" name="custom_check[]" class="selector-item_radio" value="Wed">
+														<label for="radioupdate_Wed" class="selector-item_label">W</label>
 													</div>
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate5" name="custom_check[]" class="selector-item_radio" value="Thu">
-														<label for="radioupdate5" class="selector-item_label">T</label>
+														<input type="checkbox" id="radioupdate_Thu" name="custom_check[]" class="selector-item_radio" value="Thu">
+														<label for="radioupdate_Thu" class="selector-item_label">T</label>
 													</div>
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate6" name="custom_check[]" class="selector-item_radio" value="Fri">
-														<label for="radioupdate6" class="selector-item_label">F</label>
+														<input type="checkbox" id="radioupdate_Fri" name="custom_check[]" class="selector-item_radio" value="Fri">
+														<label for="radioupdate_Fri" class="selector-item_label">F</label>
 													</div>
 													<div class="selecotr-item">
-														<input type="checkbox" id="radioupdate7" name="custom_check[]" class="selector-item_radio" value="Sat">
-														<label for="radioupdate7" class="selector-item_label">S</label>
+														<input type="checkbox" id="radioupdate_Sat" name="custom_check[]" class="selector-item_radio" value="Sat">
+														<label for="radioupdate_Sat" class="selector-item_label">S</label>
 													</div>
 												</div>
 											</div>

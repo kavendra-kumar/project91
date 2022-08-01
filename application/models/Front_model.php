@@ -677,6 +677,12 @@ class Front_model extends CI_Model {
 		$query = $this->db->get('planner');
 		return $query->row();
 	}
+	function getDataByUniqueId($unique_key)
+	{
+		$this->db->where('unique_key', $unique_key);
+		$query = $this->db->get('events');
+		return $query->result();
+	}
 }
 /* End of file Front_model.php */
 /* Location: ./application/helpers/Front_model.php */
