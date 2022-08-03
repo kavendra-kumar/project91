@@ -80,6 +80,9 @@ if($this->uri->segment(2) == 'myday'){
     box-shadow:0 0 4px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.5);
     transform:translateY(-2px);
 }
+.swal-footer{
+	text-align: center;
+}
 @media (max-width:480px) {
 	.selector{
 		width: 90%;

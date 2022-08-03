@@ -323,8 +323,9 @@ class Front extends MY_Controller {
     { 
         $event_id = $this->input->post('event_id');
         $delete_check = $this->input->post('delete_check');
-        $this->Front_model->deleteEvent($event_id,$delete_check);
+        $query_result = $this->Front_model->deleteEvent($event_id,$delete_check);
         $response['status'] = TRUE;
+        $response['data'] = $query_result;
         header('Content-type: application/json');
         echo json_encode($response);
     }

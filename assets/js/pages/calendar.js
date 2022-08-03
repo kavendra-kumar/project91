@@ -321,6 +321,10 @@ var base_url = 'http://localhost/project91/';
                             text: "Delete only this",
                             value: "catch",
                           },
+                          following: {
+                            text: "Delete this and following",
+                            value: "following",
+                          },
                           delete: {
                             text: "Delete all",
                             value: "delete_all",
@@ -369,6 +373,28 @@ var base_url = 'http://localhost/project91/';
                                         });
                                         $this.$viewEventModal.modal('hide');
                                         //location.reload();
+                                    }
+                                });
+                            break;
+                            case "following":
+                                $.ajax({
+                                    type: "POST",
+                                    url: base_url+'front/delete_event',
+                                    type: 'POST',
+                                    data: {
+                                        event_id:event_id,
+                                        delete_check : 2
+                                    }, 
+                                    success: function(html){
+                                            //console.log(html.data[0]);
+                                            $.each(html.data, function(index) {
+                                                console.log(html.data[index].id);
+                                                swal("Deleted!", "Successfully.", "success"); 
+                                                $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                                                return (ev.event_id === html.data[index].id);   
+                                            });
+                                            $this.$viewEventModal.modal('hide');
+                                        });
                                     }
                                 });
                             break;
