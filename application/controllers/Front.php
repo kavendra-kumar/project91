@@ -490,9 +490,9 @@ class Front extends MY_Controller {
                                     'show_draggable_event' => 1,
                                     'status' => 'active',
                                     'date' => date('Y-m-d H:i:s'),
-                                    'event_repeat_option_type' => $this->input->post('event_repeat_option'),
-                                    'created_type' => $this->input->post('created_type'),
-                                    'task_priority' => $this->input->post('task_priority'),
+                                    // 'event_repeat_option_type' => $this->input->post('event_repeat_option'),
+                                    // 'created_type' => $this->input->post('created_type'),
+                                    // 'task_priority' => $this->input->post('task_priority'),
                                  );
                     $data = $this->security->xss_clean($data); // xss filter
                     $this->Front_model->insertDraggableEvent($data);
