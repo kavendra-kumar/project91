@@ -389,7 +389,7 @@ class Front extends MY_Controller {
           return $dates;
         }
 
-    public function insert_draggable_event() //Insert Draggable Event Details
+    public function insert_draggable_event($unique_key ="1234") //Insert Draggable Event Details
     {
         // print_r($this->input->post());
         // die;
@@ -398,8 +398,12 @@ class Front extends MY_Controller {
         }else{
             $event_reminder = $this->input->post('event_reminder') ;
         }
+        if($unique_key == "1234"){
+            $unique_key = uniqid();
+        }else{
+            $unique_key = $unique_key;
+        }
         
-        $unique_key = uniqid();
         $this->form_validation->set_rules('event_name','Event Name','trim|required');
         $this->form_validation->set_rules('event_color','Event Color','trim|required');
         // if($this->input->post('event_repeat_option') == 'Does not repeat'){
@@ -429,7 +433,8 @@ class Front extends MY_Controller {
         {
             
             $type = $this->input->post('type');         
-                $event_start_end_date = $this->input->post('event_start_end_date');
+               // $event_start_end_date = $this->input->post('event_start_end_date');
+                $event_start_end_date = $this->input->post('event_start_date_nn')." - ".$this->input->post('event_end_date_nn');
                 $sdd = explode(' - ',$event_start_end_date);
                 $event_start_date = $sdd[0];
                 $event_end_date = $sdd[1];
@@ -486,6 +491,8 @@ class Front extends MY_Controller {
                                     'status' => 'active',
                                     'date' => date('Y-m-d H:i:s'),
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
+                                    'created_type' => $this->input->post('created_type'),
+                                    'task_priority' => $this->input->post('task_priority'),
                                  );
                     $data = $this->security->xss_clean($data); // xss filter
                     $this->Front_model->insertDraggableEvent($data);
@@ -516,7 +523,9 @@ class Front extends MY_Controller {
                                     'type' => $this->input->post('type'),
                                     'status' => 'active',
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
-                                    'date' => date('Y-m-d H:i:s')
+                                    'date' => date('Y-m-d H:i:s'),
+                                    'created_type' => $this->input->post('created_type'),
+                                    'task_priority' => $this->input->post('task_priority'),
                                 );
 
                 }else{
@@ -542,6 +551,8 @@ class Front extends MY_Controller {
                                     'status' => 'active',
                                     'date' => date('Y-m-d H:i:s'),
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
+                                    'created_type' => $this->input->post('created_type'),
+                                    'task_priority' => $this->input->post('task_priority'),
                                 );
                 }
                 
@@ -616,6 +627,8 @@ class Front extends MY_Controller {
                                     'status' => 'active',
                                     'date' => date('Y-m-d H:i:s'),
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
+                                    'created_type' => $this->input->post('created_type'),
+                                    'task_priority' => $this->input->post('task_priority'),
                                  );
                         }
 
@@ -704,6 +717,8 @@ class Front extends MY_Controller {
                                     'date' => date('Y-m-d H:i:s'),
                                     'custom_all_day' => $custom_all_day,
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
+                                    'created_type' => $this->input->post('created_type'),
+                                    'task_priority' => $this->input->post('task_priority'),
                                  );
                         }
 
@@ -803,6 +818,8 @@ class Front extends MY_Controller {
                                     'status' => 'active',
                                     'date' => date('Y-m-d H:i:s'),
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
+                                    'created_type' => $this->input->post('created_type'),
+                                    'task_priority' => $this->input->post('task_priority'),
                                  );
                         }
 
@@ -894,6 +911,8 @@ class Front extends MY_Controller {
                                     'status' => 'active',
                                     'date' => date('Y-m-d H:i:s'),
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
+                                    'created_type' => $this->input->post('created_type'),
+                                    'task_priority' => $this->input->post('task_priority'),
                                  );
                         }
 
@@ -986,6 +1005,8 @@ class Front extends MY_Controller {
                                     'status' => 'active',
                                     'date' => date('Y-m-d H:i:s'),
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
+                                    'created_type' => $this->input->post('created_type'),
+                                    'task_priority' => $this->input->post('task_priority'),
                                  );
                         }
 
@@ -1042,6 +1063,8 @@ class Front extends MY_Controller {
             $response['draggable_id'] = $response['drag_id'];                   
             $response['status'] = TRUE;
             $response['event_repeat_option_type'] = $this->input->post('event_repeat_option');
+            $response['created_type'] = $this->input->post('created_type');
+            $response['task_priority'] = $this->input->post('task_priority');
             $this->session->set_flashdata('message', 'Successfully Created'); 
             header('Content-type: application/json');
             echo json_encode($response); 
@@ -1111,18 +1134,16 @@ class Front extends MY_Controller {
     public function update_event_form() //Update Event Details
     {
         try {
-            $delete_check = 1;
-            $this->Front_model->deleteEvent($this->input->post('event_id'),$delete_check);
-            $this->insert_draggable_event();
+            $delete_check = $this->input->post('delete_check');
+            $result = $this->Front_model->deleteEvent($this->input->post('event_id'),$delete_check);
+            $unique_key = $result[0]->unique_key;
+            $this->insert_draggable_event($unique_key);
           }
           
           //catch exception
           catch(Exception $e) {
             $this->session->set_flashdata('message', 'Something went wrong'); 
           }
-        // $delete_check = 1;
-        // $this->Front_model->deleteEvent($this->input->post('event_id'),$delete_check);
-        // $this->insert_draggable_event();
     }
 
     // public function update_event_form() //Update Event Details
@@ -2249,6 +2270,8 @@ class Front extends MY_Controller {
                 {
                 $all_data = $this->Front_model->getDataByUniqueId($d->unique_key);
                 $array_count = count($all_data);
+                $isLast = $this->Front_model->getDataIsLast($d->id);
+                $isLastCount = count($isLast);
                 if($d->event_repeat_option == 'Does not repeat')
                 {              
                     $event_start_date = date($format, strtotime($d->event_start_date));
@@ -2273,6 +2296,9 @@ class Front extends MY_Controller {
                                     'custom_all_day' => $d->custom_all_day,
                                     'event_repeat_option_type' => $d->event_repeat_option_type,
                                     'array_count' => $array_count,
+                                    'isLastCount' => $isLastCount,
+                                    'created_type' => $d->created_type,
+                                    'task_priority' => $d->task_priority,
 
                                  );
                     $data_array[] = $data1;
@@ -2319,6 +2345,9 @@ class Front extends MY_Controller {
                                         'custom_all_day' => $d->custom_all_day,
                                         'type' => $d->type,
                                         'array_count' => $array_count,
+                                        'isLastCount' => $isLastCount,
+                                        'created_type' => $d->created_type,
+                                        'task_priority' => $d->task_priority,
                                      );
                         $data_array[] = $data1;
                         $start_date = strtotime($stepVal, $start_date);
@@ -2348,6 +2377,8 @@ class Front extends MY_Controller {
                 foreach ($data as $d) {
                     $all_data = $this->Front_model->getDataByUniqueId($d->unique_key);
                     $array_count = count($all_data);
+                    $isLast = $this->Front_model->getDataIsLast($d->id);
+                    $isLastCount = count($isLast);
                     if($d->event_repeat_option == 'Does not repeat')
                     {              
                         $event_start_date = date($format, strtotime($d->event_start_date));
@@ -2371,6 +2402,9 @@ class Front extends MY_Controller {
                                         'unique_key' => $d->unique_key,
                                         'event_repeat_option_type' => $d->event_repeat_option_type,
                                         'array_count' => $array_count,
+                                        'isLastCount' => $isLastCount,
+                                        'created_type' => $d->created_type,
+                                        'task_priority' => $d->task_priority,
                                      );
                         $data_array[] = $data1;
                     }
@@ -2429,6 +2463,9 @@ class Front extends MY_Controller {
                                             'custom_all_day' => $d->custom_all_day,
                                             'event_repeat_option_type' => $d->event_repeat_option_type,
                                             'array_count' => $array_count,
+                                            'isLastCount' => $isLastCount,
+                                            'created_type' => $d->created_type,
+                                            'task_priority' => $d->task_priority,
                                          );
                             $data_array[] = $data1;
                             $start_date = strtotime($stepVal, $start_date);
@@ -2472,6 +2509,10 @@ class Front extends MY_Controller {
             $data_array = array();
             if($data){
                 foreach ($data as $d) {
+                    $all_data = $this->Front_model->getDataByUniqueId($d->unique_key);
+                    $array_count = count($all_data);
+                    $isLast = $this->Front_model->getDataIsLast($d->id);
+                    $isLastCount = count($isLast);
                     if($d->event_repeat_option == 'Does not repeat')
                     {              
                         $event_start_date = date($format, strtotime($d->event_start_date));
@@ -2494,6 +2535,10 @@ class Front extends MY_Controller {
                                         'unique_key' => $d->unique_key,
                                         'custom_all_day' => $d->custom_all_day,
                                         'event_repeat_option_type' => $d->event_repeat_option_type,
+                                        'array_count' => $array_count,
+                                        'isLastCount' => $isLastCount,
+                                        'created_type' => $d->created_type,
+                                        'task_priority' => $d->task_priority,
                                      );
                         $data_array[] = $data1;
                     }
@@ -2549,6 +2594,10 @@ class Front extends MY_Controller {
                                             'unique_key' => $d->unique_key,
                                             'custom_all_day' => $d->custom_all_day,
                                             'event_repeat_option_type' => $d->event_repeat_option_type,
+                                            'array_count' => $array_count,
+                                            'isLastCount' => $isLastCount,
+                                            'created_type' => $d->created_type,
+                                            'task_priority' => $d->task_priority,
                                         );
                             $data_array[] = $data1;
                             $start_date = strtotime($stepVal, $start_date);
@@ -2586,13 +2635,16 @@ class Front extends MY_Controller {
           }
         }else{
           if($count_my == 2){
-            echo "ewewe";
             $month_year = date("Y-m", strtotime($month_year));
             $data = $this->Front_model->getCalendarMonthEvents($student_id,$month_year);
             $format = 'Y-m-d';
             $data_array = array();
             if($data){
                 foreach ($data as $d) {
+                    $all_data = $this->Front_model->getDataByUniqueId($d->unique_key);
+                    $array_count = count($all_data);
+                    $isLast = $this->Front_model->getDataIsLast($d->id);
+                    $isLastCount = count($isLast);
                     if($d->event_repeat_option == 'Does not repeat')
                     {              
                         $event_start_date = date($format, strtotime($d->event_start_date));
@@ -2615,6 +2667,10 @@ class Front extends MY_Controller {
                                         'unique_key' => $d->unique_key,
                                         'custom_all_day' => $d->custom_all_day,
                                         'event_repeat_option_type' => $d->event_repeat_option_type,
+                                        'array_count' => $array_count,
+                                        'isLastCount' => $isLastCount,
+                                        'created_type' => $d->created_type,
+                                        'task_priority' => $d->task_priority,
                                      );
                         $data_array[] = $data1;
                     }
@@ -2671,6 +2727,10 @@ class Front extends MY_Controller {
                                             'unique_key' => $d->unique_key,
                                             'custom_all_day' => $d->custom_all_day,
                                             'event_repeat_option_type' => $d->event_repeat_option_type,
+                                            'array_count' => $array_count,
+                                            'isLastCount' => $isLastCount,
+                                            'created_type' => $d->created_type,
+                                            'task_priority' => $d->task_priority,
                                          );
                             $data_array[] = $data1;
                             $start_date = strtotime($stepVal, $start_date);
@@ -2818,10 +2878,72 @@ class Front extends MY_Controller {
     {
         $event_id = $this->input->post('event_id');
         $event_data  = $this->Front_model->getTaskDataNew($event_id);
+        $start_nn = $event_data[0]->event_start_date;
+        foreach($event_data as $row)
+        {
+            $d1 = new DateTime($row->event_start_date);
+            $d2 = new DateTime($start_nn);
+            if($d1 < $d2){
+                $start_nn = $row->event_start_date;
+            }
+
+        }
+        $end_nn = $event_data[0]->event_end_date;
+        foreach($event_data as $row)
+        {
+            $d1 = new DateTime($row->event_end_date);
+            $d2 = new DateTime($end_nn);
+            if($d1 > $d2){
+                $end_nn = $row->event_end_date;
+            }
+
+        }
+        // $response['task_start_date'] = $event_data[0]->event_start_date;
+        // $response['task_end_date'] = array_slice($event_data, -1)[0]->event_end_date;
+        $response['task_start_date'] = $start_nn;
+        $response['task_end_date'] = $end_nn;
+        header('Content-type: application/json');
+        echo json_encode($response);
+    }
+    public function task_data_single_event() //Task Details
+    {
+        $event_id = $this->input->post('event_id');
+        $event_data  = $this->Front_model->getTaskData($event_id);
         $response['task_start_date'] = $event_data[0]->event_start_date;
-        $response['task_end_date'] = array_slice($event_data, -1)[0]->event_end_date;
+        $response['task_end_date'] = $event_data[0]->event_end_date;
         // print_r($response);
         // die;
+        header('Content-type: application/json');
+        echo json_encode($response);
+    }
+    public function task_data_following_event() //Task Details
+    {
+        $event_id = $this->input->post('event_id');
+        $event_data  = $this->Front_model->getTaskDataFollowing($event_id);
+        $start_nn = $event_data[0]->event_start_date;
+        foreach($event_data as $row)
+        {
+            $d1 = new DateTime($row->event_start_date);
+            $d2 = new DateTime($start_nn);
+            if($d1 < $d2){
+                $start_nn = $row->event_start_date;
+            }
+
+        }
+        $end_nn = $event_data[0]->event_end_date;
+        foreach($event_data as $row)
+        {
+            $d1 = new DateTime($row->event_end_date);
+            $d2 = new DateTime($end_nn);
+            if($d1 > $d2){
+                $end_nn = $row->event_end_date;
+            }
+
+        }
+        $response['task_start_date'] = $start_nn;
+        $response['task_end_date'] = $end_nn;
+        // $response['task_start_date'] = $event_data[0]->event_start_date;
+        // $response['task_end_date'] = array_slice($event_data, -1)[0]->event_end_date;
         header('Content-type: application/json');
         echo json_encode($response);
     }

@@ -34,6 +34,7 @@ if($this->uri->segment(2) == 'myday'){
     <link rel="stylesheet" href="<?php echo base_url('assets/css_js/calendar/css/skin_color.css');?>">
     <!--custom css-->
     <link rel="stylesheet" href="<?php echo base_url('assets/css_js/calendar/css/lib/control/iconselect.css');?>">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--custom css-->
     <script src="<?php echo base_url('assets/js/jquery.min.js');?>"></script> 
     <script src="<?php echo base_url('assets/js/pages/date.js');?>"></script> 
@@ -242,13 +243,92 @@ include 'sidebar.php';
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body"></div>
-				<div style="padding: 0px 14px;"><button class="btn btn-light pull-right" type="button" data-toggle="modal" onclick="showPriority(1);" data-target="#add-task">Add task</button></div>
+				<!-- <div style="padding: 0px 14px;"><button class="btn btn-light pull-right" type="button" data-toggle="modal" onclick="showPriority(1);" data-target="#add-task">Add task</button></div> -->
 				<div class="modal-body1 p-10"></div>
 				<div class="modal-footer"></div>
 			</div>
 		</div>
 	</div>
 	<!-- END MODAL -->
+	<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+			<h4 id="delete_type_edit" style="font-weight: 400;color:black">Delete event</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+			
+			<div class="modal-body">
+				<div id="delete_event_one">
+					<input type="radio" id="delete_check_value1" name="delete_check_value" value="0" checked>
+					<label for="delete_check_value1">Delete this event</label><br>
+				</div>
+				<div id="delete_event_two">
+					<div id="delete_event_three">
+						<input type="radio" id="delete_check_value2" name="delete_check_value" value="2">
+						<label for="delete_check_value2">Delete this and following</label><br>
+					</div>
+					<input type="radio" id="delete_check_value3" name="delete_check_value" value="1">
+					<label for="delete_check_value3">Delete all</label>
+					<br>
+				</div>
+				<span id="event_delete_Err" class="text-danger" ></span>
+				<div class="modal_button mt-4 float-right" >
+					<button type="button" class="btn btn-default" data-dismiss="modal" style="border: none;background: none">Cancel</button>
+					<button type="button" class="btn delete-next-event" style="border: none;background: none">Delete</button>
+				</div>
+			</div>
+        </div>
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div> -->
+      </div>
+      
+    </div>
+  </div>
+  <!--Update Modal content-->
+  <div class="modal fade" id="myModalUpdate" role="dialog">
+    <div class="modal-dialog  modal-sm">
+  	<div class="modal-content">
+        <div class="modal-header">
+			<h4 id="update_type_edit" style="font-weight: 400;color:black">Update event</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+			
+			<div class="modal-body">
+				<div id="update_event_one">
+					<input type="radio" id="update_check_value1" name="update_check_value" value="0" checked>
+					<label for="update_check_value1">Update this</label><br>
+				</div>
+				<div id="update_event_two">
+					<div id="update_event_three">
+						<input type="radio" id="update_check_value2" name="update_check_value" value="2">
+						<label for="update_check_value2">Update this and following</label><br>
+					</div>
+					<input type="radio" id="update_check_value3" name="update_check_value" value="1">
+					<label for="update_check_value3">Update all</label>
+					<br>
+				</div>
+				<span id="event_delete_Err" class="text-danger" ></span>
+				<div class="modal_button_up mt-4 float-right" >
+					<button type="button" class="btn btn-default" data-dismiss="modal" style="border: none;background: none">Close</button>
+					<button type="button" class="btn update-next-event" style="border: none;background: none">Update</button>
+				</div>
+				</div>
+        </div>
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div> -->
+      </div>
+      
+    </div>
+  </div>
 
   	<!-- BEGIN MODAL -->
   	<!-- Modal Create Event -->
@@ -261,6 +341,82 @@ include 'sidebar.php';
 			</div>
 			<form class="create-category" method="post" autocomplete="off">
 			<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12">
+						<!-- <ul class="nav nav-pills ">
+							<li class="nav-item">
+								<a class="nav-link" href="#">Event</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link active" href="#">Task</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#">Reminder</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#">Meeting</a>
+							</li>
+							</ul>
+							<hr> -->
+<style>
+	.wrapper_sp {
+  display: inline-flex;
+  /* background: #fff; */
+  /* height: 100px;
+  width: 250px; */
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 5px;
+  /* padding: 20px 15px;
+  box-shadow: 5px 5px 30px rgb(0 0 0 / 20%); */
+}
+.wrapper_sp .option {
+	padding: 8px 16px !important;
+    display: inline-block !important;
+    height: auto !important;
+	margin: 0;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid #cdd9dd;
+}
+.wrapper_sp input[type="radio"] {
+  display: none;
+}
+.wrapper_sp input#created_type_event:checked ~ .option-1,
+.wrapper_sp input#created_type_task:checked ~ .option-2,
+.wrapper_sp input#created_type_reminder:checked ~ .option-3,
+.wrapper_sp input#four:checked ~ .option-4 {
+  background: #0066ff;
+  border-color: #0066ff;
+  border: 1px solid #0066ff;
+}
+.wrapper_sp input#created_type_event:checked ~ .option-1 span,
+.wrapper_sp input#created_type_task:checked ~ .option-2 span,
+.wrapper_sp input#created_type_reminder:checked ~ .option-3 span,
+.wrapper_sp input#four:checked ~ .option-4 span {
+  color: #fff;
+}
+.wrapper_sp .option span {
+  font-size: 17px;
+}
+.wrapper_sp label:after,
+.wrapper_sp label:before{
+	content: '';
+	display: none;
+
+}
+</style>
+							<div class="wrapper_sp mb-4">
+								<input type="radio" value="event" name="created_type" id="created_type_event" checked>
+								<input type="radio" value="task" name="created_type" id="created_type_task">
+								<input type="radio" value="reminder" name="created_type" id="created_type_reminder">
+								<input type="radio" value="event" name="created_type" id="four">
+								<label for="created_type_event" class="option option-1" onclick="event_type_event()"><span>Event</span></label>
+								<label for="created_type_task" class="option option-2" onclick="event_type_task()"><span>Task</span></label>
+								<label for="created_type_reminder" class="option option-3" onclick="event_type_reminder()"><span>Reminder</span></label>
+								<!-- <label for="four" class="option option-4" onclick="event_type()"><span>Meeting</span></label> -->
+							</div>
+						</div>
+					</div>
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
@@ -297,7 +453,7 @@ include 'sidebar.php';
 					<div class="tab-content">
 						<div id="event-1" class="tab-pane active">
 							<div class="row">
-								<div class="col-md-12">
+								<div class="col-md-12" id="add_note_div">
 									<div class="form-group">
 										<div class="input-group">
 											<textarea class="form-control form-white" placeholder="Add Note" name="event_note"></textarea>
@@ -309,6 +465,9 @@ include 'sidebar.php';
 									</div>
 								</div>
 							</div>
+							<style>
+								option:disabled{color: #ccc;}
+							</style>
 							<div class="row">
 								<div class="col-md-12">
 									<div class="form-group">
@@ -317,10 +476,10 @@ include 'sidebar.php';
 											<option value="Does not repeat">Does not repeat</option>
 											<option value="Daily">Daily</option>
 											<option value="Every Weekday">Every Weekday (Monday to Friday)</option>
-											<option value="Custom">Custom</option>
-											<option value="Weekly">Weekly</option>
-											<option value="Monthly">Monthly</option>
-											<option value="Yearly">Yearly</option>
+											<option value="Custom" id="custom_value">Custom</option>
+											<option value="Weekly" id="weekday_value">Weekly</option>
+											<option value="Monthly" id="monthly_value">Monthly</option>
+											<option value="Yearly" id="yearly_value">Yearly</option>
 											<!-- <option value="Weekly">Weekly</option>
 											<option value="Annually">Annually</option> -->
 										  	</select>
@@ -333,37 +492,37 @@ include 'sidebar.php';
 								</div>
 								
 							</div>
-							<div class="row custom-class" style="display: none;">
+							<div class="row custom-class" style="display: none;"  id="cus_radioBTN">
 								<div class="col-md-12">
 									<div class="form-group">
 										<div class="input-group mb-3">
 										<div class="cus_radioBTN">
 											<div class="selector">
-												<div class="selecotr-item">
+												<div class="selecotr-item" id="radioId1">
 													<input type="checkbox" id="radio1" name="custom_check[]" class="selector-item_radio"  value="Sun" checked>
 													<label for="radio1" class="selector-item_label">S</label>
 												</div>
-												<div class="selecotr-item">
+												<div class="selecotr-item" id="radioId2">
 													<input type="checkbox" id="radio2" name="custom_check[]" class="selector-item_radio" value="Mon">
 													<label for="radio2" class="selector-item_label">M</label>
 												</div>
-												<div class="selecotr-item">
+												<div class="selecotr-item" id="radioId3">
 													<input type="checkbox" id="radio3" name="custom_check[]" class="selector-item_radio" value="Tue">
 													<label for="radio3" class="selector-item_label">T</label>
 												</div>
-												<div class="selecotr-item">
+												<div class="selecotr-item" id="radioId4">
 													<input type="checkbox" id="radio4" name="custom_check[]" class="selector-item_radio" value="Wed">
 													<label for="radio4" class="selector-item_label">W</label>
 												</div>
-												<div class="selecotr-item">
+												<div class="selecotr-item" id="radioId5">
 													<input type="checkbox" id="radio5" name="custom_check[]" class="selector-item_radio" value="Thu">
 													<label for="radio5" class="selector-item_label">T</label>
 												</div>
-												<div class="selecotr-item">
+												<div class="selecotr-item" id="radioId6">
 													<input type="checkbox" id="radio6" name="custom_check[]" class="selector-item_radio" value="Fri">
 													<label for="radio6" class="selector-item_label">F</label>
 												</div>
-												<div class="selecotr-item">
+												<div class="selecotr-item" id="radioId7">
 													<input type="checkbox" id="radio7" name="custom_check[]" class="selector-item_radio" value="Sat">
 													<label for="radio7" class="selector-item_label">S</label>
 												</div>
@@ -373,7 +532,7 @@ include 'sidebar.php';
 									</div>
 								</div>
 							</div>
-							<div class="row"  id="event_start_end_date_select">
+							<!-- <div class="row"  id="event_start_end_date_select">
 								<div class="col-md-12">
 									<div class="form-group">
 										<div class="input-group">
@@ -385,12 +544,39 @@ include 'sidebar.php';
 										<span id="event_start_end_dateErr" class="text-danger" ></span>
 									 </div>
 								</div>
+							</div> -->
+							<!--    New start end date field -->
+							<div class="row"  id="event_start_end_date_select">
+								<div class="col-md-6">
+									<div class="form-group">
+										<div class="input-group">
+										  <input type="text" name="event_start_date_nn" class="form-control" id="event_start_date_nn" value="" required="" onchange="customChange()">	
+										  <div class="input-group-addon">
+											<i class="fa fa-calendar"></i>
+										  </div>	
+										</div>
+										<span id="event_start_end_dateErr" class="text-danger" ></span>
+									 </div>
+								</div>
+							
+								<div class="col-md-6">
+									<div class="form-group">
+										<div class="input-group">
+										  <input type="text" name="event_end_date_nn" class="form-control" id="event_end_date_nn" value="" required="" onchange="customChange()">	
+										  <div class="input-group-addon">
+											<i class="fa fa-calendar"></i>
+										  </div>	
+										</div>
+										<span id="event_start_end_dateErr" class="text-danger" ></span>
+									 </div>
+								</div>
 							</div>
+							<!--             end            --->	
 							<div class="row" id="event_start_end_date_div">
 								<div class="col-md-12">
 									<div class="form-group">
 										<div class="input-group">
-										  <input type="date" name="event_start_end_date_new" class="form-control" id="event_start_end_date_new" value="event_start_end_date_new">	
+										  <input type="text" name="event_start_end_date_new" class="form-control" id="event_start_end_date_new" value="event_start_end_date_new">	
 										  <div class="input-group-addon">
 										  </div>	
 										</div>
@@ -522,6 +708,22 @@ include 'sidebar.php';
 										  	<span id="event_reminderErr" class="text-danger"></span>
 									</div>
 								</div>
+								<div class="col-md-6" id="task_priority_div">
+									<div class="form-group">
+										<div class="input-group mb-3">
+											<select id="task_priority" name="task_priority" class="form-control">
+												<option value="No Priority">No Priority</option>
+												<option value="High Priority">High Priority</option>
+												<option value="Medium Priority">Medium Priority</option>
+												<option value="Low Priority">Low Priority</option>
+											</select>
+										  	<div class="input-group-append">
+												<span class="input-group-text"><i class="fa fa-bell-o"></i></span>
+											</div>
+										</div>
+										  	<span id="task_priorityErr" class="text-danger"></span>
+									</div>
+								</div>
 								<!-- <div class="col-md-6">
 									<div class="form-group">
 										<input type="checkbox" name="draggable_event" id="draggable_event" class="filled-in chk-col-success">
@@ -533,7 +735,7 @@ include 'sidebar.php';
 						</div>
 						<br>
 						<div class="event-task-panel">
-							<button class="btn btn-light event-add-task" onclick="showPriority(2);" type="button">Add task</button>
+							<!-- <button class="btn btn-light event-add-task" onclick="showPriority(2);" type="button">Add task</button> -->
 							<div class="panel add-task-panel" style="display:none;">
 							<div class="panel-body">
 								<div class="form-group">
@@ -656,10 +858,72 @@ include 'sidebar.php';
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title"><strong>Update</strong></h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="hideModal()">&times;</button>
 				</div>
 				<form class="update-category" method="post" autocomplete="off">
 				<div class="modal-body">
+				<div class="row">
+						<div class="com-md-12">
+						<style>
+	.wrapper_sp {
+  display: inline-flex;
+  /* background: #fff; */
+  /* height: 100px;
+  width: 250px; */
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 5px;
+  /* padding: 20px 15px;
+  box-shadow: 5px 5px 30px rgb(0 0 0 / 20%); */
+}
+.wrapper_sp .option {
+	padding: 8px 16px !important;
+    display: inline-block !important;
+    height: auto !important;
+	margin: 0;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid #cdd9dd;
+}
+.wrapper_sp input[type="radio"] {
+  display: none;
+}
+.wrapper_sp input#created_type_event_update:checked ~ .option-1,
+.wrapper_sp input#created_type_task_update:checked ~ .option-2,
+.wrapper_sp input#created_type_reminder_update:checked ~ .option-3,
+.wrapper_sp input#four:checked ~ .option-4 {
+  background: #0066ff;
+  border-color: #0066ff;
+  border: 1px solid #0066ff;
+}
+.wrapper_sp input#created_type_event_update:checked ~ .option-1 span,
+.wrapper_sp input#created_type_task_update:checked ~ .option-2 span,
+.wrapper_sp input#created_type_reminder_update:checked ~ .option-3 span,
+.wrapper_sp input#four:checked ~ .option-4 span {
+  color: #fff;
+}
+.wrapper_sp .option span {
+  font-size: 17px;
+}
+.wrapper_sp label:after,
+.wrapper_sp label:before{
+	content: '';
+	display: none;
+
+}
+</style>
+							<div class="wrapper_sp mb-4">
+								<input type="radio" value="event" name="created_type" id="created_type_event_update" onclick="return false;">
+								<input type="radio" value="task" name="created_type" id="created_type_task_update" onclick="return false;">
+								<input type="radio" value="reminder" name="created_type" id="created_type_reminder_update" onclick="return false;">
+								<input type="radio" value="event" name="created_type" id="four_update" onclick="return false;">
+								<label for="created_type_event_update" class="option option-1"><span>Event</span></label>
+								<label for="created_type_task_update" class="option option-2"><span>Task</span></label>
+								<label for="created_type_reminder_update" class="option option-3"><span>Reminder</span></label>
+								<!-- <label for="four" class="option option-4" onclick="event_type()"><span>Meeting</span></label> -->
+							</div>
+						</div>
+					</div>
+					
 					
 						<div class="row">
 							<div class="col-md-6">
@@ -697,7 +961,7 @@ include 'sidebar.php';
 						<div class="tab-content">
 							<div id="event-1">
 								<div class="row">
-									<div class="col-md-12">
+									<div class="col-md-12" id="add_note_div_update">
 										<div class="form-group">
 											<div class="input-group">
 												<textarea class="form-control form-white" placeholder="Add Note" name="event_note"></textarea>
@@ -709,20 +973,24 @@ include 'sidebar.php';
 										</div>
 									</div>
 								</div>
+								<div id="event_field_hide">
+									<style>
+									option:disabled{color: #ccc;}
+									</style>
 								<div class="row">
 									<div class="col-md-12">
 											<div class="form-group">
 												<div class="input-group mb-3">
-													<select id="event_repeat_option" name="event_repeat_option" class="form-control" onchange="showEndDateUpdate(this.value);">
+													<select id="event_repeat_option" name="event_repeat_option" class="form-control event_repeat_optionn" onchange="showEndDateUpdate(this.value);">
 													<!-- <option value="Does not repeat">Daily</option> -->
 													<option value="Does not repeat">Does not repeat</option>
 													<option value="Daily">Daily</option>
 													<!-- <option value="Daily">Daily</option> -->
 													<option value="Every Weekday">Every Weekday (Monday to Friday)</option>
-													<option value="Custom">Custom</option>
-													<option value="Weekly">Weekly</option>
-													<option value="Monthly">Monthly</option>
-													<option value="Yearly">Yearly</option>
+													<option value="Custom" class="custom_value_update">Custom</option>
+													<option value="Weekly" id="weekday_value" class="weekday_value_update">Weekly</option>
+													<option value="Monthly" id="monthly_value" class="monthly_value_update">Monthly</option>
+													<option value="Yearly" id="yearly_value" class="yearly_value_update">Annually</option>
 													<!--<option value="Monthly">Monthly</option>
 													<option value="Annually">Annually</option> -->
 													</select>
@@ -740,31 +1008,31 @@ include 'sidebar.php';
 											<div class="input-group mb-3">
 											<div class="cus_radioBTN">
 												<div class="selector">
-													<div class="selecotr-item">
+													<div class="selecotr-item" id="radioupdate1">
 														<input type="checkbox" id="radioupdate_Sun" name="custom_check[]" class="selector-item_radio"  value="Sun">
 														<label for="radioupdate_Sun" class="selector-item_label">S</label>
 													</div>
-													<div class="selecotr-item">
+													<div class="selecotr-item" id="radioupdate2">
 														<input type="checkbox" id="radioupdate_Mon" name="custom_check[]" class="selector-item_radio" value="Mon">
 														<label for="radioupdate_Mon" class="selector-item_label">M</label>
 													</div>
-													<div class="selecotr-item">
+													<div class="selecotr-item" id="radioupdate3">
 														<input type="checkbox" id="radioupdate_Tue" name="custom_check[]" class="selector-item_radio" value="Tue">
 														<label for="radioupdate_Tue" class="selector-item_label">T</label>
 													</div>
-													<div class="selecotr-item">
+													<div class="selecotr-item" id="radioupdate4">
 														<input type="checkbox" id="radioupdate_Wed" name="custom_check[]" class="selector-item_radio" value="Wed">
 														<label for="radioupdate_Wed" class="selector-item_label">W</label>
 													</div>
-													<div class="selecotr-item">
+													<div class="selecotr-item" id="radioupdate5">
 														<input type="checkbox" id="radioupdate_Thu" name="custom_check[]" class="selector-item_radio" value="Thu">
 														<label for="radioupdate_Thu" class="selector-item_label">T</label>
 													</div>
-													<div class="selecotr-item">
+													<div class="selecotr-item" id="radioupdate6">
 														<input type="checkbox" id="radioupdate_Fri" name="custom_check[]" class="selector-item_radio" value="Fri">
 														<label for="radioupdate_Fri" class="selector-item_label">F</label>
 													</div>
-													<div class="selecotr-item">
+													<div class="selecotr-item" id="radioupdate7">
 														<input type="checkbox" id="radioupdate_Sat" name="custom_check[]" class="selector-item_radio" value="Sat">
 														<label for="radioupdate_Sat" class="selector-item_label">S</label>
 													</div>
@@ -774,11 +1042,35 @@ include 'sidebar.php';
 										</div>
 									</div>
 								</div>
-								<div class="row" id="event_start_end_date_select_update">
+								<!-- <div class="row" id="event_start_end_date_select_update">
 									<div class="col-md-12">
 										<div class="form-group">
 											<div class="input-group">
 											  <input type="text" name="event_start_end_date" class="form-control" id="reservation1" required="">	
+											  <div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											  </div>	
+											</div>
+											<span id="event_start_end_dateErr" class="text-danger"></span>
+										 </div>
+									</div>
+								</div> -->
+								<div class="row" id="event_start_end_date_select_update">
+									<div class="col-md-6">
+										<div class="form-group">
+											<div class="input-group">
+											  <input type="text" name="event_start_date_nn" class="form-control" id="event_start_date_nnn" required="" onchange="customChangeUpdate()">	
+											  <div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											  </div>	
+											</div>
+											<span id="event_start_end_dateErr" class="text-danger"></span>
+										 </div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<div class="input-group">
+											  <input type="text" name="event_end_date_nn" class="form-control" value="" id="event_end_date_nnn" required="" onchange="customChangeUpdate()">	
 											  <div class="input-group-addon">
 												<i class="fa fa-calendar"></i>
 											  </div>	
@@ -791,14 +1083,16 @@ include 'sidebar.php';
 								    <div class="col-md-12">
 									<div class="form-group">
 										<div class="input-group">
-										  <input type="date" name="event_start_end_date_new" class="form-control" id="event_start_end_date_new" value="event_start_end_date_new">	
+										  <input type="text" name="event_start_end_date_new" class="form-control" id="event_start_end_date_new" value="event_start_end_date_new">	
 										  <div class="input-group-addon">
+										  	<i class="fa fa-calendar"></i>
 										  </div>	
 										</div>
 										<span id="event_start_end_date_new" class="text-danger" ></span>
 									 </div>
 								   </div>
 							    </div>
+								</div>
 								
 								<div class="row" id="date-time-section1">
 									<div class="col-md-6">
@@ -966,6 +1260,22 @@ include 'sidebar.php';
 									</div>
 									
 								</div>
+								<div class="col-md-6" id="task_priority_div_update">
+									<div class="form-group">
+										<div class="input-group mb-3">
+											<select id="task_priority" name="task_priority" class="form-control">
+												<option value="No Priority">No Priority</option>
+												<option value="High Priority">High Priority</option>
+												<option value="Medium Priority">Medium Priority</option>
+												<option value="Low Priority">Low Priority</option>
+											</select>
+										  	<div class="input-group-append">
+												<span class="input-group-text"><i class="fa fa-bell-o"></i></span>
+											</div>
+										</div>
+										  	<span id="task_priorityErr" class="text-danger"></span>
+									</div>
+								</div>
 									<!-- <div class="col-md-6">
 										<div class="form-group">
 											<input type="checkbox" name="draggable_event" id="draggable_event1" class="filled-in chk-col-success" checked="">
@@ -981,7 +1291,7 @@ include 'sidebar.php';
 						<input type="hidden" name="type" id="type" value="event">
 						<input type="hidden" name="event_id" id="event_id">
 						<div class="event-task-panel">
-							<button class="btn btn-light event-add-task" onclick="showPriority(3);" type="button">Add task</button>
+							<!-- <button class="btn btn-light event-add-task" onclick="showPriority(3);" type="button">Add task</button> -->
 							<div class="panel add-task-panel" style="display:none;">
 							<div class="panel-body">
 								<div class="form-group">
@@ -1086,7 +1396,7 @@ include 'sidebar.php';
 				</div>
 				<div class="modal-footer text-center">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>			
-					<button type="submit" class="btn btn-primary update-event-btn save-category">Update Event</button>
+					<button type="submit" class="btn btn-primary update-event-btn save-category">Update</button>
 				</div>
 				</form>
 			</div>
@@ -1640,8 +1950,7 @@ include 'sidebar.php';
 <script src="<?php echo base_url('assets/css_js/calendar/vendor_components/fullcalendar/fullcalendar.js');?>"></script>
 <script src="<?php echo base_url('assets/css_js/calendar/vendor_components/fullcalendar/lib/moment.min.js');?>"></script>
 <script src="<?php echo base_url('assets/css_js/calendar/vendor_components/fullcalendar/fullcalendar.min.js');?>"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="<?php echo base_url('assets/css_js/calendar/vendor_components/jquery-toast-plugin-master/src/jquery.toast.js');?>"></script>
+<script src="<?php echo base_url('assets/css_js/calendar/vendor_components/sweetalert/sweetalert.min.js');?>"></script><script src="<?php echo base_url('assets/css_js/calendar/vendor_components/jquery-toast-plugin-master/src/jquery.toast.js');?>"></script>
 <script src="<?php echo base_url('assets/css_js/calendar/vendor_components/bootstrap-daterangepicker/daterangepicker.js');?>"></script>
 <script src="<?php echo base_url('assets/css_js/calendar/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js');?>"></script>
 <script src="<?php echo base_url('assets/js/template.js');?>"></script>
@@ -1678,6 +1987,7 @@ if(($this->session->flashdata('message')) && ($this->session->flashdata('message
 <script src="<?php echo base_url('assets/js/lib/control/iconselect.js');?>"></script>
 <script src="<?php echo base_url('assets/js/lib/iscroll.js');?>"></script>
 <script type="text/javascript">  
+$('#task_priority_div').hide();
 function showPriority(i){
 	var iconSelect;
 	var selectedText;
@@ -1726,15 +2036,41 @@ function showPriority(i){
 	// $('#event_start_end_date_div').show();
 	function showEndDate(value) 
 	{
-		// if(value == 'Daily'){
-		// 	$('.end-date-class').css('display','block');
-		// }else{
-		// 	$('.end-date-class').css('display','none');
-		// }
 		if(value == 'Custom'){
-			$('#event_start_end_date_select').show();
-			$('#event_start_end_date_div').hide();
-			$('.custom-class').css('display','block');
+			console.log("Fgf");
+			var start_date_selected = $('#event_start_date_nn').val();
+			var end_date_selected = $('#event_end_date_nn').val();
+			var date1 = new Date(start_date_selected);
+			var date2 = new Date(end_date_selected);
+			var Difference_In_Time = date2.getTime() - date1.getTime();
+			var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+			console.log("Difference_In_Time");
+			console.log(Difference_In_Days);
+			if(Difference_In_Days > 5){
+				$('#event_start_end_date_select').show();
+				$('#event_start_end_date_div').hide();  
+				$('.custom-class').css('display','block');
+			}else{
+				for($i =1;$i<=7;$i++){
+					$('#radioId'+$i).hide();
+				}
+				$('#event_start_end_date_select').show();
+				$('#event_start_end_date_div').hide();
+				$('.custom-class').css('display','block'); 
+				var dateArray = new Array();
+				var currentDate = date1;
+				while (currentDate <= date2) {
+					dateArray.push(new Date (currentDate));
+					currentDate = currentDate.addDays(1);
+				}
+				var arrayLength = dateArray.length;
+				for (var i = 0; i < arrayLength; i++) {
+					let day_new_value = ['1', '2', '3', '4', '5', '6', '7'][new Date(dateArray[i]).getDay()];
+					$('#radioId'+day_new_value).show();
+				}
+
+			}
+			
 		}else if(value == 'Does not repeat'){
 			$('#event_start_end_date_select').hide();
 			$('#event_start_end_date_div').show();
@@ -1747,15 +2083,40 @@ function showPriority(i){
 	}
 	function showEndDateUpdate(value) 
 	{
-		// if(value == 'Daily'){
-		// 	$('.end-date-class').css('display','block');
-		// }else{
-		// 	$('.end-date-class').css('display','none');
-		// }
 		if(value == 'Custom'){
-			$('#event_start_end_date_select_update').show();
-			$('#event_start_end_date_div_update').hide();
-			$('.custom-class-update').css('display','block');
+			
+			var start_date_selected = $('#event_start_date_nnn').val();
+			var end_date_selected = $('#event_end_date_nnn').val();
+			var date1 = new Date(start_date_selected);
+			var date2 = new Date(end_date_selected);
+			var Difference_In_Time = date2.getTime() - date1.getTime();
+			var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+			console.log("Difference_In_Time");
+			console.log(Difference_In_Days);
+			if(Difference_In_Days > 5){
+				$('#event_start_end_date_select_update').show();
+				$('#event_start_end_date_div_update').hide();
+				$('.custom-class-update').css('display','block');
+			}else{
+				for($i =1;$i<=7;$i++){
+					$('#radioupdate'+$i).hide();
+				}
+				$('#event_start_end_date_select_update').show();
+				$('#event_start_end_date_div_update').hide();
+				$('.custom-class-update').css('display','block');
+				var dateArray = new Array();
+				var currentDate = date1;
+				while (currentDate <= date2) {
+					dateArray.push(new Date (currentDate));
+					currentDate = currentDate.addDays(1);
+				}
+				var arrayLength = dateArray.length;
+				for (var i = 0; i < arrayLength; i++) {
+					let day_new_value = ['1', '2', '3', '4', '5', '6', '7'][new Date(dateArray[i]).getDay()];
+					$('#radioupdate'+day_new_value).show();
+				}
+
+			} 
 		}else if(value == 'Does not repeat'){
 			$('#event_start_end_date_select_update').hide();
 			$('#event_start_end_date_div_update').show();
@@ -1795,6 +2156,186 @@ function showPriority(i){
 	function dateChange(value){
 		alert(value);
 	}
+	
+	function event_type_task(){
+		$('#task_priority_div').show();
+		$('#add_note_div').show();
+	}
+	function event_type_event(){
+		$('#task_priority_div').hide();
+		$('#add_note_div').show();
+	}
+	function event_type_reminder(){
+		$('#add_note_div').hide();
+		$('#task_priority_div').hide();
+	}
+	function customChange(){
+		var event_repeat_option = $('#event_repeat_option').val();
+		if(event_repeat_option == "Custom"){
+			for($i =1;$i<=7;$i++){
+					$('#radioId'+$i).hide();
+				}
+				$('#event_start_end_date_select').show();
+				$('#event_start_end_date_div').hide();
+				$('.custom-class').css('display','block'); 
+				var start_date_selected = $('#event_start_date_nn').val();
+				var end_date_selected = $('#event_end_date_nn').val();
+				var date1 = new Date(start_date_selected);
+				var date2 = new Date(end_date_selected);
+				var dateArray = new Array();
+				var currentDate = date1;
+				while (currentDate <= date2) {
+					dateArray.push(new Date (currentDate));
+					currentDate = currentDate.addDays(1);
+				}
+				var arrayLength = dateArray.length;
+				for (var i = 0; i < arrayLength; i++) {
+					let day_new_value = ['1', '2', '3', '4', '5', '6', '7'][new Date(dateArray[i]).getDay()];
+					$('#radioId'+day_new_value).show();
+				}
+                
+		}
+		/////////   Event date time update
+		var start_date_selected = $('#event_start_date_nn').val();
+		var end_date_selected = $('#event_end_date_nn').val();
+		var date1 = new Date(start_date_selected);
+		var startd = start_date_selected;
+		let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(startd).getDay()];
+		let monthNames = ["January", "February", "March", "April", "May", "June",
+		"July", "August", "September", "October", "November", "December"
+		][new Date(startd).getMonth()];
+		var start_day_value = new Date(startd).getDate();
+		$("#weekday_value").html("Weekly on "+weekday);
+		$("#monthly_value").html("Monthly on "+start_day_value);
+		$("#yearly_value").html("Annually on "+start_day_value+" "+monthNames);
+
+		var start_update = new Date(start_date_selected),
+        end_update   = new Date(end_date_selected),
+        diff_update  = new Date(end_update - start_update),
+        days_diff  = diff_update/1000/60/60/24;
+        console.log("days_diff");
+        console.log(days_diff);
+		if(days_diff < 2){
+            $('#custom_value').prop('disabled', true);
+        }else{
+			$('#custom_value').prop('disabled', false);
+		}
+        if(days_diff < 7){
+            $('#weekday_value').prop('disabled', true);
+        }else{
+			$('#weekday_value').prop('disabled', false);
+		}
+        if(days_diff < 31){
+            $('#monthly_value').prop('disabled', true);
+        }else{
+			$('#monthly_value').prop('disabled', false);
+		}
+        if(days_diff < 365){
+            $('#yearly_value').prop('disabled', true);
+        }else{
+			$('#yearly_value').prop('disabled', false);
+		}
+
+	}
+	function customChangeUpdate(){
+		console.log("Dfdfd");
+		var event_repeat_option = $('.event_repeat_optionn').val();
+		console.log("event_repeat_optionkkk");
+		console.log(event_repeat_option);
+		if(event_repeat_option == "Custom"){
+			console.log("custommmmmm");
+			var start_date_selected = $('#event_start_date_nnn').val();
+			var end_date_selected = $('#event_end_date_nnn').val();
+			var date1 = new Date(start_date_selected);
+			var date2 = new Date(end_date_selected);
+			var Difference_In_Time = date2.getTime() - date1.getTime();
+			var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+			console.log("Difference_In_Time");
+			console.log(Difference_In_Days);
+			if(Difference_In_Days > 5){
+				$('#event_start_end_date_select_update').show();
+				$('#event_start_end_date_div_update').hide();
+				$('.custom-class-update').css('display','block');
+				for($i =1;$i<=7;$i++){
+					$('#radioupdate'+$i).show();
+				}
+			}else{
+				for($i =1;$i<=7;$i++){
+					$('#radioupdate'+$i).hide();
+				}
+				$('#event_start_end_date_select_update').show();
+				$('#event_start_end_date_div_update').hide();
+				$('.custom-class-update').css('display','block');
+				var dateArray = new Array();
+				var currentDate = date1;
+				while (currentDate <= date2) {
+					dateArray.push(new Date (currentDate));
+					currentDate = currentDate.addDays(1);
+				}
+				var arrayLength = dateArray.length;
+				for (var i = 0; i < arrayLength; i++) {
+					let day_new_value = ['1', '2', '3', '4', '5', '6', '7'][new Date(dateArray[i]).getDay()];
+					$('#radioupdate'+day_new_value).show();
+				}
+
+			}
+		}
+		/////////   Event date time update
+		console.log("rrrrrrrrrrr");
+		var start_date_selected = $('#event_start_date_nnn').val();
+		var end_date_selected = $('#event_end_date_nnn').val();
+		var startd = start_date_selected;
+		let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(startd).getDay()];
+		let monthNames = ["January", "February", "March", "April", "May", "June",
+		"July", "August", "September", "October", "November", "December"
+		][new Date(startd).getMonth()];
+		var start_day_value = new Date(startd).getDate();
+		$(".weekday_value_update").html("Weekly on "+weekday);
+		$(".monthly_value_update").html("Monthly on "+start_day_value);
+		$(".yearly_value_update").html("Annually on "+start_day_value+" "+monthNames);
+
+		var start_update = new Date(start_date_selected),
+        end_update   = new Date(end_date_selected),
+        diff_update  = new Date(end_update - start_update),
+        days_diff  = diff_update/1000/60/60/24;
+        console.log("days_diff");
+        console.log(days_diff);
+		if(days_diff < 2){
+			$('.custom_value_update').prop('disabled', true);
+		}else{
+			$('.custom_value_update').prop('disabled', false);
+		}
+        if(days_diff < 7){
+            $('.weekday_value_update').prop('disabled', true);
+        }else{
+			$('.weekday_value_update').prop('disabled', false);
+		}
+        if(days_diff < 31){
+            $('.monthly_value_update').prop('disabled', true);
+        }else{
+			$('.monthly_value_update').prop('disabled', false);
+		}
+        if(days_diff < 365){
+            $('.yearly_value_update').prop('disabled', true);
+        }else{
+			$('.yearly_value_update').prop('disabled', false);
+		}
+	}
+	function hideModal(){
+		console.log("FGfg");
+		$('#update-event').modal('hide');
+		$('#myModalUpdate').modal('hide');
+		
+	}
+	$( function() {
+    	$( "#event_start_date_nn" ).datepicker({format: 'yyyy-mm-dd'});
+		$( "#event_end_date_nn" ).datepicker({format: 'yyyy-mm-dd'});
+		$( "#event_start_end_date_new" ).datepicker({format: 'yyyy-mm-dd'});
+		$( "#event_start_date_nnn" ).datepicker({format: 'yyyy-mm-dd'});
+		$( "#event_end_date_nnn" ).datepicker({format: 'yyyy-mm-dd'});
+		$( "#event_start_end_date_new" ).datepicker({format: 'yyyy-mm-dd'});
+  	} );
+	
 </script>	
 </body>
 </html>

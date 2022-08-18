@@ -381,7 +381,11 @@ class Front_model extends CI_Model {
 		// $this->db->delete('events');
 		if($delete_check == 0){
 			$this->db->where('id', $id);
+			$query_result = $this->db->get('events');
+
+			$this->db->where('id', $id);
 			$this->db->delete('events');
+			return $query_result->result();
 		}else if($delete_check == 2){
 
 			$this->db->where('id', $id);
@@ -401,6 +405,7 @@ class Front_model extends CI_Model {
 			$query=$this->db->get('events');
 			$this->db->where('unique_key', $query->row()->unique_key);
 			$this->db->delete('events');
+			return $query->result();
 		}
 		
 	}
@@ -413,6 +418,21 @@ class Front_model extends CI_Model {
 		$query = $this->db->get('events');
 		return $query->result();
 		
+	}
+	function getTaskData($id)
+	{
+		$this->db->where('id', $id);
+		$event_data=$this->db->get('events');
+		return $event_data->result();
+	}
+	function getTaskDataFollowing($id)
+	{
+		$this->db->where('id', $id);
+		$event_data=$this->db->get('events');
+		$this->db->where('unique_key', $event_data->row()->unique_key);
+		$this->db->where('id >=',$id);
+		$query = $this->db->get('events');
+		return $query->result();
 	}
 
 	function getEventById($id)
@@ -696,6 +716,16 @@ class Front_model extends CI_Model {
 		$this->db->where('unique_key', $unique_key);
 		$query = $this->db->get('events');
 		return $query->result();
+	}
+	function getDataIsLast($id)
+	{
+		$this->db->where('id', $id);
+		$query = $this->db->get('events');
+
+		$this->db->where('unique_key', $query->row()->unique_key);
+		$this->db->where('id >=',$id);
+		$query_result = $this->db->get('events');
+		return $query_result->result();
 	}
 }
 /* End of file Front_model.php */

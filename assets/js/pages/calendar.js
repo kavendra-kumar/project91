@@ -4,8 +4,6 @@
 var base_url = 'http://localhost/project91/';
 // var base_url = 'https://project91.isynbus.com/';
 
-
-
 !function($) {
     "use strict";
 
@@ -20,6 +18,8 @@ var base_url = 'http://localhost/project91/';
         this.$categoryModal = $('#add-new-events'),
         this.$dragEventModal = $('#edit-drag-event'),
         this.$viewEventModal = $('#view-event'),
+        this.$myModal = $('#myModal'),
+        this.$myModalUpdate = $('#myModalUpdate'),
         this.$updateEventModal = $('#update-event'),
         this.$calendarObj = null
     };
@@ -121,19 +121,16 @@ var base_url = 'http://localhost/project91/';
                     success: function(data){
                        var task_start_date_new = data.task_start_date;
                        var task_end_date_new = data.task_end_date;
-                       console.log("success");
-                       console.log(task_start_date_new);
-                       console.log("successssssnew");
-                       console.log(calEvent.start);
                        var date12 = moment(task_start_date_new, 'Y-MM-DD').format('dddd, MMMM DD YYYY');
                        var date14 = moment(task_end_date_new, 'Y-MM-DD').format('dddd, MMMM DD YYYY');
+                       console.log("date12");
                        console.log(date12);
+                       
                       // return false;
                        var start_date = $.fullCalendar.formatDate(calEvent.start, "Y-MM-DD HH:mm:ss");
                         var allDay = calEvent.allDay;
                         if(allDay == false){
-                            var end_date = $.fullCalendar.formatDate(calEvent.end, "Y-MM-DD HH:mm:ss");
-
+                            //var end_date = $.fullCalendar.formatDate(calEvent.end, "Y-MM-DD HH:mm:ss");
                             if(task_start_date_new == task_end_date_new){
                                 var date1 = moment(task_start_date_new, 'Y-MM-DD').format('dddd, MMMM DD YYYY');
                                 var time1 = moment(calEvent.event_start_time, 'HH:mm').format('hh:mm A');
@@ -217,200 +214,23 @@ var base_url = 'http://localhost/project91/';
 
         $this.$viewEventModal.find('.modal-header').find('.delete-event').unbind('click').click(function () {
             //var event_id = event_div.find("input[name=event_id]").val(); 
+            $('#delete_event_two').show();
+            $('#delete_event_three').show();
+            $('#delete_type_edit').html("Delete recurring "+calEvent.created_type);
             var event_id = calEvent.event_id;
                 if(calEvent.array_count == 1){
-                    swal("Are you sure to delete?", {
-                        icon: 'warning',
-                        buttons: {
-                          cancel: "Cancel",
-                          confirm: true,
-                        },
-                      })
-                      .then((value) => {
-                        switch (value) {
-                          case true:
-                            $.ajax({
-                                type: "POST",
-                                url: base_url+'front/delete_event',
-                                type: 'POST',
-                                data: {
-                                    event_id:event_id,
-                                    delete_check : 1
-                                }, 
-                                success: function(html){
-                                    swal("Deleted!", "Successfully.", "success"); 
-                                    $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
-                                        return (ev.unique_key === calEvent.unique_key);   
-                                    });
-                                    $this.$viewEventModal.modal('hide');
-                                    //location.reload();
-                                }
-                            });
-                            break;
-                       
-                          
-                        }
-                      });
-                }else{
-                 
-                if(calEvent.event_repeat_option_type == 'Does not repeat' || calEvent.event_repeat_option_type == 'Daily'){
-                    swal("Are you sure to delete?", {
-                        icon: 'warning',
-                        buttons: {
-                          cancel: "Cancel",
-                          confirm: true,
-                        },
-                      })
-                      .then((value) => {
-                        switch (value) {
-                          case true:
-                            $.ajax({
-                                type: "POST",
-                                url: base_url+'front/delete_event',
-                                type: 'POST',
-                                data: {
-                                    event_id:event_id,
-                                    delete_check : 1
-                                }, 
-                                success: function(html){
-                                    swal("Deleted!", "Successfully.", "success"); 
-                                    $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
-                                        return (ev.unique_key === calEvent.unique_key);   
-                                    });
-                                    $this.$viewEventModal.modal('hide');
-                                    //location.reload();
-                                }
-                            });
-                            break;
-                       
-                          
-                        }
-                      });
-                    // swal({   
-                    //     title: "Are you sure?",   
-                    //     text: "You want to delete the event !",   
-                    //     type: "info",   
-                    //     showCancelButton: true,   
-                    //     confirmButtonColor: "#04a08b",   
-                    //     confirmButtonText: "Yes",   
-                    //     closeOnConfirm: false 
-                    // }, function(){ 
-                    //     $.ajax({
-                    //       type: "POST",
-                    //       url: base_url+'front/delete_event',
-                    //       type: 'POST',
-                    //       data: {
-                    //           event_id:event_id,
-                    //           delete_check : 1
-                    //       }, 
-                    //       success: function(html){
-                    //           swal("Deleted!", "Successfully.", "success"); 
-                    //           $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
-                    //               return (ev._id == calEvent._id);   
-                    //           });
-                    //           $this.$viewEventModal.modal('hide');
-                    //       }
-                    //     });      
-                    //   });
-                }else{
-                    swal("Are you sure to delete?", {
-                        icon: 'warning',
-                        buttons: {
-                          cancel: "Cancel",
-                          catch: {
-                            text: "Delete only this",
-                            value: "catch",
-                          },
-                          following: {
-                            text: "Delete this and following",
-                            value: "following",
-                          },
-                          delete: {
-                            text: "Delete all",
-                            value: "delete_all",
-
-                          },
-                          //delete: true,
-                          
-                        },
-                      })
-                      .then((value) => {
-                        switch (value) {
-                       
-                          case "delete_all":
-                            $.ajax({
-                                type: "POST",
-                                url: base_url+'front/delete_event',
-                                type: 'POST',
-                                data: {
-                                    event_id:event_id,
-                                    delete_check : 1
-                                }, 
-                                success: function(html){
-                                    swal("Deleted!", "Successfully.", "success"); 
-                                    $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
-                                        return (ev.unique_key === calEvent.unique_key);   
-                                    });
-                                    $this.$viewEventModal.modal('hide');
-                                    //location.reload();
-                                }
-                            });
-                            break;
-                       
-                          case "catch":
-                                $.ajax({
-                                    type: "POST",
-                                    url: base_url+'front/delete_event',
-                                    type: 'POST',
-                                    data: {
-                                        event_id:event_id,
-                                        delete_check : 0
-                                    }, 
-                                    success: function(html){
-                                        swal("Deleted!", "Successfully.", "success"); 
-                                        $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
-                                            return (ev.event_id === calEvent.event_id);   
-                                        });
-                                        $this.$viewEventModal.modal('hide');
-                                        //location.reload();
-                                    }
-                                });
-                            break;
-                            case "following":
-                                $.ajax({
-                                    type: "POST",
-                                    url: base_url+'front/delete_event',
-                                    type: 'POST',
-                                    data: {
-                                        event_id:event_id,
-                                        delete_check : 2
-                                    }, 
-                                    success: function(html){
-                                            //console.log(html.data[0]);
-                                            $.each(html.data, function(index) {
-                                                console.log(html.data[index].id);
-                                                swal("Deleted!", "Successfully.", "success"); 
-                                                $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
-                                                return (ev.event_id === html.data[index].id);   
-                                            });
-                                            $this.$viewEventModal.modal('hide');
-                                        });
-                                    }
-                                });
-                            break;
-                        }
-                      });
-                    // swal({   
-                    //     title: "Are you sure?",   
-                    //     text: "You want to delete the event !",   
-                    //     type: "info",  
-                    //     cancelButtonText : 'Delete only this', 
-                    //     showCancelButton: true,   
-                    //     confirmButtonColor: "#04a08b",   
-                    //     confirmButtonText: "Delete All",   
-                    //     closeOnConfirm: false 
-                    //     }, function(isConfirm){
-                    //         if (isConfirm) { 
+                    $('#delete_event_two').hide();
+                    $("#myModal").modal();
+                    // swal("Are you sure to delete?", {
+                    //     icon: 'warning',
+                    //     buttons: {
+                    //       cancel: "Cancel",
+                    //       confirm: true,
+                    //     },
+                    //   })
+                    //   .then((value) => {
+                    //     switch (value) {
+                    //       case true:
                     //         $.ajax({
                     //             type: "POST",
                     //             url: base_url+'front/delete_event',
@@ -427,8 +247,103 @@ var base_url = 'http://localhost/project91/';
                     //                 $this.$viewEventModal.modal('hide');
                     //                 //location.reload();
                     //             }
-                    //         });  
-                    //         }else{
+                    //         });
+                    //         break;
+                       
+                          
+                    //     }
+                    //   });
+                }else{
+                 
+                if(calEvent.event_repeat_option_type == 'Does not repeat' || calEvent.event_repeat_option_type == 'Daily'){
+                    $('#delete_event_two').hide();
+                    $("#myModal").modal();
+                    // swal("Are you sure to delete?", {
+                    //     icon: 'warning',
+                    //     buttons: {
+                    //       cancel: "Cancel",
+                    //       confirm: true,
+                    //     },
+                    //   })
+                    //   .then((value) => {
+                    //     switch (value) {
+                    //       case true:
+                    //         $.ajax({
+                    //             type: "POST",
+                    //             url: base_url+'front/delete_event',
+                    //             type: 'POST',
+                    //             data: {
+                    //                 event_id:event_id,
+                    //                 delete_check : 1
+                    //             }, 
+                    //             success: function(html){
+                    //                 swal("Deleted!", "Successfully.", "success"); 
+                    //                 $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                    //                     return (ev.unique_key === calEvent.unique_key);   
+                    //                 });
+                    //                 $this.$viewEventModal.modal('hide');
+                    //                 //location.reload();
+                    //             }
+                    //         });
+                    //         break;
+                       
+                          
+                    //     }
+                    //   });
+                }else{
+                        console.log("calEvent.isLastCount");
+                        console.log(calEvent.isLastCount);
+                        if(calEvent.isLastCount == 1){
+                            $('#delete_event_three').hide();
+                            $("#myModal").modal();
+                        }else{
+                            $("#myModal").modal();
+                        }
+                    // swal("Are you sure to delete?", {
+                    //     icon: 'warning',
+                    //     buttons: {
+                    //       cancel: "Cancel",
+                    //       catch: {
+                    //         text: "Delete only this",
+                    //         value: "catch",
+                    //       },
+                    //       following: {
+                    //         text: "Delete this and following",
+                    //         value: "following",
+                    //       },
+                    //       delete: {
+                    //         text: "Delete all",
+                    //         value: "delete_all",
+
+                    //       },
+                    //       //delete: true,
+                          
+                    //     },
+                    //   })
+                    //   .then((value) => {
+                    //     switch (value) {
+                       
+                    //       case "delete_all":
+                    //         $.ajax({
+                    //             type: "POST",
+                    //             url: base_url+'front/delete_event',
+                    //             type: 'POST',
+                    //             data: {
+                    //                 event_id:event_id,
+                    //                 delete_check : 1
+                    //             }, 
+                    //             success: function(html){
+                    //                 swal("Deleted!", "Successfully.", "success"); 
+                    //                 $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                    //                     return (ev.unique_key === calEvent.unique_key);   
+                    //                 });
+                    //                 $this.$viewEventModal.modal('hide');
+                    //                 //location.reload();
+                    //             }
+                    //         });
+                    //         break;
+                       
+                    //       case "catch":
                     //             $.ajax({
                     //                 type: "POST",
                     //                 url: base_url+'front/delete_event',
@@ -446,219 +361,1465 @@ var base_url = 'http://localhost/project91/';
                     //                     //location.reload();
                     //                 }
                     //             });
-                    //         }
-                            
-                    // });
+                    //         break;
+                    //         case "following":
+                    //             $.ajax({
+                    //                 type: "POST",
+                    //                 url: base_url+'front/delete_event',
+                    //                 type: 'POST',
+                    //                 data: {
+                    //                     event_id:event_id,
+                    //                     delete_check : 2
+                    //                 }, 
+                    //                 success: function(html){
+                    //                         //console.log(html.data[0]);
+                    //                         $.each(html.data, function(index) {
+                    //                             console.log(html.data[index].id);
+                    //                             swal("Deleted!", "Successfully.", "success"); 
+                    //                             $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                    //                             return (ev.event_id === html.data[index].id);   
+                    //                         });
+                    //                         $this.$viewEventModal.modal('hide');
+                    //                     });
+                    //                 }
+                    //             });
+                    //         break;
+                    //     }
+                    //   });
                 }  
             }
             });
-            $this.$viewEventModal.find('.modal-header').find('.edit-event').unbind('click').click(function () {
-                var event_new_id = calEvent.event_id;
-                $.ajax({
-                    type: "POST",
-                    url: base_url+'front/task_data_new',
-                    type: 'POST',
-                    data: {
-                        event_id:event_new_id 
-                    }, 
-                    success: function(data){
-                       var task_start_date = data.task_start_date;
-                       var task_end_date = data.task_end_date;
-                       $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
-                       $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(task_start_date);
-                       $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(task_end_date);
-                       // $this.$viewEventModal.find('.modal-body1').empty().prepend(data).end();
-                    }
-                  });
-                if(calEvent.event_repeat_option_type == 'Does not repeat'){
-                    $('#event_start_end_date_div_update').show();
-                    $('#event_start_end_date_select_update').hide();                    
-                }else if(calEvent.event_repeat_option_type == 'Custom'){
-                    const split_string = calEvent.custom_all_day.split(",");
-                    split_string.forEach(myFunction);
-                    function myFunction(value, index, array) {
-                        $("#radioupdate_"+value).prop('checked', true);
-                    }
-                    $('.custom-class-update').show();
-                    $('#event_start_end_date_div_update').hide();
-                    $('#event_start_end_date_select_update').show();
-                }else{
-                    $('#event_start_end_date_div_update').hide();
-                    $('#event_start_end_date_select_update').show();
-                }
-                // if(calEvent.event_repeat_option_type == 'Custom'){
-                //     $('.custom-class-update').css('display','block');
-                //     var day_cal = new Date(calEvent.event_start_date);
-                    
-                // }
+
+            this.$myModal.find('.modal-body').find('.delete-next-event').unbind('click').click(function () {
+                console.log("hello js", $("input[name=delete_check_value]:checked").val());
+                var event_id = calEvent.event_id;
                 
-                // $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date);                
-                $this.$viewEventModal.modal('hide');
-                $this.$updateEventModal.modal('show');
-                 
-                $this.$updateEventModal.find("input[name=event_name]").val(calEvent.title); 
-                $this.$updateEventModal.find("select[name='event_color']").val(calEvent.className[0]);                 
-                if(calEvent.type == 'event')
-                {
-                    $("#event").addClass("active");
-                    $("#event-1").addClass("active");
-                    $this.$updateEventModal.find("textarea[name=event_note]").val(calEvent.event_note);
-                    // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(calEvent.event_start_date);
-                    // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(calEvent.event_end_date);
-
-                    // $this.$updateEventModal.find("input[name=event_start_end_date]").val(calEvent.event_start_date+ ' - ' +calEvent.event_end_date);
-                    if(calEvent.allDay == false){
-                        $this.$updateEventModal.find("select[name=event_start_time]").val(moment(calEvent.event_start_time, "HH:mm").format('hh:mm A'));
-                        $this.$updateEventModal.find("select[name=event_start_time]").select2().trigger('change');
-                        $this.$updateEventModal.find("select[name=event_end_time]").val(moment(calEvent.event_end_time, "HH:mm").format('hh:mm A'));
-                        $this.$updateEventModal.find("select[name=event_end_time]").select2().trigger('change');
-                        $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', false);
-                        $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('true');
-                        $("#date-time-section1").show();
-                        $("#old_reminder_update").show();
-                        $("#new_reminder_update").hide();
-                    }else{
-                        $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', true);
-                        $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('false');
-                        $("#date-time-section1").hide();
-                        $("#new_reminder_update").show();
-                        $("#old_reminder_update").hide();
-                    }
-                    $this.$updateEventModal.find("select[name='event_repeat_option']").val(calEvent.event_repeat_option_type); 
-                    $this.$updateEventModal.find("select[name='event_reminder']").val(calEvent.event_reminder);
-                    $this.$updateEventModal.find("select[name='event_reminder_new']").val(calEvent.event_reminder); 
-                    if(calEvent.draggable_event == 'on'){
-                        $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', true);
-                    }else{
-                        $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', false);
-                    }
-                    $this.$updateEventModal.find("input[name=event_id]").val(calEvent.event_id);
-                    $this.$updateEventModal.find("input[name=draggable_id]").val(calEvent.draggable_id);
-                }
-                else
-                {
-                    $("#task").addClass("active");
-                    $("#task-2").addClass("active");
-                } 
-                $this.$updateEventModal.find('.update-category').unbind('submit').on('submit', function (e) {    
-                    e.preventDefault(); // Stop page from refreshing
-            var input_allday = $this.$updateEventModal.find("input[name=event_allDay]");
-            var ip_sedate=$this.$updateEventModal.find("input[name=event_start_end_date]").val();
-            var input_dd = ip_sedate.split(' - ');
-
-            var input_sdate=input_dd[0];
-            var input_edate=input_dd[1];
-            var input_stime=$this.$updateEventModal.find("select[name=event_start_time]").val();
-            var input_etime=$this.$updateEventModal.find("select[name=event_end_time]").val();
-            var event_repeat_option_value=$this.$updateEventModal.find("#event_repeat_option").val();
-
-            if(event_repeat_option_value == "Custom"){
-                var start_update = new Date(input_sdate),
-                end_update   = new Date(input_edate),
-                diff_update  = new Date(end_update - start_update),
-                days_update  = diff_update/1000/60/60/24;
-                if(days_update<= 7){
-                    $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select at least 7 days ');
-                    return false;
-                }
-            }
-            
-            var op_sdate = new Date(input_sdate+' '+input_stime);
-            var op_edate = new Date(input_edate+' '+input_etime);
-            if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
-                    {
-                        var formData = new FormData(this);             
-                        $.ajax({
-                            url: base_url+'front/update_event_form',
-                            type:"POST",
-                            data:formData,
-                            contentType:false,
-                            processData:false,
-                            cache:false,
-                            success: function(data) {
-                                if (data.status == false)
-                                {
-                                    //show errors
-                                    $('[id*=Err]').html('');
-                                    $.each(data.errors, function(key, val) {
-                                        var key =key.replace(/\[]/g, '');
-                                        key=key+'Err';    
-                                        $('#'+ key).html(val);
-                                    })
-                                }
-                                else if(data.status == true){
-                                    var categoryName = $this.$updatecategoryForm.find("input[name='event_name']").val(); 
-                                    var categoryColor = $this.$updatecategoryForm.find("select[name='event_color']").val();
-                                    var dragId = data.drag_id;
-                                    var event_id = data.event_id;
-                                    var categoryStart = data.start_date;
-                                    var categoryEnd = data.end_date;
-                                    var type = data.type;
-                                    var draggable_id = data.draggable_id;
-                                    var allDay = data.allDay;
-                                    if(allDay == 'true'){
-                                        var allDay = true;
-                                    }else{
-                                        var allDay = false;
-                                    }
-                                    if (categoryName !== null && categoryName.length != 0) {
-                                        $this.$updateEventModal.find('#event_end_timeErr').html('');
-                                        $this.$calendarObj.fullCalendar('removeEvents', function (evnt) {
-                                            return (calEvent._id == evnt._id);   
+                var delete_event_id = $("input[name=delete_check_value]:checked").val();
+                    $.ajax({
+                            type: "POST",
+                            url: base_url+'front/delete_event',
+                            type: 'POST',
+                            data: {
+                                event_id:event_id,
+                                delete_check : delete_event_id
+                            }, 
+                            success: function(html){
+                                swal("Deleted!", "Successfully.", "success");
+                                if(delete_event_id == "0"){
+                                    $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                                        return (ev.event_id === calEvent.event_id);   
+                                    });
+                                }else if(delete_event_id == "1"){
+                                    $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                                        return (ev.unique_key === calEvent.unique_key);   
+                                    });
+                                }else if(delete_event_id == "2"){
+                                        $.each(html.data, function(index) {
+                                            console.log(html.data[index].id);
+                                            $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                                            return (ev.event_id === html.data[index].id);   
                                         });
-                                        $this.$calendarObj.fullCalendar('renderEvent', {
-                                            title: categoryName,
-                                            start: categoryStart,
-                                            event_id: event_id,
-                                            end: categoryEnd,
-                                            allDay: allDay,
-                                            className: categoryColor,
-                                            event_note: data.event_note,
-                                            event_start_date: data.event_start_date,
-                                            event_end_date: data.event_end_date,
-                                            event_start_time: data.event_start_time,
-                                            event_end_time: data.event_end_time,
-                                            event_repeat_option: data.event_repeat_option,
-                                            event_allDay: data.event_allDay,
-                                            event_reminder: data.event_reminder,
-                                            draggable_event: data.draggable_event,
-                                            draggable_id: data.draggable_id,
-                                            drag_id: data.drag_id,
-                                            type: data.type,
-                                        }, true);
-                                        $this.$calendarObj.fullCalendar('refetchEvents');
-                                        if(dragId != 'no_drag_id'){
-                                            if(!$('.external-event').hasClass('drag-event'+dragId)){
-                                                $this.$extEvents.append('<div id="' + dragId + '" class="m-10 external-event drag-event'+dragId + ' ' + categoryColor + '" data-class="' + categoryColor + '" style="position: relative;"><i class="fa fa-hand-o-right"></i>' + categoryName + '<i onclick="return removeDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-times"></i><i onclick="return editModalDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-pencil"></i></div>')
-                                                $this.enableDrag();
-                                            }
-                                        }else if(dragId == 'no_drag_id'){       
-                                            if($('.external-event').hasClass('drag-event'+draggable_id)){
-                                                $(".drag-event"+draggable_id).remove();
-                                            }  
-                                        }
-                                        $this.$updateEventModal.modal('hide');
-                                        // setTimeout(function(){ 
-                                        //    $.CalendarApp.init()
-                                        // }, 1000);
-                                        location.reload();
-                                        return false;
-                                    } 
-                                }                   
-                            },
-                            error: function() {
-                                alert("Something went Wrong...");
+                                            $this.$myModal.modal('hide');
+                                        });
+                                }
+
+                                $this.$myModal.modal('hide');
+                                $this.$viewEventModal.modal('hide');
+                                //location.reload();
+                            }
+                    });
+
+            });
+            this.$myModalUpdate.find('.modal-body').find('.update-next-event').unbind('click').click(function () {
+                console.log("hello js", $("input[name=update_check_value]:checked").val());
+                var event_id = calEvent.event_id;
+                var update_event_id = $("input[name=update_check_value]:checked").val();
+                $('#task_priority_div_update').hide();
+                if(calEvent.created_type == "task"){
+                    $('#task_priority_div_update').show();
+                    $this.$updateEventModal.find("select[name='task_priority']").val(calEvent.task_priority);
+                    $("#created_type_task_update").prop('checked', true);
+
+                }
+                if(calEvent.created_type == "reminder"){
+                    $("#created_type_reminder_update").prop('checked', true);
+                    $("#add_note_div_update").hide();
+                }
+                if(calEvent.created_type == "event"){
+                    $("#created_type_event_update").prop('checked', true);
+                }
+                /////// start if 
+                    if(update_event_id == 1){
+                        var event_new_id = calEvent.event_id;
+                        $.ajax({
+                            type: "POST",
+                            url: base_url+'front/task_data_new',
+                            type: 'POST',
+                            data: {
+                                event_id:event_new_id 
+                            }, 
+                            success: function(data){
+                            var task_start_date = data.task_start_date;
+                            var task_end_date = data.task_end_date;
+                            $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(task_start_date);
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(task_end_date);
+                            $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
+                            $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+                            // $this.$viewEventModal.find('.modal-body1').empty().prepend(data).end();
                             }
                         });
+                        if(calEvent.event_repeat_option_type == 'Does not repeat'){
+                            $('#event_start_end_date_div_update').show();
+                            $('#event_start_end_date_select_update').hide();                    
+                        }else if(calEvent.event_repeat_option_type == 'Custom'){
+                            const split_string = calEvent.custom_all_day.split(",");
+                            split_string.forEach(myFunction);
+                            function myFunction(value, index, array) {
+                                $("#radioupdate_"+value).prop('checked', true);
+                            }
+                            $('.custom-class-update').show();
+                            $('#event_start_end_date_div_update').hide();
+                            $('#event_start_end_date_select_update').show();
+                        }else{
+                            $('#event_start_end_date_div_update').hide();
+                            $('#event_start_end_date_select_update').show();
+                        }
+                        // if(calEvent.event_repeat_option_type == 'Custom'){
+                        //     $('.custom-class-update').css('display','block');
+                        //     var day_cal = new Date(calEvent.event_start_date);
+                            
+                        // }
+                        
+                        // $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date);                
+                        $this.$viewEventModal.modal('hide');
+                        $this.$updateEventModal.modal('show');
+                        
+                        $this.$updateEventModal.find("input[name=event_name]").val(calEvent.title); 
+                        $this.$updateEventModal.find("select[name='event_color']").val(calEvent.className[0]);                 
+                        if(calEvent.type == 'event')
+                        {
+                            $("#event").addClass("active");
+                            $("#event-1").addClass("active");
+                            $this.$updateEventModal.find("textarea[name=event_note]").val(calEvent.event_note);
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(calEvent.event_start_date);
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(calEvent.event_end_date);
+
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").val(calEvent.event_start_date+ ' - ' +calEvent.event_end_date);
+                            if(calEvent.allDay == false){
+                                $this.$updateEventModal.find("select[name=event_start_time]").val(moment(calEvent.event_start_time, "HH:mm").format('hh:mm A'));
+                                $this.$updateEventModal.find("select[name=event_start_time]").select2().trigger('change');
+                                $this.$updateEventModal.find("select[name=event_end_time]").val(moment(calEvent.event_end_time, "HH:mm").format('hh:mm A'));
+                                $this.$updateEventModal.find("select[name=event_end_time]").select2().trigger('change');
+                                $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', false);
+                                $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('true');
+                                $("#date-time-section1").show();
+                                $("#old_reminder_update").show();
+                                $("#new_reminder_update").hide();
+                            }else{
+                                $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', true);
+                                $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('false');
+                                $("#date-time-section1").hide();
+                                $("#new_reminder_update").show();
+                                $("#old_reminder_update").hide();
+                            }
+                            $this.$updateEventModal.find("select[name='event_repeat_option']").val(calEvent.event_repeat_option_type); 
+                            $this.$updateEventModal.find("select[name='event_reminder']").val(calEvent.event_reminder);
+                            $this.$updateEventModal.find("select[name='event_reminder_new']").val(calEvent.event_reminder); 
+                            if(calEvent.draggable_event == 'on'){
+                                $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', true);
+                            }else{
+                                $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', false);
+                            }
+                            $this.$updateEventModal.find("input[name=event_id]").val(calEvent.event_id);
+                            $this.$updateEventModal.find("input[name=draggable_id]").val(calEvent.draggable_id);
+                        }
+                        else
+                        {
+                            $("#task").addClass("active");
+                            $("#task-2").addClass("active");
+                        }
+                        $('#event_field_hide').show(); 
+                        $this.$updateEventModal.find('.update-category').unbind('submit').on('submit', function (e) {    
+                            e.preventDefault(); // Stop page from refreshing
+                        var input_allday = $this.$updateEventModal.find("input[name=event_allDay]");
+                       // var ip_sedate=$this.$updateEventModal.find("input[name=event_start_end_date]").val();
+                        var ip_sedate=$this.$updateEventModal.find("input[name=event_start_date_nn]").val()+' - '+$this.$updateEventModal.find("input[name=event_end_date_nn]").val();
+                        var input_dd = ip_sedate.split(' - ');
+
+                        var input_sdate=input_dd[0];
+                        var input_edate=input_dd[1];
+                        var input_stime=$this.$updateEventModal.find("select[name=event_start_time]").val();
+                        var input_etime=$this.$updateEventModal.find("select[name=event_end_time]").val();
+                        var event_repeat_option_value=$this.$updateEventModal.find("#event_repeat_option").val();
+                        var start_update = new Date(input_sdate),
+                        end_update   = new Date(input_edate),
+                        diff_update  = new Date(end_update - start_update),
+                        days_update  = diff_update/1000/60/60/24;
+                        if(days_update<= -1){
+                            $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select correct date range');
+                            return false;
+                        }
+
+                        if(event_repeat_option_value == "Custom"){
+                            var start_update = new Date(input_sdate),
+                            end_update   = new Date(input_edate),
+                            diff_update  = new Date(end_update - start_update),
+                            days_update  = diff_update/1000/60/60/24;
+                            // if(days_update<= 7){
+                            //     $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                            //     return false;
+                            // }
+                        }
+                        
+                        var op_sdate = new Date(input_sdate+' '+input_stime);
+                        var op_edate = new Date(input_edate+' '+input_etime);
+                        if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
+                            {
+                                var formData = new FormData(this);
+                                formData.append('delete_check', '1');              
+                                $.ajax({
+                                    url: base_url+'front/update_event_form',
+                                    type:"POST",
+                                    data:formData,
+                                    contentType:false,
+                                    processData:false,
+                                    cache:false,
+                                    success: function(data) {
+                                        if (data.status == false)
+                                        {
+                                            //show errors
+                                            $('[id*=Err]').html('');
+                                            $.each(data.errors, function(key, val) {
+                                                var key =key.replace(/\[]/g, '');
+                                                key=key+'Err';    
+                                                $('#'+ key).html(val);
+                                            })
+                                        }
+                                        else if(data.status == true){
+                                            var categoryName = $this.$updatecategoryForm.find("input[name='event_name']").val(); 
+                                            var categoryColor = $this.$updatecategoryForm.find("select[name='event_color']").val();
+                                            var dragId = data.drag_id;
+                                            var event_id = data.event_id;
+                                            var categoryStart = data.start_date;
+                                            var categoryEnd = data.end_date;
+                                            var type = data.type;
+                                            var draggable_id = data.draggable_id;
+                                            var allDay = data.allDay;
+                                            if(allDay == 'true'){
+                                                var allDay = true;
+                                            }else{
+                                                var allDay = false;
+                                            }
+                                            if (categoryName !== null && categoryName.length != 0) {
+                                                $this.$updateEventModal.find('#event_end_timeErr').html('');
+                                                $this.$calendarObj.fullCalendar('removeEvents', function (evnt) {
+                                                    return (calEvent._id == evnt._id);   
+                                                });
+                                                $this.$calendarObj.fullCalendar('renderEvent', {
+                                                    title: categoryName,
+                                                    start: categoryStart,
+                                                    event_id: event_id,
+                                                    end: categoryEnd,
+                                                    allDay: allDay,
+                                                    className: categoryColor,
+                                                    event_note: data.event_note,
+                                                    event_start_date: data.event_start_date,
+                                                    event_end_date: data.event_end_date,
+                                                    event_start_time: data.event_start_time,
+                                                    event_end_time: data.event_end_time,
+                                                    event_repeat_option: data.event_repeat_option,
+                                                    event_allDay: data.event_allDay,
+                                                    event_reminder: data.event_reminder,
+                                                    draggable_event: data.draggable_event,
+                                                    draggable_id: data.draggable_id,
+                                                    drag_id: data.drag_id,
+                                                    type: data.type,
+                                                }, true);
+                                                $this.$calendarObj.fullCalendar('refetchEvents');
+                                                if(dragId != 'no_drag_id'){
+                                                    if(!$('.external-event').hasClass('drag-event'+dragId)){
+                                                        $this.$extEvents.append('<div id="' + dragId + '" class="m-10 external-event drag-event'+dragId + ' ' + categoryColor + '" data-class="' + categoryColor + '" style="position: relative;"><i class="fa fa-hand-o-right"></i>' + categoryName + '<i onclick="return removeDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-times"></i><i onclick="return editModalDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-pencil"></i></div>')
+                                                        $this.enableDrag();
+                                                    }
+                                                }else if(dragId == 'no_drag_id'){       
+                                                    if($('.external-event').hasClass('drag-event'+draggable_id)){
+                                                        $(".drag-event"+draggable_id).remove();
+                                                    }  
+                                                }
+                                                $this.$updateEventModal.modal('hide');
+                                                // setTimeout(function(){ 
+                                                //    $.CalendarApp.init()
+                                                // }, 1000);
+                                                location.reload();
+                                                return false;
+                                            } 
+                                        }                   
+                                    },
+                                    error: function() {
+                                        alert("Something went Wrong...");
+                                    }
+                                });
+                            }else{
+                                $this.$updateEventModal.find('#event_end_timeErr').html('End Time should be greater than Start time');
+                            }                                 
+                        });
+                        
+                    }else if(update_event_id =="0"){
+                        var event_new_id = calEvent.event_id;
+                            $.ajax({
+                                type: "POST",
+                                url: base_url+'front/task_data_single_event',
+                                type: 'POST',
+                                data: {
+                                    event_id:event_new_id 
+                                }, 
+                                success: function(data){
+                                    console.log("testtttt");
+                                var task_start_date = data.task_start_date;
+                                var task_end_date = data.task_end_date;
+                                
+                                $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(task_start_date);
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(task_end_date);
+                                
+                                $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
+                                $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+
+                                let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(task_start_date).getDay()];
+                                let monthNames = ["January", "February", "March", "April", "May", "June",
+                                "July", "August", "September", "October", "November", "December"
+                                ][new Date(task_start_date).getMonth()];
+                                var start_day_value = new Date(task_start_date).getDate();
+                                $this.$updateEventModal.find("#weekday_value").html("Weekly on "+weekday);
+                                $this.$updateEventModal.find("#monthly_value").html("Monthly on "+start_day_value);
+                                $this.$updateEventModal.find("#yearly_value").html("Annually on "+start_day_value+" "+monthNames);
+
+                                var start_update = new Date(task_start_date),
+                                end_update   = new Date(task_end_date),
+                                diff_update  = new Date(end_update - start_update),
+                                days_diff  = diff_update/1000/60/60/24;
+                                console.log("days_diff");
+                                console.log(days_diff);
+                                if(days_diff < 2){
+                                    $('.custom_value_update').prop('disabled', true);
+                                }else{
+                                    $('.custom_value_update').prop('disabled', false);
+                                }
+                                if(days_diff < 7){
+                                    $('.weekday_value_update').prop('disabled', true);
+                                }else{
+                                    $('.weekday_value_update').prop('disabled', false);
+                                }
+                                if(days_diff < 31){
+                                    $('.monthly_value_update').prop('disabled', true);
+                                }else{
+                                    $('.monthly_value_update').prop('disabled', false);
+                                }
+                                if(days_diff < 365){
+                                    $('.yearly_value_update').prop('disabled', true);
+                                }else{
+                                    $('.yearly_value_update').prop('disabled', false);
+                                }
+                                // $this.$viewEventModal.find('.modal-body1').empty().prepend(data).end();
+                                }
+                            });
+                            if(calEvent.event_repeat_option_type == 'Does not repeat'){
+                                $('#event_start_end_date_div_update').show();
+                                $('#event_start_end_date_select_update').hide();                    
+                            }else if(calEvent.event_repeat_option_type == 'Custom'){
+                                const split_string = calEvent.custom_all_day.split(",");
+                                split_string.forEach(myFunction);
+                                function myFunction(value, index, array) {
+                                    $("#radioupdate_"+value).prop('checked', true);
+                                }
+                                $('.custom-class-update').show();
+                                $('#event_start_end_date_div_update').hide();
+                                $('#event_start_end_date_select_update').show();
+                            }else{
+                                $('#event_start_end_date_div_update').hide();
+                                $('#event_start_end_date_select_update').show();
+                            }
+                            $this.$viewEventModal.modal('hide');
+                            $this.$updateEventModal.modal('show');
+                            $this.$updateEventModal.find("input[name=event_name]").val(calEvent.title); 
+                            $this.$updateEventModal.find("select[name='event_color']").val(calEvent.className[0]);                 
+                            if(calEvent.type == 'event')
+                            {
+                                $("#event").addClass("active");
+                                $("#event-1").addClass("active");
+                                $this.$updateEventModal.find("textarea[name=event_note]").val(calEvent.event_note);
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(calEvent.event_start_date);
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(calEvent.event_end_date);
+
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").val(calEvent.event_start_date+ ' - ' +calEvent.event_end_date);
+                                if(calEvent.allDay == false){
+                                    $this.$updateEventModal.find("select[name=event_start_time]").val(moment(calEvent.event_start_time, "HH:mm").format('hh:mm A'));
+                                    $this.$updateEventModal.find("select[name=event_start_time]").select2().trigger('change');
+                                    $this.$updateEventModal.find("select[name=event_end_time]").val(moment(calEvent.event_end_time, "HH:mm").format('hh:mm A'));
+                                    $this.$updateEventModal.find("select[name=event_end_time]").select2().trigger('change');
+                                    $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', false);
+                                    $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('true');
+                                    $("#date-time-section1").show();
+                                    $("#old_reminder_update").show();
+                                    $("#new_reminder_update").hide();
+                                }else{
+                                    $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', true);
+                                    $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('false');
+                                    $("#date-time-section1").hide();
+                                    $("#new_reminder_update").show();
+                                    $("#old_reminder_update").hide();
+                                }
+                                $this.$updateEventModal.find("select[name='event_repeat_option']").val(calEvent.event_repeat_option_type); 
+                                $this.$updateEventModal.find("select[name='event_reminder']").val(calEvent.event_reminder);
+                                $this.$updateEventModal.find("select[name='event_reminder_new']").val(calEvent.event_reminder); 
+                                if(calEvent.draggable_event == 'on'){
+                                    $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', true);
+                                }else{
+                                    $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', false);
+                                }
+                                $this.$updateEventModal.find("input[name=event_id]").val(calEvent.event_id);
+                                $this.$updateEventModal.find("input[name=draggable_id]").val(calEvent.draggable_id);
+                            }
+                            else
+                            {
+                                $("#task").addClass("active");
+                                $("#task-2").addClass("active");
+                            }
+                            if(calEvent.event_repeat_option_type == 'Does not repeat' || calEvent.event_repeat_option_type == 'Daily'){
+                                $('#event_field_hide').show();
+                            }else{
+                                $('#event_field_hide').hide();
+                            }
+                            
+                            $this.$updateEventModal.find('.update-category').unbind('submit').on('submit', function (e) {    
+                                e.preventDefault(); // Stop page from refreshing
+                            var input_allday = $this.$updateEventModal.find("input[name=event_allDay]");
+                            // var ip_sedate=$this.$updateEventModal.find("input[name=event_start_end_date]").val();
+                            var ip_sedate=$this.$updateEventModal.find("input[name=event_start_date_nn]").val()+' - '+$this.$updateEventModal.find("input[name=event_end_date_nn]").val();
+                            var input_dd = ip_sedate.split(' - ');
+
+                            var input_sdate=input_dd[0];
+                            var input_edate=input_dd[1];
+                            var input_stime=$this.$updateEventModal.find("select[name=event_start_time]").val();
+                            var input_etime=$this.$updateEventModal.find("select[name=event_end_time]").val();
+                            var event_repeat_option_value=$this.$updateEventModal.find("#event_repeat_option").val();
+                            var start_update = new Date(input_sdate),
+                            end_update   = new Date(input_edate),
+                            diff_update  = new Date(end_update - start_update),
+                            days_update  = diff_update/1000/60/60/24;
+                            if(days_update<= -1){
+                                $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select correct date range');
+                                return false;
+                            }
+
+                            if(event_repeat_option_value == "Custom"){
+                                var start_update = new Date(input_sdate),
+                                end_update   = new Date(input_edate),
+                                diff_update  = new Date(end_update - start_update),
+                                days_update  = diff_update/1000/60/60/24;
+                                // if(days_update<= 7){
+                                //     $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                                //     return false;
+                                // }
+                            }
+                            
+                            var op_sdate = new Date(input_sdate+' '+input_stime);
+                            var op_edate = new Date(input_edate+' '+input_etime);
+                            if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
+                                {
+                                    var formData = new FormData(this); 
+                                    formData.append('delete_check', '0');             
+                                    $.ajax({
+                                        url: base_url+'front/update_event_form',
+                                        type:"POST",
+                                        data:formData,
+                                        contentType:false,
+                                        processData:false,
+                                        cache:false,
+                                        success: function(data) {
+                                            if (data.status == false)
+                                            {
+                                                //show errors
+                                                $('[id*=Err]').html('');
+                                                $.each(data.errors, function(key, val) {
+                                                    var key =key.replace(/\[]/g, '');
+                                                    key=key+'Err';    
+                                                    $('#'+ key).html(val);
+                                                })
+                                            }
+                                            else if(data.status == true){
+                                                var categoryName = $this.$updatecategoryForm.find("input[name='event_name']").val(); 
+                                                var categoryColor = $this.$updatecategoryForm.find("select[name='event_color']").val();
+                                                var dragId = data.drag_id;
+                                                var event_id = data.event_id;
+                                                var categoryStart = data.start_date;
+                                                var categoryEnd = data.end_date;
+                                                var type = data.type;
+                                                var draggable_id = data.draggable_id;
+                                                var allDay = data.allDay;
+                                                if(allDay == 'true'){
+                                                    var allDay = true;
+                                                }else{
+                                                    var allDay = false;
+                                                }
+                                                if (categoryName !== null && categoryName.length != 0) {
+                                                    $this.$updateEventModal.find('#event_end_timeErr').html('');
+                                                    $this.$calendarObj.fullCalendar('removeEvents', function (evnt) {
+                                                        return (calEvent._id == evnt._id);   
+                                                    });
+                                                    $this.$calendarObj.fullCalendar('renderEvent', {
+                                                        title: categoryName,
+                                                        start: categoryStart,
+                                                        event_id: event_id,
+                                                        end: categoryEnd,
+                                                        allDay: allDay,
+                                                        className: categoryColor,
+                                                        event_note: data.event_note,
+                                                        event_start_date: data.event_start_date,
+                                                        event_end_date: data.event_end_date,
+                                                        event_start_time: data.event_start_time,
+                                                        event_end_time: data.event_end_time,
+                                                        event_repeat_option: data.event_repeat_option,
+                                                        event_allDay: data.event_allDay,
+                                                        event_reminder: data.event_reminder,
+                                                        draggable_event: data.draggable_event,
+                                                        draggable_id: data.draggable_id,
+                                                        drag_id: data.drag_id,
+                                                        type: data.type,
+                                                    }, true);
+                                                    $this.$calendarObj.fullCalendar('refetchEvents');
+                                                    if(dragId != 'no_drag_id'){
+                                                        if(!$('.external-event').hasClass('drag-event'+dragId)){
+                                                            $this.$extEvents.append('<div id="' + dragId + '" class="m-10 external-event drag-event'+dragId + ' ' + categoryColor + '" data-class="' + categoryColor + '" style="position: relative;"><i class="fa fa-hand-o-right"></i>' + categoryName + '<i onclick="return removeDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-times"></i><i onclick="return editModalDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-pencil"></i></div>')
+                                                            $this.enableDrag();
+                                                        }
+                                                    }else if(dragId == 'no_drag_id'){       
+                                                        if($('.external-event').hasClass('drag-event'+draggable_id)){
+                                                            $(".drag-event"+draggable_id).remove();
+                                                        }  
+                                                    }
+                                                    $this.$updateEventModal.modal('hide');
+                                                    // setTimeout(function(){ 
+                                                    //    $.CalendarApp.init()
+                                                    // }, 1000);
+                                                    location.reload();
+                                                    return false;
+                                                } 
+                                            }                   
+                                        },
+                                        error: function() {
+                                            alert("Something went Wrong...");
+                                        }
+                                    });
+                                }else{
+                                    $this.$updateEventModal.find('#event_end_timeErr').html('End Time should be greater than Start time');
+                                }                                 
+                            });
+                    }else if(update_event_id =="2"){
+                        var event_new_id = calEvent.event_id;
+                        $.ajax({
+                            type: "POST",
+                            url: base_url+'front/task_data_following_event',
+                            type: 'POST',
+                            data: {
+                                event_id:event_new_id 
+                            }, 
+                            success: function(data){
+                            var task_start_date = data.task_start_date;
+                            var task_end_date = data.task_end_date;
+                            $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(task_start_date);
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(task_end_date);
+                            $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
+                            $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+                            
+                            // $this.$viewEventModal.find('.modal-body1').empty().prepend(data).end();
+                            }
+                        });
+                        if(calEvent.event_repeat_option_type == 'Does not repeat'){
+                            $('#event_start_end_date_div_update').show();
+                            $('#event_start_end_date_select_update').hide();                    
+                        }else if(calEvent.event_repeat_option_type == 'Custom'){
+                            const split_string = calEvent.custom_all_day.split(",");
+                            split_string.forEach(myFunction);
+                            function myFunction(value, index, array) {
+                                $("#radioupdate_"+value).prop('checked', true);
+                            }
+                            $('.custom-class-update').show();
+                            $('#event_start_end_date_div_update').hide();
+                            $('#event_start_end_date_select_update').show();
+                        }else{
+                            $('#event_start_end_date_div_update').hide();
+                            $('#event_start_end_date_select_update').show();
+                        }
+                        $this.$viewEventModal.modal('hide');
+                        $this.$updateEventModal.modal('show');
+                        $this.$updateEventModal.find("input[name=event_name]").val(calEvent.title); 
+                        $this.$updateEventModal.find("select[name='event_color']").val(calEvent.className[0]);                 
+                        if(calEvent.type == 'event')
+                        {
+                            $("#event").addClass("active");
+                            $("#event-1").addClass("active");
+                            $this.$updateEventModal.find("textarea[name=event_note]").val(calEvent.event_note);
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(calEvent.event_start_date);
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(calEvent.event_end_date);
+
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").val(calEvent.event_start_date+ ' - ' +calEvent.event_end_date);
+                            if(calEvent.allDay == false){
+                                $this.$updateEventModal.find("select[name=event_start_time]").val(moment(calEvent.event_start_time, "HH:mm").format('hh:mm A'));
+                                $this.$updateEventModal.find("select[name=event_start_time]").select2().trigger('change');
+                                $this.$updateEventModal.find("select[name=event_end_time]").val(moment(calEvent.event_end_time, "HH:mm").format('hh:mm A'));
+                                $this.$updateEventModal.find("select[name=event_end_time]").select2().trigger('change');
+                                $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', false);
+                                $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('true');
+                                $("#date-time-section1").show();
+                                $("#old_reminder_update").show();
+                                $("#new_reminder_update").hide();
+                            }else{
+                                $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', true);
+                                $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('false');
+                                $("#date-time-section1").hide();
+                                $("#new_reminder_update").show();
+                                $("#old_reminder_update").hide();
+                            }
+                            $this.$updateEventModal.find("select[name='event_repeat_option']").val(calEvent.event_repeat_option_type); 
+                            $this.$updateEventModal.find("select[name='event_reminder']").val(calEvent.event_reminder);
+                            $this.$updateEventModal.find("select[name='event_reminder_new']").val(calEvent.event_reminder); 
+                            if(calEvent.draggable_event == 'on'){
+                                $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', true);
+                            }else{
+                                $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', false);
+                            }
+                            $this.$updateEventModal.find("input[name=event_id]").val(calEvent.event_id);
+                            $this.$updateEventModal.find("input[name=draggable_id]").val(calEvent.draggable_id);
+                        }
+                        else
+                        {
+                            $("#task").addClass("active");
+                            $("#task-2").addClass("active");
+                        } 
+                        if(calEvent.event_repeat_option_type == 'Does not repeat' || calEvent.event_repeat_option_type == 'Daily'){
+                            $('#event_field_hide').show();
+                        }else{
+                            $('#event_field_hide').hide();
+                        }
+                        $this.$updateEventModal.find('.update-category').unbind('submit').on('submit', function (e) {    
+                            e.preventDefault(); // Stop page from refreshing
+                        var input_allday = $this.$updateEventModal.find("input[name=event_allDay]");
+                        // var ip_sedate=$this.$updateEventModal.find("input[name=event_start_end_date]").val();
+                        var ip_sedate=$this.$updateEventModal.find("input[name=event_start_date_nn]").val()+' - '+$this.$updateEventModal.find("input[name=event_end_date_nn]").val();
+                        var input_dd = ip_sedate.split(' - ');
+
+                        var input_sdate=input_dd[0];
+                        var input_edate=input_dd[1];
+                        var input_stime=$this.$updateEventModal.find("select[name=event_start_time]").val();
+                        var input_etime=$this.$updateEventModal.find("select[name=event_end_time]").val();
+                        var event_repeat_option_value=$this.$updateEventModal.find("#event_repeat_option").val();
+                        var start_update = new Date(input_sdate),
+                        end_update   = new Date(input_edate),
+                        diff_update  = new Date(end_update - start_update),
+                        days_update  = diff_update/1000/60/60/24;
+                        if(days_update<= -1){
+                            $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select correct date range');
+                            return false;
+                        }
+
+                        if(event_repeat_option_value == "Custom"){
+                            var start_update = new Date(input_sdate),
+                            end_update   = new Date(input_edate),
+                            diff_update  = new Date(end_update - start_update),
+                            days_update  = diff_update/1000/60/60/24;
+                            // if(days_update<= 7){
+                            //     $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                            //     return false;
+                            // }
+                        }
+                        
+                        var op_sdate = new Date(input_sdate+' '+input_stime);
+                        var op_edate = new Date(input_edate+' '+input_etime);
+                        if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
+                            {
+                                var formData = new FormData(this);
+                                formData.append('delete_check', '2');             
+                                $.ajax({
+                                    url: base_url+'front/update_event_form',
+                                    type:"POST",
+                                    data:formData,
+                                    contentType:false,
+                                    processData:false,
+                                    cache:false,
+                                    success: function(data) {
+                                        if (data.status == false)
+                                        {
+                                            //show errors
+                                            $('[id*=Err]').html('');
+                                            $.each(data.errors, function(key, val) {
+                                                var key =key.replace(/\[]/g, '');
+                                                key=key+'Err';    
+                                                $('#'+ key).html(val);
+                                            })
+                                        }
+                                        else if(data.status == true){
+                                            var categoryName = $this.$updatecategoryForm.find("input[name='event_name']").val(); 
+                                            var categoryColor = $this.$updatecategoryForm.find("select[name='event_color']").val();
+                                            var dragId = data.drag_id;
+                                            var event_id = data.event_id;
+                                            var categoryStart = data.start_date;
+                                            var categoryEnd = data.end_date;
+                                            var type = data.type;
+                                            var draggable_id = data.draggable_id;
+                                            var allDay = data.allDay;
+                                            if(allDay == 'true'){
+                                                var allDay = true;
+                                            }else{
+                                                var allDay = false;
+                                            }
+                                            if (categoryName !== null && categoryName.length != 0) {
+                                                $this.$updateEventModal.find('#event_end_timeErr').html('');
+                                                $this.$calendarObj.fullCalendar('removeEvents', function (evnt) {
+                                                    return (calEvent._id == evnt._id);   
+                                                });
+                                                $this.$calendarObj.fullCalendar('renderEvent', {
+                                                    title: categoryName,
+                                                    start: categoryStart,
+                                                    event_id: event_id,
+                                                    end: categoryEnd,
+                                                    allDay: allDay,
+                                                    className: categoryColor,
+                                                    event_note: data.event_note,
+                                                    event_start_date: data.event_start_date,
+                                                    event_end_date: data.event_end_date,
+                                                    event_start_time: data.event_start_time,
+                                                    event_end_time: data.event_end_time,
+                                                    event_repeat_option: data.event_repeat_option,
+                                                    event_allDay: data.event_allDay,
+                                                    event_reminder: data.event_reminder,
+                                                    draggable_event: data.draggable_event,
+                                                    draggable_id: data.draggable_id,
+                                                    drag_id: data.drag_id,
+                                                    type: data.type,
+                                                }, true);
+                                                $this.$calendarObj.fullCalendar('refetchEvents');
+                                                if(dragId != 'no_drag_id'){
+                                                    if(!$('.external-event').hasClass('drag-event'+dragId)){
+                                                        $this.$extEvents.append('<div id="' + dragId + '" class="m-10 external-event drag-event'+dragId + ' ' + categoryColor + '" data-class="' + categoryColor + '" style="position: relative;"><i class="fa fa-hand-o-right"></i>' + categoryName + '<i onclick="return removeDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-times"></i><i onclick="return editModalDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-pencil"></i></div>')
+                                                        $this.enableDrag();
+                                                    }
+                                                }else if(dragId == 'no_drag_id'){       
+                                                    if($('.external-event').hasClass('drag-event'+draggable_id)){
+                                                        $(".drag-event"+draggable_id).remove();
+                                                    }  
+                                                }
+                                                $this.$updateEventModal.modal('hide');
+                                                // setTimeout(function(){ 
+                                                //    $.CalendarApp.init()
+                                                // }, 1000);
+                                                location.reload();
+                                                return false;
+                                            } 
+                                        }                   
+                                    },
+                                    error: function() {
+                                        alert("Something went Wrong...");
+                                    }
+                                });
+                            }else{
+                                $this.$updateEventModal.find('#event_end_timeErr').html('End Time should be greater than Start time');
+                            }                                 
+                        });
+                    }
+                /////////   end if
+
+            });
+            $this.$viewEventModal.find('.modal-header').find('.edit-event').unbind('click').click(function () {
+                $('#update_event_two').show();
+                $('#update_event_three').show();
+                $('#update_type_edit').html("Update recurring "+calEvent.created_type);
+                if(calEvent.array_count == 1){
+                    $('#update_event_two').hide();
+                    $("#myModalUpdate").modal();
+                    
+                }else{
+                 
+                    if(calEvent.event_repeat_option_type == 'Does not repeat' || calEvent.event_repeat_option_type == 'Daily'){
+                        $('#update_event_two').hide();
+                        $("#myModalUpdate").modal();
+                        
                     }else{
-                        $this.$updateEventModal.find('#event_end_timeErr').html('End Time should be greater than Start time');
-                    }                                 
-                });
+                        console.log("calEvent.isLastCount");
+                        console.log(calEvent.isLastCount);
+                        if(calEvent.isLastCount == 1){
+                            $('#update_event_three').hide();
+                            $("#myModalUpdate").modal();
+                        }else{
+                            $("#myModalUpdate").modal();
+                        }
+                    }  
+                }
+                return false;
+                swal("Are you sure to update event?", {
+                    icon: 'warning',
+                    buttons: {
+                      cancel: "Cancel",
+                      catch: {
+                        text: "Update only this",
+                        value: "catch",
+                      },
+                      following: {
+                        text: "Update this and following",
+                        value: "following",
+
+                      },
+                      delete: {
+                        text: "Update all",
+                        value: "update_all",
+
+                      },
+                      //delete: true,
+                      
+                    },
+                  })
+                  .then((value) => {
+                    switch (value) {
+                   
+                      case "update_all":
+                        var event_new_id = calEvent.event_id;
+                        $.ajax({
+                            type: "POST",
+                            url: base_url+'front/task_data_new',
+                            type: 'POST',
+                            data: {
+                                event_id:event_new_id 
+                            }, 
+                            success: function(data){
+                            var task_start_date = data.task_start_date;
+                            var task_end_date = data.task_end_date;
+                            $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(task_start_date);
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(task_end_date);
+                            $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
+                            $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+                            // $this.$viewEventModal.find('.modal-body1').empty().prepend(data).end();
+                            }
+                        });
+                        if(calEvent.event_repeat_option_type == 'Does not repeat'){
+                            $('#event_start_end_date_div_update').show();
+                            $('#event_start_end_date_select_update').hide();                    
+                        }else if(calEvent.event_repeat_option_type == 'Custom'){
+                            const split_string = calEvent.custom_all_day.split(",");
+                            split_string.forEach(myFunction);
+                            function myFunction(value, index, array) {
+                                $("#radioupdate_"+value).prop('checked', true);
+                            }
+                            $('.custom-class-update').show();
+                            $('#event_start_end_date_div_update').hide();
+                            $('#event_start_end_date_select_update').show();
+                        }else{
+                            $('#event_start_end_date_div_update').hide();
+                            $('#event_start_end_date_select_update').show();
+                        }
+                        // if(calEvent.event_repeat_option_type == 'Custom'){
+                        //     $('.custom-class-update').css('display','block');
+                        //     var day_cal = new Date(calEvent.event_start_date);
+                            
+                        // }
+                        
+                        // $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date);                
+                        $this.$viewEventModal.modal('hide');
+                        $this.$updateEventModal.modal('show');
+                        
+                        $this.$updateEventModal.find("input[name=event_name]").val(calEvent.title); 
+                        $this.$updateEventModal.find("select[name='event_color']").val(calEvent.className[0]);                 
+                        if(calEvent.type == 'event')
+                        {
+                            $("#event").addClass("active");
+                            $("#event-1").addClass("active");
+                            $this.$updateEventModal.find("textarea[name=event_note]").val(calEvent.event_note);
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(calEvent.event_start_date);
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(calEvent.event_end_date);
+
+                            // $this.$updateEventModal.find("input[name=event_start_end_date]").val(calEvent.event_start_date+ ' - ' +calEvent.event_end_date);
+                            if(calEvent.allDay == false){
+                                $this.$updateEventModal.find("select[name=event_start_time]").val(moment(calEvent.event_start_time, "HH:mm").format('hh:mm A'));
+                                $this.$updateEventModal.find("select[name=event_start_time]").select2().trigger('change');
+                                $this.$updateEventModal.find("select[name=event_end_time]").val(moment(calEvent.event_end_time, "HH:mm").format('hh:mm A'));
+                                $this.$updateEventModal.find("select[name=event_end_time]").select2().trigger('change');
+                                $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', false);
+                                $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('true');
+                                $("#date-time-section1").show();
+                                $("#old_reminder_update").show();
+                                $("#new_reminder_update").hide();
+                            }else{
+                                $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', true);
+                                $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('false');
+                                $("#date-time-section1").hide();
+                                $("#new_reminder_update").show();
+                                $("#old_reminder_update").hide();
+                            }
+                            $this.$updateEventModal.find("select[name='event_repeat_option']").val(calEvent.event_repeat_option_type); 
+                            $this.$updateEventModal.find("select[name='event_reminder']").val(calEvent.event_reminder);
+                            $this.$updateEventModal.find("select[name='event_reminder_new']").val(calEvent.event_reminder); 
+                            if(calEvent.draggable_event == 'on'){
+                                $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', true);
+                            }else{
+                                $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', false);
+                            }
+                            $this.$updateEventModal.find("input[name=event_id]").val(calEvent.event_id);
+                            $this.$updateEventModal.find("input[name=draggable_id]").val(calEvent.draggable_id);
+                        }
+                        else
+                        {
+                            $("#task").addClass("active");
+                            $("#task-2").addClass("active");
+                        } 
+                        $this.$updateEventModal.find('.update-category').unbind('submit').on('submit', function (e) {    
+                            e.preventDefault(); // Stop page from refreshing
+                        var input_allday = $this.$updateEventModal.find("input[name=event_allDay]");
+                       // var ip_sedate=$this.$updateEventModal.find("input[name=event_start_end_date]").val();
+                        var ip_sedate=$this.$updateEventModal.find("input[name=event_start_date_nn]").val()+' - '+$this.$updateEventModal.find("input[name=event_end_date_nn]").val();
+                        var input_dd = ip_sedate.split(' - ');
+
+                        var input_sdate=input_dd[0];
+                        var input_edate=input_dd[1];
+                        var input_stime=$this.$updateEventModal.find("select[name=event_start_time]").val();
+                        var input_etime=$this.$updateEventModal.find("select[name=event_end_time]").val();
+                        var event_repeat_option_value=$this.$updateEventModal.find("#event_repeat_option").val();
+
+                        if(event_repeat_option_value == "Custom"){
+                            var start_update = new Date(input_sdate),
+                            end_update   = new Date(input_edate),
+                            diff_update  = new Date(end_update - start_update),
+                            days_update  = diff_update/1000/60/60/24;
+                            if(days_update<= 7){
+                                $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                                return false;
+                            }
+                        }
+                        
+                        var op_sdate = new Date(input_sdate+' '+input_stime);
+                        var op_edate = new Date(input_edate+' '+input_etime);
+                        if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
+                            {
+                                var formData = new FormData(this);
+                                formData.append('delete_check', '1');              
+                                $.ajax({
+                                    url: base_url+'front/update_event_form',
+                                    type:"POST",
+                                    data:formData,
+                                    contentType:false,
+                                    processData:false,
+                                    cache:false,
+                                    success: function(data) {
+                                        if (data.status == false)
+                                        {
+                                            //show errors
+                                            $('[id*=Err]').html('');
+                                            $.each(data.errors, function(key, val) {
+                                                var key =key.replace(/\[]/g, '');
+                                                key=key+'Err';    
+                                                $('#'+ key).html(val);
+                                            })
+                                        }
+                                        else if(data.status == true){
+                                            var categoryName = $this.$updatecategoryForm.find("input[name='event_name']").val(); 
+                                            var categoryColor = $this.$updatecategoryForm.find("select[name='event_color']").val();
+                                            var dragId = data.drag_id;
+                                            var event_id = data.event_id;
+                                            var categoryStart = data.start_date;
+                                            var categoryEnd = data.end_date;
+                                            var type = data.type;
+                                            var draggable_id = data.draggable_id;
+                                            var allDay = data.allDay;
+                                            if(allDay == 'true'){
+                                                var allDay = true;
+                                            }else{
+                                                var allDay = false;
+                                            }
+                                            if (categoryName !== null && categoryName.length != 0) {
+                                                $this.$updateEventModal.find('#event_end_timeErr').html('');
+                                                $this.$calendarObj.fullCalendar('removeEvents', function (evnt) {
+                                                    return (calEvent._id == evnt._id);   
+                                                });
+                                                $this.$calendarObj.fullCalendar('renderEvent', {
+                                                    title: categoryName,
+                                                    start: categoryStart,
+                                                    event_id: event_id,
+                                                    end: categoryEnd,
+                                                    allDay: allDay,
+                                                    className: categoryColor,
+                                                    event_note: data.event_note,
+                                                    event_start_date: data.event_start_date,
+                                                    event_end_date: data.event_end_date,
+                                                    event_start_time: data.event_start_time,
+                                                    event_end_time: data.event_end_time,
+                                                    event_repeat_option: data.event_repeat_option,
+                                                    event_allDay: data.event_allDay,
+                                                    event_reminder: data.event_reminder,
+                                                    draggable_event: data.draggable_event,
+                                                    draggable_id: data.draggable_id,
+                                                    drag_id: data.drag_id,
+                                                    type: data.type,
+                                                }, true);
+                                                $this.$calendarObj.fullCalendar('refetchEvents');
+                                                if(dragId != 'no_drag_id'){
+                                                    if(!$('.external-event').hasClass('drag-event'+dragId)){
+                                                        $this.$extEvents.append('<div id="' + dragId + '" class="m-10 external-event drag-event'+dragId + ' ' + categoryColor + '" data-class="' + categoryColor + '" style="position: relative;"><i class="fa fa-hand-o-right"></i>' + categoryName + '<i onclick="return removeDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-times"></i><i onclick="return editModalDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-pencil"></i></div>')
+                                                        $this.enableDrag();
+                                                    }
+                                                }else if(dragId == 'no_drag_id'){       
+                                                    if($('.external-event').hasClass('drag-event'+draggable_id)){
+                                                        $(".drag-event"+draggable_id).remove();
+                                                    }  
+                                                }
+                                                $this.$updateEventModal.modal('hide');
+                                                // setTimeout(function(){ 
+                                                //    $.CalendarApp.init()
+                                                // }, 1000);
+                                                location.reload();
+                                                return false;
+                                            } 
+                                        }                   
+                                    },
+                                    error: function() {
+                                        alert("Something went Wrong...");
+                                    }
+                                });
+                            }else{
+                                $this.$updateEventModal.find('#event_end_timeErr').html('End Time should be greater than Start time');
+                            }                                 
+                        });
+                        
+                        break;
+                   
+                      case "catch":
+                        
+                            var event_new_id = calEvent.event_id;
+                            $.ajax({
+                                type: "POST",
+                                url: base_url+'front/task_data_single_event',
+                                type: 'POST',
+                                data: {
+                                    event_id:event_new_id 
+                                }, 
+                                success: function(data){
+                                var task_start_date = data.task_start_date;
+                                var task_end_date = data.task_end_date;
+                                $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(task_start_date);
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(task_end_date);
+                                
+                                $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
+                                $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+
+                                let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(task_start_date).getDay()];
+                                let monthNames = ["January", "February", "March", "April", "May", "June",
+                                "July", "August", "September", "October", "November", "December"
+                                ][new Date(task_start_date).getMonth()];
+                                var start_day_value = new Date(task_start_date).getDate();
+                                $this.$updateEventModal.find("#weekday_value").html("Weekly on "+weekday);
+                                $this.$updateEventModal.find("#monthly_value").html("Monthly on "+start_day_value);
+                                $this.$updateEventModal.find("#yearly_value").html("Annually on "+start_day_value+" "+monthNames);
+                                // $this.$viewEventModal.find('.modal-body1').empty().prepend(data).end();
+                                }
+                            });
+                            if(calEvent.event_repeat_option_type == 'Does not repeat'){
+                                $('#event_start_end_date_div_update').show();
+                                $('#event_start_end_date_select_update').hide();                    
+                            }else if(calEvent.event_repeat_option_type == 'Custom'){
+                                const split_string = calEvent.custom_all_day.split(",");
+                                split_string.forEach(myFunction);
+                                function myFunction(value, index, array) {
+                                    $("#radioupdate_"+value).prop('checked', true);
+                                }
+                                $('.custom-class-update').show();
+                                $('#event_start_end_date_div_update').hide();
+                                $('#event_start_end_date_select_update').show();
+                            }else{
+                                $('#event_start_end_date_div_update').hide();
+                                $('#event_start_end_date_select_update').show();
+                            }
+                            $this.$viewEventModal.modal('hide');
+                            $this.$updateEventModal.modal('show');
+                            $this.$updateEventModal.find("input[name=event_name]").val(calEvent.title); 
+                            $this.$updateEventModal.find("select[name='event_color']").val(calEvent.className[0]);                 
+                            if(calEvent.type == 'event')
+                            {
+                                $("#event").addClass("active");
+                                $("#event-1").addClass("active");
+                                $this.$updateEventModal.find("textarea[name=event_note]").val(calEvent.event_note);
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(calEvent.event_start_date);
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(calEvent.event_end_date);
+
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").val(calEvent.event_start_date+ ' - ' +calEvent.event_end_date);
+                                if(calEvent.allDay == false){
+                                    $this.$updateEventModal.find("select[name=event_start_time]").val(moment(calEvent.event_start_time, "HH:mm").format('hh:mm A'));
+                                    $this.$updateEventModal.find("select[name=event_start_time]").select2().trigger('change');
+                                    $this.$updateEventModal.find("select[name=event_end_time]").val(moment(calEvent.event_end_time, "HH:mm").format('hh:mm A'));
+                                    $this.$updateEventModal.find("select[name=event_end_time]").select2().trigger('change');
+                                    $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', false);
+                                    $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('true');
+                                    $("#date-time-section1").show();
+                                    $("#old_reminder_update").show();
+                                    $("#new_reminder_update").hide();
+                                }else{
+                                    $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', true);
+                                    $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('false');
+                                    $("#date-time-section1").hide();
+                                    $("#new_reminder_update").show();
+                                    $("#old_reminder_update").hide();
+                                }
+                                $this.$updateEventModal.find("select[name='event_repeat_option']").val(calEvent.event_repeat_option_type); 
+                                $this.$updateEventModal.find("select[name='event_reminder']").val(calEvent.event_reminder);
+                                $this.$updateEventModal.find("select[name='event_reminder_new']").val(calEvent.event_reminder); 
+                                if(calEvent.draggable_event == 'on'){
+                                    $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', true);
+                                }else{
+                                    $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', false);
+                                }
+                                $this.$updateEventModal.find("input[name=event_id]").val(calEvent.event_id);
+                                $this.$updateEventModal.find("input[name=draggable_id]").val(calEvent.draggable_id);
+                            }
+                            else
+                            {
+                                $("#task").addClass("active");
+                                $("#task-2").addClass("active");
+                            } 
+                            $this.$updateEventModal.find('.update-category').unbind('submit').on('submit', function (e) {    
+                                e.preventDefault(); // Stop page from refreshing
+                            var input_allday = $this.$updateEventModal.find("input[name=event_allDay]");
+                            // var ip_sedate=$this.$updateEventModal.find("input[name=event_start_end_date]").val();
+                            var ip_sedate=$this.$updateEventModal.find("input[name=event_start_date_nn]").val()+' - '+$this.$updateEventModal.find("input[name=event_end_date_nn]").val();
+                            var input_dd = ip_sedate.split(' - ');
+
+                            var input_sdate=input_dd[0];
+                            var input_edate=input_dd[1];
+                            var input_stime=$this.$updateEventModal.find("select[name=event_start_time]").val();
+                            var input_etime=$this.$updateEventModal.find("select[name=event_end_time]").val();
+                            var event_repeat_option_value=$this.$updateEventModal.find("#event_repeat_option").val();
+
+                            if(event_repeat_option_value == "Custom"){
+                                var start_update = new Date(input_sdate),
+                                end_update   = new Date(input_edate),
+                                diff_update  = new Date(end_update - start_update),
+                                days_update  = diff_update/1000/60/60/24;
+                                if(days_update<= 7){
+                                    $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                                    return false;
+                                }
+                            }
+                            
+                            var op_sdate = new Date(input_sdate+' '+input_stime);
+                            var op_edate = new Date(input_edate+' '+input_etime);
+                            if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
+                                {
+                                    var formData = new FormData(this); 
+                                    formData.append('delete_check', '0');             
+                                    $.ajax({
+                                        url: base_url+'front/update_event_form',
+                                        type:"POST",
+                                        data:formData,
+                                        contentType:false,
+                                        processData:false,
+                                        cache:false,
+                                        success: function(data) {
+                                            if (data.status == false)
+                                            {
+                                                //show errors
+                                                $('[id*=Err]').html('');
+                                                $.each(data.errors, function(key, val) {
+                                                    var key =key.replace(/\[]/g, '');
+                                                    key=key+'Err';    
+                                                    $('#'+ key).html(val);
+                                                })
+                                            }
+                                            else if(data.status == true){
+                                                var categoryName = $this.$updatecategoryForm.find("input[name='event_name']").val(); 
+                                                var categoryColor = $this.$updatecategoryForm.find("select[name='event_color']").val();
+                                                var dragId = data.drag_id;
+                                                var event_id = data.event_id;
+                                                var categoryStart = data.start_date;
+                                                var categoryEnd = data.end_date;
+                                                var type = data.type;
+                                                var draggable_id = data.draggable_id;
+                                                var allDay = data.allDay;
+                                                if(allDay == 'true'){
+                                                    var allDay = true;
+                                                }else{
+                                                    var allDay = false;
+                                                }
+                                                if (categoryName !== null && categoryName.length != 0) {
+                                                    $this.$updateEventModal.find('#event_end_timeErr').html('');
+                                                    $this.$calendarObj.fullCalendar('removeEvents', function (evnt) {
+                                                        return (calEvent._id == evnt._id);   
+                                                    });
+                                                    $this.$calendarObj.fullCalendar('renderEvent', {
+                                                        title: categoryName,
+                                                        start: categoryStart,
+                                                        event_id: event_id,
+                                                        end: categoryEnd,
+                                                        allDay: allDay,
+                                                        className: categoryColor,
+                                                        event_note: data.event_note,
+                                                        event_start_date: data.event_start_date,
+                                                        event_end_date: data.event_end_date,
+                                                        event_start_time: data.event_start_time,
+                                                        event_end_time: data.event_end_time,
+                                                        event_repeat_option: data.event_repeat_option,
+                                                        event_allDay: data.event_allDay,
+                                                        event_reminder: data.event_reminder,
+                                                        draggable_event: data.draggable_event,
+                                                        draggable_id: data.draggable_id,
+                                                        drag_id: data.drag_id,
+                                                        type: data.type,
+                                                    }, true);
+                                                    $this.$calendarObj.fullCalendar('refetchEvents');
+                                                    if(dragId != 'no_drag_id'){
+                                                        if(!$('.external-event').hasClass('drag-event'+dragId)){
+                                                            $this.$extEvents.append('<div id="' + dragId + '" class="m-10 external-event drag-event'+dragId + ' ' + categoryColor + '" data-class="' + categoryColor + '" style="position: relative;"><i class="fa fa-hand-o-right"></i>' + categoryName + '<i onclick="return removeDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-times"></i><i onclick="return editModalDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-pencil"></i></div>')
+                                                            $this.enableDrag();
+                                                        }
+                                                    }else if(dragId == 'no_drag_id'){       
+                                                        if($('.external-event').hasClass('drag-event'+draggable_id)){
+                                                            $(".drag-event"+draggable_id).remove();
+                                                        }  
+                                                    }
+                                                    $this.$updateEventModal.modal('hide');
+                                                    // setTimeout(function(){ 
+                                                    //    $.CalendarApp.init()
+                                                    // }, 1000);
+                                                    location.reload();
+                                                    return false;
+                                                } 
+                                            }                   
+                                        },
+                                        error: function() {
+                                            alert("Something went Wrong...");
+                                        }
+                                    });
+                                }else{
+                                    $this.$updateEventModal.find('#event_end_timeErr').html('End Time should be greater than Start time');
+                                }                                 
+                            });
+                            
+                        break;
+                        case "following":
+                        
+                            var event_new_id = calEvent.event_id;
+                            $.ajax({
+                                type: "POST",
+                                url: base_url+'front/task_data_following_event',
+                                type: 'POST',
+                                data: {
+                                    event_id:event_new_id 
+                                }, 
+                                success: function(data){
+                                var task_start_date = data.task_start_date;
+                                var task_end_date = data.task_end_date;
+                                $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(task_start_date);
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(task_end_date);
+                                $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
+                                $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+                                
+                                // $this.$viewEventModal.find('.modal-body1').empty().prepend(data).end();
+                                }
+                            });
+                            if(calEvent.event_repeat_option_type == 'Does not repeat'){
+                                $('#event_start_end_date_div_update').show();
+                                $('#event_start_end_date_select_update').hide();                    
+                            }else if(calEvent.event_repeat_option_type == 'Custom'){
+                                const split_string = calEvent.custom_all_day.split(",");
+                                split_string.forEach(myFunction);
+                                function myFunction(value, index, array) {
+                                    $("#radioupdate_"+value).prop('checked', true);
+                                }
+                                $('.custom-class-update').show();
+                                $('#event_start_end_date_div_update').hide();
+                                $('#event_start_end_date_select_update').show();
+                            }else{
+                                $('#event_start_end_date_div_update').hide();
+                                $('#event_start_end_date_select_update').show();
+                            }
+                            $this.$viewEventModal.modal('hide');
+                            $this.$updateEventModal.modal('show');
+                            $this.$updateEventModal.find("input[name=event_name]").val(calEvent.title); 
+                            $this.$updateEventModal.find("select[name='event_color']").val(calEvent.className[0]);                 
+                            if(calEvent.type == 'event')
+                            {
+                                $("#event").addClass("active");
+                                $("#event-1").addClass("active");
+                                $this.$updateEventModal.find("textarea[name=event_note]").val(calEvent.event_note);
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(calEvent.event_start_date);
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(calEvent.event_end_date);
+
+                                // $this.$updateEventModal.find("input[name=event_start_end_date]").val(calEvent.event_start_date+ ' - ' +calEvent.event_end_date);
+                                if(calEvent.allDay == false){
+                                    $this.$updateEventModal.find("select[name=event_start_time]").val(moment(calEvent.event_start_time, "HH:mm").format('hh:mm A'));
+                                    $this.$updateEventModal.find("select[name=event_start_time]").select2().trigger('change');
+                                    $this.$updateEventModal.find("select[name=event_end_time]").val(moment(calEvent.event_end_time, "HH:mm").format('hh:mm A'));
+                                    $this.$updateEventModal.find("select[name=event_end_time]").select2().trigger('change');
+                                    $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', false);
+                                    $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('true');
+                                    $("#date-time-section1").show();
+                                    $("#old_reminder_update").show();
+                                    $("#new_reminder_update").hide();
+                                }else{
+                                    $this.$updateEventModal.find("input[name=event_allDay]").prop('checked', true);
+                                    $this.$updateEventModal.find("input[name='checkbox_value_get_update']").val('false');
+                                    $("#date-time-section1").hide();
+                                    $("#new_reminder_update").show();
+                                    $("#old_reminder_update").hide();
+                                }
+                                $this.$updateEventModal.find("select[name='event_repeat_option']").val(calEvent.event_repeat_option_type); 
+                                $this.$updateEventModal.find("select[name='event_reminder']").val(calEvent.event_reminder);
+                                $this.$updateEventModal.find("select[name='event_reminder_new']").val(calEvent.event_reminder); 
+                                if(calEvent.draggable_event == 'on'){
+                                    $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', true);
+                                }else{
+                                    $this.$updateEventModal.find("input[name=draggable_event]").prop('checked', false);
+                                }
+                                $this.$updateEventModal.find("input[name=event_id]").val(calEvent.event_id);
+                                $this.$updateEventModal.find("input[name=draggable_id]").val(calEvent.draggable_id);
+                            }
+                            else
+                            {
+                                $("#task").addClass("active");
+                                $("#task-2").addClass("active");
+                            } 
+                            $this.$updateEventModal.find('.update-category').unbind('submit').on('submit', function (e) {    
+                                e.preventDefault(); // Stop page from refreshing
+                            var input_allday = $this.$updateEventModal.find("input[name=event_allDay]");
+                            // var ip_sedate=$this.$updateEventModal.find("input[name=event_start_end_date]").val();
+                            var ip_sedate=$this.$updateEventModal.find("input[name=event_start_date_nn]").val()+' - '+$this.$updateEventModal.find("input[name=event_end_date_nn]").val();
+                            var input_dd = ip_sedate.split(' - ');
+
+                            var input_sdate=input_dd[0];
+                            var input_edate=input_dd[1];
+                            var input_stime=$this.$updateEventModal.find("select[name=event_start_time]").val();
+                            var input_etime=$this.$updateEventModal.find("select[name=event_end_time]").val();
+                            var event_repeat_option_value=$this.$updateEventModal.find("#event_repeat_option").val();
+
+                            if(event_repeat_option_value == "Custom"){
+                                var start_update = new Date(input_sdate),
+                                end_update   = new Date(input_edate),
+                                diff_update  = new Date(end_update - start_update),
+                                days_update  = diff_update/1000/60/60/24;
+                                if(days_update<= 7){
+                                    $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                                    return false;
+                                }
+                            }
+                            
+                            var op_sdate = new Date(input_sdate+' '+input_stime);
+                            var op_edate = new Date(input_edate+' '+input_etime);
+                            if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
+                                {
+                                    var formData = new FormData(this);
+                                    formData.append('delete_check', '2');             
+                                    $.ajax({
+                                        url: base_url+'front/update_event_form',
+                                        type:"POST",
+                                        data:formData,
+                                        contentType:false,
+                                        processData:false,
+                                        cache:false,
+                                        success: function(data) {
+                                            if (data.status == false)
+                                            {
+                                                //show errors
+                                                $('[id*=Err]').html('');
+                                                $.each(data.errors, function(key, val) {
+                                                    var key =key.replace(/\[]/g, '');
+                                                    key=key+'Err';    
+                                                    $('#'+ key).html(val);
+                                                })
+                                            }
+                                            else if(data.status == true){
+                                                var categoryName = $this.$updatecategoryForm.find("input[name='event_name']").val(); 
+                                                var categoryColor = $this.$updatecategoryForm.find("select[name='event_color']").val();
+                                                var dragId = data.drag_id;
+                                                var event_id = data.event_id;
+                                                var categoryStart = data.start_date;
+                                                var categoryEnd = data.end_date;
+                                                var type = data.type;
+                                                var draggable_id = data.draggable_id;
+                                                var allDay = data.allDay;
+                                                if(allDay == 'true'){
+                                                    var allDay = true;
+                                                }else{
+                                                    var allDay = false;
+                                                }
+                                                if (categoryName !== null && categoryName.length != 0) {
+                                                    $this.$updateEventModal.find('#event_end_timeErr').html('');
+                                                    $this.$calendarObj.fullCalendar('removeEvents', function (evnt) {
+                                                        return (calEvent._id == evnt._id);   
+                                                    });
+                                                    $this.$calendarObj.fullCalendar('renderEvent', {
+                                                        title: categoryName,
+                                                        start: categoryStart,
+                                                        event_id: event_id,
+                                                        end: categoryEnd,
+                                                        allDay: allDay,
+                                                        className: categoryColor,
+                                                        event_note: data.event_note,
+                                                        event_start_date: data.event_start_date,
+                                                        event_end_date: data.event_end_date,
+                                                        event_start_time: data.event_start_time,
+                                                        event_end_time: data.event_end_time,
+                                                        event_repeat_option: data.event_repeat_option,
+                                                        event_allDay: data.event_allDay,
+                                                        event_reminder: data.event_reminder,
+                                                        draggable_event: data.draggable_event,
+                                                        draggable_id: data.draggable_id,
+                                                        drag_id: data.drag_id,
+                                                        type: data.type,
+                                                    }, true);
+                                                    $this.$calendarObj.fullCalendar('refetchEvents');
+                                                    if(dragId != 'no_drag_id'){
+                                                        if(!$('.external-event').hasClass('drag-event'+dragId)){
+                                                            $this.$extEvents.append('<div id="' + dragId + '" class="m-10 external-event drag-event'+dragId + ' ' + categoryColor + '" data-class="' + categoryColor + '" style="position: relative;"><i class="fa fa-hand-o-right"></i>' + categoryName + '<i onclick="return removeDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-times"></i><i onclick="return editModalDragEvent(' + dragId + ');" style="cursor: pointer;" class="pull-right fa fa-pencil"></i></div>')
+                                                            $this.enableDrag();
+                                                        }
+                                                    }else if(dragId == 'no_drag_id'){       
+                                                        if($('.external-event').hasClass('drag-event'+draggable_id)){
+                                                            $(".drag-event"+draggable_id).remove();
+                                                        }  
+                                                    }
+                                                    $this.$updateEventModal.modal('hide');
+                                                    // setTimeout(function(){ 
+                                                    //    $.CalendarApp.init()
+                                                    // }, 1000);
+                                                    location.reload();
+                                                    return false;
+                                                } 
+                                            }                   
+                                        },
+                                        error: function() {
+                                            alert("Something went Wrong...");
+                                        }
+                                    });
+                                }else{
+                                    $this.$updateEventModal.find('#event_end_timeErr').html('End Time should be greater than Start time');
+                                }                                 
+                            });
+                            
+                        break;
+                    }
+                  });
+                  return false;
             });
 
     },
+    
     /* on select */
     CalendarApp.prototype.onSelect = function (start, end, allDay) {
+        $('#cus_radioBTN').hide();
+        $('#custom_value').prop('disabled', false);
+        $('#weekday_value').prop('disabled', false);
+        $('#monthly_value').prop('disabled', false);
+        $('#yearly_value').prop('disabled', false);
+
         var $this = this;
         $this.$categoryModal.modal({
             backdrop: 'static'
@@ -666,17 +1827,44 @@ var base_url = 'http://localhost/project91/';
 
         var startd = $.fullCalendar.formatDate(start, "Y-MM-DD");
         var ended = $.fullCalendar.formatDate(end.subtract(1, 'days'), "Y-MM-DD");
-        // $this.$categoryModal.find("input[name=event_start_end_date]").val(startd+ ' - ' +ended);
-        $this.$categoryModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(startd);
-        $this.$categoryModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(ended);
+        let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(startd).getDay()];
+        let monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+        ][new Date(startd).getMonth()];
+        var start_day_value = $.fullCalendar.formatDate(start, "DD");
+        $this.$categoryModal.find("#weekday_value").html("Weekly on "+weekday);
+        $this.$categoryModal.find("#monthly_value").html("Monthly on "+start_day_value);
+        $this.$categoryModal.find("#yearly_value").html("Annually on "+start_day_value+" "+monthNames);
+        ///////////  Validation
+        var start_update = new Date(start),
+        end_update   = new Date(end),
+        diff_update  = new Date(end_update - start_update),
+        days_diff  = diff_update/1000/60/60/24;
+        console.log("days_updateww");
+        console.log(days_diff);
+        if(days_diff < 2){
+            $('#custom_value').prop('disabled', true);
+        }
+        if(days_diff < 7){
+            $('#weekday_value').prop('disabled', true);
+        }
+        if(days_diff < 31){
+            $('#monthly_value').prop('disabled', true);
+        }
+        if(days_diff < 365){
+            $('#yearly_value').prop('disabled', true);
+        }
+        /////////// end validation
+
+        $this.$categoryModal.find("input[name=event_start_date_nn]").val(startd);
+        $this.$categoryModal.find("input[name=event_end_date_nn]").val(ended);
+
         $this.$categoryModal.find("input[name=event_start_end_date_new]").val(startd);
         if(startd === ended){
-            console.log('test');
             $('#event_start_end_date_div').show();
             $('#event_start_end_date_select').hide();
             $this.$categoryModal.find("select[name='event_repeat_option']").val('Does not repeat');
         }else{
-            console.log("ffff");
             $('#event_start_end_date_select').show();
             $('#event_start_end_date_div').hide();
             $this.$categoryModal.find("select[name='event_repeat_option']").val('Daily');
@@ -755,6 +1943,7 @@ var base_url = 'http://localhost/project91/';
                             delete obj[old_key]; // delete old key
                         }
                     }
+                    $(".fc-title").html("yuvam");
                     db_events.forEach(obj => renameKey(obj, 'event_name', 'title'));
                     db_events.forEach(obj => renameKey(obj, 'event_color', 'className'));
                     db_events.forEach(obj => renameKey(obj, 'id', 'event_id'));
@@ -772,6 +1961,15 @@ var base_url = 'http://localhost/project91/';
 
                             db_events[i].start = db_events[i].event_start_date+' '+db_events[i].event_start_time;
                             db_events[i].end = db_events[i].event_end_date+' '+db_events[i].event_end_time;
+                            var icon_val = db_events[i].created_type;
+                            if(icon_val == "reminder"){
+                                db_events[i].icon = 'bell';
+                            }else if(icon_val == "task"){
+                                db_events[i].icon = 'edit';
+                            }else{
+                                db_events[i].icon = 'diamond';
+                            }
+                            
                         }else{
                             if(db_events[i].task_allDay == 'true')
                             {
@@ -780,6 +1978,14 @@ var base_url = 'http://localhost/project91/';
                                 db_events[i].allDay = false;
                             }
                             db_events[i].start = db_events[i].task_start_date+' '+db_events[i].task_start_time;
+                            var icon_val = db_events[i].created_type;
+                            if(icon_val == "reminder"){
+                                db_events[i].icon = 'bell';
+                            }else if(icon_val == "task"){
+                                db_events[i].icon = 'edit';
+                            }else{
+                                db_events[i].icon = 'diamond';
+                            }
                             // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
                         }
                     }
@@ -972,6 +2178,14 @@ var base_url = 'http://localhost/project91/';
                                             }
                                             db_events[i].start = db_events[i].event_start_date+' '+db_events[i].event_start_time;
                                             db_events[i].end = db_events[i].event_end_date+' '+db_events[i].event_end_time;
+                                            var icon_val = db_events[i].created_type;
+                                            if(icon_val == "reminder"){
+                                                db_events[i].icon = 'bell';
+                                            }else if(icon_val == "task"){
+                                                db_events[i].icon = 'edit';
+                                            }else{
+                                                db_events[i].icon = 'diamond';
+                                            }
                                         }else{
                                             if(db_events[i].task_allDay == 'true')
                                             {
@@ -980,6 +2194,14 @@ var base_url = 'http://localhost/project91/';
                                                 db_events[i].allDay = false;
                                             }
                                             db_events[i].start = db_events[i].task_start_date+' '+db_events[i].task_start_time;
+                                            var icon_val = db_events[i].created_type;
+                                            if(icon_val == "reminder"){
+                                                db_events[i].icon = 'bell';
+                                            }else if(icon_val == "task"){
+                                                db_events[i].icon = 'edit';
+                                            }else{
+                                                db_events[i].icon = 'diamond';
+                                            }
                                             // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
                                         }
                                     }
@@ -1058,6 +2280,14 @@ var base_url = 'http://localhost/project91/';
                                             }
                                             db_events[i].start = db_events[i].event_start_date+' '+db_events[i].event_start_time;
                                             db_events[i].end = db_events[i].event_end_date+' '+db_events[i].event_end_time;
+                                            var icon_val = db_events[i].created_type;
+                                            if(icon_val == "reminder"){
+                                                db_events[i].icon = 'bell';
+                                            }else if(icon_val == "task"){
+                                                db_events[i].icon = 'edit';
+                                            }else{
+                                                db_events[i].icon = 'diamond';
+                                            }
                                         }else{
                                             if(db_events[i].task_allDay == 'true')
                                             {
@@ -1066,6 +2296,14 @@ var base_url = 'http://localhost/project91/';
                                                 db_events[i].allDay = false;
                                             }
                                             db_events[i].start = db_events[i].task_start_date+' '+db_events[i].task_start_time;
+                                            var icon_val = db_events[i].created_type;
+                                            if(icon_val == "reminder"){
+                                                db_events[i].icon = 'bell';
+                                            }else if(icon_val == "task"){
+                                                db_events[i].icon = 'edit';
+                                            }else{
+                                                db_events[i].icon = 'diamond';
+                                            }
                                             // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
                                         }
                                     }
@@ -1084,7 +2322,11 @@ var base_url = 'http://localhost/project91/';
                 },
             },
             events: defaultEvents,
-            
+            eventRender: function(event, element) {
+                if(event.icon){          
+                   element.find(".fc-time").prepend("<i class='fa fa-"+event.icon+"'></i>");
+                }
+            },
             // timeFormat: 'hh:mm A', // uppercase H for 24-hour clock
             editable: false,
             droppable: true, // this allows things to be dropped onto the calendar !!!
@@ -1166,6 +2408,7 @@ var base_url = 'http://localhost/project91/';
 
         $(".fc-today-button").click(function(e) {//load event on today button.
             e.preventDefault();
+            console.log("select today");
             var view = $('#calendar').fullCalendar('getView');
             var date = new Date();
             var d = date.getDate();
@@ -1211,6 +2454,14 @@ var base_url = 'http://localhost/project91/';
                                 }
                                 db_events[i].start = db_events[i].event_start_date+' '+db_events[i].event_start_time;
                                 db_events[i].end = db_events[i].event_end_date+' '+db_events[i].event_end_time;
+                                var icon_val = db_events[i].created_type;
+                                if(icon_val == "reminder"){
+                                    db_events[i].icon = 'bell';
+                                }else if(icon_val == "task"){
+                                    db_events[i].icon = 'edit';
+                                }else{
+                                    db_events[i].icon = 'diamond';
+                                }
                             }else{
                                 if(db_events[i].task_allDay == 'true')
                                 {
@@ -1219,6 +2470,14 @@ var base_url = 'http://localhost/project91/';
                                     db_events[i].allDay = false;
                                 }
                                 db_events[i].start = db_events[i].task_start_date+' '+db_events[i].task_start_time;
+                                var icon_val = db_events[i].created_type;
+                                if(icon_val == "reminder"){
+                                    db_events[i].icon = 'bell';
+                                }else if(icon_val == "task"){
+                                    db_events[i].icon = 'edit';
+                                }else{
+                                    db_events[i].icon = 'diamond';
+                                }
                                 // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
                             }
                         }
@@ -1281,6 +2540,14 @@ var base_url = 'http://localhost/project91/';
                                 }
                                 db_events[i].start = db_events[i].event_start_date+' '+db_events[i].event_start_time;
                                 db_events[i].end = db_events[i].event_end_date+' '+db_events[i].event_end_time;
+                                var icon_val = db_events[i].created_type;
+                                if(icon_val == "reminder"){
+                                    db_events[i].icon = 'bell';
+                                }else if(icon_val == "task"){
+                                    db_events[i].icon = 'edit';
+                                }else{
+                                    db_events[i].icon = 'diamond';
+                                }
                             }else{
                                 if(db_events[i].task_allDay == 'true')
                                 {
@@ -1289,6 +2556,14 @@ var base_url = 'http://localhost/project91/';
                                     db_events[i].allDay = false;
                                 }
                                 db_events[i].start = db_events[i].task_start_date+' '+db_events[i].task_start_time;
+                                var icon_val = db_events[i].created_type;
+                                if(icon_val == "reminder"){
+                                    db_events[i].icon = 'bell';
+                                }else if(icon_val == "task"){
+                                    db_events[i].icon = 'edit';
+                                }else{
+                                    db_events[i].icon = 'diamond';
+                                }
                                 // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
                             }
                         }
@@ -1324,7 +2599,7 @@ var base_url = 'http://localhost/project91/';
                     },
                     url: base_url+'front/get_allcalendar_events',            
                     success: function(data){
-                        console.log("asasa");
+                        console.log("wwwwwwwwww");
                         var db_events = data; 
                         function renameKey(obj, old_key, new_key) {   
                             // check if old key = new key  
@@ -1338,7 +2613,6 @@ var base_url = 'http://localhost/project91/';
                         db_events.forEach(obj => renameKey(obj, 'event_name', 'title'));
                         db_events.forEach(obj => renameKey(obj, 'event_color', 'className'));
                         db_events.forEach(obj => renameKey(obj, 'id', 'event_id'));
-
                         var lim = db_events.length;
                         for (var i = 0; i < lim; i++)
                         {                        
@@ -1351,6 +2625,14 @@ var base_url = 'http://localhost/project91/';
                                 }
                                 db_events[i].start = db_events[i].event_start_date+' '+db_events[i].event_start_time;
                                 db_events[i].end = db_events[i].event_end_date+' '+db_events[i].event_end_time;
+                                var icon_val = db_events[i].created_type;
+                                if(icon_val == "reminder"){
+                                    db_events[i].icon = 'bell';
+                                }else if(icon_val == "task"){
+                                    db_events[i].icon = 'edit';
+                                }else{
+                                    db_events[i].icon = 'diamond';
+                                }
                             }else{
                                 if(db_events[i].task_allDay == 'true')
                                 {
@@ -1359,6 +2641,14 @@ var base_url = 'http://localhost/project91/';
                                     db_events[i].allDay = false;
                                 }
                                 db_events[i].start = db_events[i].task_start_date+' '+db_events[i].task_start_time;
+                                var icon_val = db_events[i].created_type;
+                                if(icon_val == "reminder"){
+                                    db_events[i].icon = 'bell';
+                                }else if(icon_val == "task"){
+                                    db_events[i].icon = 'edit';
+                                }else{
+                                    db_events[i].icon = 'diamond';
+                                }
                                 // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
                             }
                         }
@@ -1378,22 +2668,37 @@ var base_url = 'http://localhost/project91/';
         $this.$categoryModal.find('.create-category').unbind('submit').on('submit', function (e){         
             e.preventDefault(); // Stop page from refreshing
             var input_allday = $this.$categoryForm.find("input[name=event_allDay]");
-            var ip_sedate=$this.$categoryForm.find("input[name=event_start_end_date]").val();
+            // var ip_sedate=$this.$categoryForm.find("input[name=event_start_end_date]").val();
+            var ip_sedate=$this.$categoryForm.find("input[name=event_start_date_nn]").val()+' - '+$this.$categoryForm.find("input[name=event_end_date_nn]").val();
            // var event_repeat_option_value=$this.$categoryForm.find("input[name=event_repeat_option]").val();
+           console.log("ip_sedate");
+           console.log(ip_sedate);
             var event_repeat_option_value=$this.$categoryForm.find("#event_repeat_option").val();
             var input_dd = ip_sedate.split(' - ');
 
             var input_sdate=input_dd[0];
             var input_edate=input_dd[1];
+            console.log("input_sdate");
+            console.log(input_sdate);
+            console.log("input_edate");
+            console.log(input_edate);
+            var start = new Date(input_sdate),
+            end   = new Date(input_edate),
+            diff  = new Date(end - start),
+            days  = diff/1000/60/60/24;
+            if(days<= -1){
+                $this.$categoryForm.find('#event_start_end_dateErr').html('Please select correct date range');
+                return false;
+            }
             if(event_repeat_option_value == "Custom"){
                 var start = new Date(input_sdate),
                 end   = new Date(input_edate),
                 diff  = new Date(end - start),
                 days  = diff/1000/60/60/24;
-                if(days<= 7){
-                    $this.$categoryForm.find('#event_start_end_dateErr').html('Please select at least 7 days ');
-                    return false;
-                }
+                // if(days<= 7){
+                //     $this.$categoryForm.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                //     return false;
+                // }
             }
             var input_stime=$this.$categoryForm.find("select[name=event_start_time]").val();
             var input_etime=$this.$categoryForm.find("select[name=event_end_time]").val();
@@ -1530,17 +2835,27 @@ var base_url = 'http://localhost/project91/';
             var input_edate_update=input_dd_update[1];
             console.log("input_edate_update");
             console.log(input_edate_update);
+            // var start_update = new Date(input_sdate_update),
+            // end_update   = new Date(input_edate_update),
+            // diff_update  = new Date(end_update - start_update),
+            // days_update  = diff_update/1000/60/60/24;
+            // console.log("days_update");
+            // console.log(days_update);
+            // if(days_update<= -1){
+            //     $this.$dragEventForm.find('#event_start_end_dateErr').html('Please select correct date range');
+            //     return false;
+            // }
             if(event_repeat_option_value == "Custom"){
                 var start_update = new Date(input_sdate_update),
                 end_update   = new Date(input_edate_update),
                 diff_update  = new Date(end_update - start_update),
                 days_update  = diff_update/1000/60/60/24;
                 console.log("days_update");
-            console.log(days_update);
-                if(days_update<= 7){
-                    $this.$dragEventForm.find('#event_start_end_dateErr').html('Please select at least 7 days ');
-                    return false;
-                }
+                console.log(days_update);
+                // if(days_update<= 7){
+                //     $this.$dragEventForm.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                //     return false;
+                // }
             }
             // console.log("event_repeat_option_value");
             // console.log(event_repeat_option_value);
