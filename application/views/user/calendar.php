@@ -578,6 +578,7 @@ include 'sidebar.php';
 										<div class="input-group">
 										  <input type="text" name="event_start_end_date_new" class="form-control" id="event_start_end_date_new" value="event_start_end_date_new">	
 										  <div class="input-group-addon">
+										  	<i class="fa fa-calendar"></i>
 										  </div>	
 										</div>
 										<span id="event_start_end_date_new" class="text-danger" ></span>
@@ -2216,21 +2217,26 @@ function showPriority(i){
         console.log("days_diff");
         console.log(days_diff);
 		if(days_diff < 2){
+			$("#custom_value").html("Custom (For enable please select correct date range)");
             $('#custom_value').prop('disabled', true);
         }else{
+			$("#custom_value").html("Custom");
 			$('#custom_value').prop('disabled', false);
 		}
         if(days_diff < 7){
+			$("#weekday_value").html("Weekly on "+weekday+" (For enable please select correct date range)");
             $('#weekday_value').prop('disabled', true);
         }else{
 			$('#weekday_value').prop('disabled', false);
 		}
         if(days_diff < 31){
+			$("#monthly_value").html("Monthly on "+start_day_value+" (For enable please select correct date range)");
             $('#monthly_value').prop('disabled', true);
         }else{
 			$('#monthly_value').prop('disabled', false);
 		}
         if(days_diff < 365){
+			$("#yearly_value").html("Annually on "+start_day_value+" "+monthNames+" (For enable please select correct date range)");
             $('#yearly_value').prop('disabled', true);
         }else{
 			$('#yearly_value').prop('disabled', false);
@@ -2301,21 +2307,26 @@ function showPriority(i){
         console.log("days_diff");
         console.log(days_diff);
 		if(days_diff < 2){
+			$(".custom_value_update").html("Custom (For enable please select correct date range)");
 			$('.custom_value_update').prop('disabled', true);
 		}else{
+			$(".custom_value_update").html("Custom");
 			$('.custom_value_update').prop('disabled', false);
 		}
         if(days_diff < 7){
+			$(".weekday_value_update").html("Weekly on "+weekday+" (For enable please select correct date range)");
             $('.weekday_value_update').prop('disabled', true);
         }else{
 			$('.weekday_value_update').prop('disabled', false);
 		}
         if(days_diff < 31){
+			$(".monthly_value_update").html("Monthly on "+start_day_value+" (For enable please select correct date range)");
             $('.monthly_value_update').prop('disabled', true);
         }else{
 			$('.monthly_value_update').prop('disabled', false);
 		}
         if(days_diff < 365){
+			$(".yearly_value_update").html("Annually on "+start_day_value+" "+monthNames+" (For enable please select correct date range)");
             $('.yearly_value_update').prop('disabled', true);
         }else{
 			$('.yearly_value_update').prop('disabled', false);
@@ -2328,12 +2339,12 @@ function showPriority(i){
 		
 	}
 	$( function() {
-    	$( "#event_start_date_nn" ).datepicker({format: 'yyyy-mm-dd'});
-		$( "#event_end_date_nn" ).datepicker({format: 'yyyy-mm-dd'});
-		$( "#event_start_end_date_new" ).datepicker({format: 'yyyy-mm-dd'});
-		$( "#event_start_date_nnn" ).datepicker({format: 'yyyy-mm-dd'});
-		$( "#event_end_date_nnn" ).datepicker({format: 'yyyy-mm-dd'});
-		$( "#event_start_end_date_new" ).datepicker({format: 'yyyy-mm-dd'});
+    	$( "#event_start_date_nn" ).datepicker({format: 'yyyy-mm-dd',autoclose: true});
+		$( "#event_end_date_nn" ).datepicker({format: 'yyyy-mm-dd',autoclose: true});
+		$( "#event_start_end_date_new" ).datepicker({format: 'yyyy-mm-dd',autoclose: true});
+		$( "#event_start_date_nnn" ).datepicker({format: 'yyyy-mm-dd',autoclose: true});
+		$( "#event_end_date_nnn" ).datepicker({format: 'yyyy-mm-dd',autoclose: true});
+		$( "#event_start_end_date_new" ).datepicker({format: 'yyyy-mm-dd',autoclose: true});
   	} );
 	
 </script>	

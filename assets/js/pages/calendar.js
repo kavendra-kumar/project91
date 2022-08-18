@@ -1,8 +1,8 @@
 //[calendar Javascript]
 
 // var base_url = 'http://91.demoserver.co.in/';
-var base_url = 'http://localhost/project91/';
-// var base_url = 'https://project91.isynbus.com/';
+// var base_url = 'http://localhost/project91/';
+var base_url = 'https://project91.isynbus.com/';
 
 !function($) {
     "use strict";
@@ -702,21 +702,26 @@ var base_url = 'http://localhost/project91/';
                                 console.log("days_diff");
                                 console.log(days_diff);
                                 if(days_diff < 2){
+                                    $(".custom_value_update").html("Custom (For enable please select correct date range)");
                                     $('.custom_value_update').prop('disabled', true);
                                 }else{
+                                    $(".custom_value_update").html("Custom");
                                     $('.custom_value_update').prop('disabled', false);
                                 }
                                 if(days_diff < 7){
+                                    $(".weekday_value_update").html("Weekly on "+weekday+" (For enable please select correct date range)");
                                     $('.weekday_value_update').prop('disabled', true);
                                 }else{
                                     $('.weekday_value_update').prop('disabled', false);
                                 }
                                 if(days_diff < 31){
+                                    $(".monthly_value_update").html("Monthly on "+start_day_value+" (For enable please select correct date range)");
                                     $('.monthly_value_update').prop('disabled', true);
                                 }else{
                                     $('.monthly_value_update').prop('disabled', false);
                                 }
                                 if(days_diff < 365){
+                                    $(".yearly_value_update").html("Annually on "+start_day_value+" "+monthNames+" (For enable please select correct date range)");
                                     $('.yearly_value_update').prop('disabled', true);
                                 }else{
                                     $('.yearly_value_update').prop('disabled', false);
@@ -1843,15 +1848,19 @@ var base_url = 'http://localhost/project91/';
         console.log("days_updateww");
         console.log(days_diff);
         if(days_diff < 2){
+            $this.$categoryModal.find("#custom_value").html("Custom (For enable please select correct date range)");
             $('#custom_value').prop('disabled', true);
         }
         if(days_diff < 7){
+            $this.$categoryModal.find("#weekday_value").html("Weekly on "+weekday+" (For enable please select correct date range)");
             $('#weekday_value').prop('disabled', true);
         }
         if(days_diff < 31){
+            $this.$categoryModal.find("#monthly_value").html("Monthly on "+start_day_value+" (For enable please select correct date range)");
             $('#monthly_value').prop('disabled', true);
         }
         if(days_diff < 365){
+            $this.$categoryModal.find("#yearly_value").html("Annually on "+start_day_value+" "+monthNames+" (For enable please select correct date range)");
             $('#yearly_value').prop('disabled', true);
         }
         /////////// end validation
@@ -2581,6 +2590,7 @@ var base_url = 'http://localhost/project91/';
 
         $(".fc-agendaWeek-button").click(function(e) {//load event on today button.
             e.preventDefault();
+            console.log("lllllllllllllllllllllllllll");
             var view = $('#calendar').fullCalendar('getView');
             var date = new Date();
             var d = date.getDate();
