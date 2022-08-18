@@ -1,8 +1,8 @@
 //[calendar Javascript]
 
 // var base_url = 'http://91.demoserver.co.in/';
-// var base_url = 'http://localhost/project91/';
-var base_url = 'https://project91.isynbus.com/';
+var base_url = 'http://localhost/project91/';
+// var base_url = 'https://project91.isynbus.com/';
 
 !function($) {
     "use strict";
@@ -218,6 +218,10 @@ var base_url = 'https://project91.isynbus.com/';
             $('#delete_event_three').show();
             $('#delete_type_edit').html("Delete recurring "+calEvent.created_type);
             var event_id = calEvent.event_id;
+            console.log("calEvent.dataaaaaa");
+            console.log(calEvent);
+            console.log("calEvent.array_count");
+            console.log(calEvent.array_count);
                 if(calEvent.array_count == 1){
                     $('#delete_event_two').hide();
                     $("#myModal").modal();
@@ -425,6 +429,9 @@ var base_url = 'https://project91.isynbus.com/';
 
                                 $this.$myModal.modal('hide');
                                 $this.$viewEventModal.modal('hide');
+                                // setTimeout(function(){ 
+                                //                    $.CalendarApp.init()
+                                //                 }, 1000);
                                 //location.reload();
                             }
                     });
