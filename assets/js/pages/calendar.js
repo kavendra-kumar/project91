@@ -466,6 +466,46 @@ var base_url = 'https://project91.isynbus.com/';
                             // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(task_end_date);
                             $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
                             $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+                            let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(task_start_date).getDay()];
+                                let monthNames = ["January", "February", "March", "April", "May", "June",
+                                "July", "August", "September", "October", "November", "December"
+                                ][new Date(task_start_date).getMonth()];
+                                var start_day_value = new Date(task_start_date).getDate();
+                                $this.$updateEventModal.find("#weekday_value").html("Weekly on "+weekday);
+                                $this.$updateEventModal.find("#monthly_value").html("Monthly on "+start_day_value);
+                                $this.$updateEventModal.find("#yearly_value").html("Annually on "+start_day_value+" "+monthNames);
+
+                                var start_update = new Date(task_start_date),
+                                end_update   = new Date(task_end_date),
+                                diff_update  = new Date(end_update - start_update),
+                                days_diff  = diff_update/1000/60/60/24;
+                                console.log("days_diff");
+                                console.log(days_diff);
+                                if(days_diff < 2){
+                                    $(".custom_value_update").html("Custom (For enable please select correct date range)");
+                                    $('.custom_value_update').prop('disabled', true);
+                                }else{
+                                    $(".custom_value_update").html("Custom");
+                                    $('.custom_value_update').prop('disabled', false);
+                                }
+                                if(days_diff < 7){
+                                    $(".weekday_value_update").html("Weekly on "+weekday+" (For enable please select correct date range)");
+                                    $('.weekday_value_update').prop('disabled', true);
+                                }else{
+                                    $('.weekday_value_update').prop('disabled', false);
+                                }
+                                if(days_diff < 31){
+                                    $(".monthly_value_update").html("Monthly on "+start_day_value+" (For enable please select correct date range)");
+                                    $('.monthly_value_update').prop('disabled', true);
+                                }else{
+                                    $('.monthly_value_update').prop('disabled', false);
+                                }
+                                if(days_diff < 365){
+                                    $(".yearly_value_update").html("Annually on "+start_day_value+" "+monthNames+" (For enable please select correct date range)");
+                                    $('.yearly_value_update').prop('disabled', true);
+                                }else{
+                                    $('.yearly_value_update').prop('disabled', false);
+                                }
                             // $this.$viewEventModal.find('.modal-body1').empty().prepend(data).end();
                             }
                         });
