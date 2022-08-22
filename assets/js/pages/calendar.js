@@ -1,8 +1,8 @@
 //[calendar Javascript]
 
 // var base_url = 'http://91.demoserver.co.in/';
-var base_url = 'http://localhost/project91/';
-// var base_url = 'https://project91.isynbus.com/';
+// var base_url = 'http://localhost/project91/';
+var base_url = 'https://project91.isynbus.com/';
 
 !function($) {
     "use strict";
@@ -429,6 +429,105 @@ var base_url = 'http://localhost/project91/';
 
                                 $this.$myModal.modal('hide');
                                 $this.$viewEventModal.modal('hide');
+                                //////// reload data
+                                var view = $('#calendar').fullCalendar('getView');
+                                var date = new Date();
+                                var d = date.getDate();
+                                var m = date.getMonth();
+                                var y = date.getFullYear();
+                                var form = '';
+                                var today = new Date($.now());
+                                var month_year = view.title;
+                                var event_data = function () {
+                                    var evt = null;
+                                    $.ajax({
+                                        method: "POST",
+                                        async: false,
+                                        data: {
+                                            month_year:month_year, button:'today',
+                                        },
+                                        url: base_url+'front/get_allcalendar_events',            
+                                        success: function(data){
+                                            console.log("testt");
+                                            var db_events = data; 
+                                            function renameKey(obj, old_key, new_key) {   
+                                                // check if old key = new key  
+                                                if (old_key !== new_key) {                  
+                                                    Object.defineProperty(obj, new_key, // modify old key
+                                                    // fetch description from object
+                                                    Object.getOwnPropertyDescriptor(obj, old_key));
+                                                    delete obj[old_key]; // delete old key
+                                                }
+                                            }
+                                            db_events.forEach(obj => renameKey(obj, 'event_name', 'title'));
+                                            db_events.forEach(obj => renameKey(obj, 'event_color', 'className'));
+                                            db_events.forEach(obj => renameKey(obj, 'id', 'event_id'));
+
+                                            var lim = db_events.length;
+                                            for (var i = 0; i < lim; i++)
+                                            {                        
+                                                if(db_events[i].type == 'event'){
+                                                    if(db_events[i].event_allDay == 'true')
+                                                    {
+                                                        db_events[i].allDay = true;
+                                                    }else{
+                                                        db_events[i].allDay = false;
+                                                    }
+                                                    db_events[i].start = db_events[i].event_start_date+' '+db_events[i].event_start_time;
+                                                    db_events[i].end = db_events[i].event_end_date+' '+db_events[i].event_end_time;
+                                                    var icon_val = db_events[i].created_type;
+                                                    if(icon_val == "reminder"){
+                                                        db_events[i].icon = 'bell';
+                                                    }else if(icon_val == "task"){
+                                                        db_events[i].icon = 'edit';
+                                                    }else{
+                                                        db_events[i].icon = 'diamond';
+                                                    }
+                                                    var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                                                    var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                                                    db_events[i].new_time = time11+'-'+time22;
+                                                    if(db_events[i].draggable_event == "on"){
+                                                        db_events[i].editable = true;
+                                                    }else{
+                                                        db_events[i].editable = false;
+                                                    }
+                                                }else{
+                                                    if(db_events[i].task_allDay == 'true')
+                                                    {
+                                                        db_events[i].allDay = true;
+                                                    }else{
+                                                        db_events[i].allDay = false;
+                                                    }
+                                                    db_events[i].start = db_events[i].task_start_date+' '+db_events[i].task_start_time;
+                                                    var icon_val = db_events[i].created_type;
+                                                    if(icon_val == "reminder"){
+                                                        db_events[i].icon = 'bell';
+                                                    }else if(icon_val == "task"){
+                                                        db_events[i].icon = 'edit';
+                                                    }else{
+                                                        db_events[i].icon = 'diamond';
+                                                    }
+                                                    var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                                                    var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                                                    db_events[i].new_time = time11+'-'+time22;
+                                                    if(db_events[i].draggable_event == "on"){
+                                                        db_events[i].editable = true;
+                                                    }else{
+                                                        db_events[i].editable = false;
+                                                    }
+                                                    // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
+                                                }
+                                            }
+                                            evt = db_events; 
+
+                                        }
+                                    });
+                                    return evt;
+                                }();
+                                if(event_data){
+                                    $('#calendar').fullCalendar('removeEvents',event_data._id);
+                                    $('#calendar').fullCalendar('renderEvents', event_data, true);
+                                } 
                                 // setTimeout(function(){ 
                                 //                    $.CalendarApp.init()
                                 //                 }, 1000);
@@ -439,6 +538,7 @@ var base_url = 'http://localhost/project91/';
             });
             this.$myModalUpdate.find('.modal-body').find('.update-next-event').unbind('click').click(function () {
                 console.log("hello js", $("input[name=update_check_value]:checked").val());
+                $('#draggable_field').hide();
                 var event_id = calEvent.event_id;
                 var update_event_id = $("input[name=update_check_value]:checked").val();
                 $('#task_priority_div_update').hide();
@@ -466,13 +566,45 @@ var base_url = 'http://localhost/project91/';
                                 event_id:event_new_id 
                             }, 
                             success: function(data){
+                            $('#draggable_field').show();
                             var task_start_date = data.task_start_date;
                             var task_end_date = data.task_end_date;
-                            $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
+                            ///////   code for hide custom field
+                            var i = 1;
+                            for(i =1;i<=7;i++){
+                                $('#radioupdate'+i).hide();
+                            }
+                            var datenew1 = new Date(task_start_date);
+                            var datenew2 = new Date(task_end_date);
+                            var dateArray = new Array();
+                            var currentDate = datenew1;
+                            while (currentDate <= datenew2) {
+                                dateArray.push(new Date (currentDate)); 
+                                currentDate = currentDate.addDays(1);
+                            }
+                            var arrayLength = dateArray.length;
+                            for (var i = 0; i < arrayLength; i++) {
+                                let day_new_value = ['1', '2', '3', '4', '5', '6', '7'][new Date(dateArray[i]).getDay()];
+                                $('#radioupdate'+day_new_value).show();
+                            }
+
+                            /////////// end 
                             // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(task_start_date);
                             // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(task_end_date);
-                            $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
-                            $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+                            // $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
+                            // $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
+                            // $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+
+                            $("#event_start_date_nnn").datepicker({
+                                minDate: task_start_date
+                            }).datepicker("setDate", task_start_date);
+                            $("#event_end_date_nnn").datepicker({
+                                minDate: task_end_date
+                            }).datepicker("setDate", task_end_date);
+                            $("#event_start_end_date_neww").datepicker({
+                                minDate: task_start_date
+                            }).datepicker("setDate", task_start_date);
+
                             let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(task_start_date).getDay()];
                                 let monthNames = ["January", "February", "March", "April", "May", "June",
                                 "July", "August", "September", "October", "November", "December"
@@ -518,7 +650,8 @@ var base_url = 'http://localhost/project91/';
                         });
                         if(calEvent.event_repeat_option_type == 'Does not repeat'){
                             $('#event_start_end_date_div_update').show();
-                            $('#event_start_end_date_select_update').hide();                    
+                            $('#event_start_end_date_select_update').hide();
+                                              
                         }else if(calEvent.event_repeat_option_type == 'Custom'){
                             const split_string = calEvent.custom_all_day.split(",");
                             split_string.forEach(myFunction);
@@ -722,16 +855,35 @@ var base_url = 'http://localhost/project91/';
                                     event_id:event_new_id 
                                 }, 
                                 success: function(data){
-                                    console.log("testtttt");
+                                console.log("testtttt");
+                                $('#draggable_field').hide();
+                                if(calEvent.event_repeat_option_type == 'Does not repeat'){
+                                    $('#draggable_field').show();
+                                }else if(calEvent.event_repeat_option_type == 'Daily'){
+                                    $('#draggable_field').show();
+                                }else{
+                                    $('#draggable_field').hide();
+                                }
                                 var task_start_date = data.task_start_date;
                                 var task_end_date = data.task_end_date;
                                 
-                                $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
+                                
                                 // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(task_start_date);
                                 // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(task_end_date);
                                 
-                                $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
-                                $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+                                //$this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
+                                // $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
+                                // $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+
+                                $("#event_start_date_nnn").datepicker({
+                                    minDate: task_start_date
+                                }).datepicker("setDate", task_start_date);
+                                $("#event_end_date_nnn").datepicker({
+                                    minDate: task_end_date
+                                }).datepicker("setDate", task_end_date);
+                                $("#event_start_end_date_neww").datepicker({
+                                    minDate: task_start_date
+                                }).datepicker("setDate", task_start_date);
 
                                 let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(task_start_date).getDay()];
                                 let monthNames = ["January", "February", "March", "April", "May", "June",
@@ -778,7 +930,7 @@ var base_url = 'http://localhost/project91/';
                             });
                             if(calEvent.event_repeat_option_type == 'Does not repeat'){
                                 $('#event_start_end_date_div_update').show();
-                                $('#event_start_end_date_select_update').hide();                    
+                                $('#event_start_end_date_select_update').hide();
                             }else if(calEvent.event_repeat_option_type == 'Custom'){
                                 const split_string = calEvent.custom_all_day.split(",");
                                 split_string.forEach(myFunction);
@@ -978,13 +1130,25 @@ var base_url = 'http://localhost/project91/';
                                 event_id:event_new_id 
                             }, 
                             success: function(data){
+                            $('#draggable_field').hide();
                             var task_start_date = data.task_start_date;
                             var task_end_date = data.task_end_date;
-                            $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
+                            
                             // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setStartDate(task_start_date);
                             // $this.$updateEventModal.find("input[name=event_start_end_date]").data('daterangepicker').setEndDate(task_end_date);
-                            $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
-                            $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+                            // $this.$updateEventModal.find("input[name=event_start_end_date_new]").val(task_start_date); 
+                            // $this.$updateEventModal.find("input[name=event_start_date_nn]").val(task_start_date);
+                            // $this.$updateEventModal.find("input[name=event_end_date_nn]").val(task_end_date);
+
+                            $("#event_start_date_nnn").datepicker({
+                                minDate: task_start_date
+                            }).datepicker("setDate", task_start_date);
+                            $("#event_end_date_nnn").datepicker({
+                                minDate: task_end_date
+                            }).datepicker("setDate", task_end_date);
+                            $("#event_start_end_date_neww").datepicker({
+                                minDate: task_start_date
+                            }).datepicker("setDate", task_start_date);
                             
                             // $this.$viewEventModal.find('.modal-body1').empty().prepend(data).end();
                             }
@@ -1912,10 +2076,20 @@ var base_url = 'http://localhost/project91/';
         }
         /////////// end validation
 
-        $this.$categoryModal.find("input[name=event_start_date_nn]").val(startd);
-        $this.$categoryModal.find("input[name=event_end_date_nn]").val(ended);
+        //$this.$categoryModal.find("input[name=event_start_date_nn]").val(startd);
+        //$this.$categoryModal.find("input[name=event_end_date_nn]").val(ended);
+        //$this.$categoryModal.find("input[name=event_start_end_date_new]").val(startd);
+        $("#event_start_date_nn").datepicker({
+            minDate: startd
+          }).datepicker("setDate", startd);
+        $("#event_end_date_nn").datepicker({
+            minDate: ended
+        }).datepicker("setDate", ended);
+        $("#event_start_end_date_new").datepicker({
+            minDate: startd
+        }).datepicker("setDate", startd);
 
-        $this.$categoryModal.find("input[name=event_start_end_date_new]").val(startd);
+        
         if(startd === ended){
             $('#event_start_end_date_div').show();
             $('#event_start_end_date_select').hide();
@@ -1977,6 +2151,7 @@ var base_url = 'http://localhost/project91/';
         var form = '';
         var today = new Date($.now());
         var month_year = today;
+        var abc = 1;
         var event_data = function () {
             var evt = null;
             $.ajax({
@@ -1999,7 +2174,7 @@ var base_url = 'http://localhost/project91/';
                             delete obj[old_key]; // delete old key
                         }
                     }
-                    $(".fc-title").html("yuvam");
+                    //$(".fc-title").html("yuvam");
                     db_events.forEach(obj => renameKey(obj, 'event_name', 'title'));
                     db_events.forEach(obj => renameKey(obj, 'event_color', 'className'));
                     db_events.forEach(obj => renameKey(obj, 'id', 'event_id'));
@@ -2025,6 +2200,15 @@ var base_url = 'http://localhost/project91/';
                             }else{
                                 db_events[i].icon = 'diamond';
                             }
+
+                            var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                            var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                            db_events[i].new_time = time11+'-'+time22;
+                            if(db_events[i].draggable_event == "on"){
+                                db_events[i].editable = true;
+                            }else{
+                                db_events[i].editable = false;
+                            }
                             
                         }else{
                             if(db_events[i].task_allDay == 'true')
@@ -2043,6 +2227,14 @@ var base_url = 'http://localhost/project91/';
                                 db_events[i].icon = 'diamond';
                             }
                             // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
+                            var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                            var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                            db_events[i].new_time = time11+'-'+time22;
+                            if(db_events[i].draggable_event == "on"){
+                                db_events[i].editable = true;
+                            }else{
+                                db_events[i].editable = false;
+                            }
                         }
                     }
                     evt = db_events; 
@@ -2242,6 +2434,14 @@ var base_url = 'http://localhost/project91/';
                                             }else{
                                                 db_events[i].icon = 'diamond';
                                             }
+                                            var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                                            var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                                            db_events[i].new_time = time11+'-'+time22;
+                                            if(db_events[i].draggable_event == "on"){
+                                                db_events[i].editable = true;
+                                            }else{
+                                                db_events[i].editable = false;
+                                            }
                                         }else{
                                             if(db_events[i].task_allDay == 'true')
                                             {
@@ -2257,6 +2457,14 @@ var base_url = 'http://localhost/project91/';
                                                 db_events[i].icon = 'edit';
                                             }else{
                                                 db_events[i].icon = 'diamond';
+                                            }
+                                            var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                                            var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                                            db_events[i].new_time = time11+'-'+time22;
+                                            if(db_events[i].draggable_event == "on"){
+                                                db_events[i].editable = true;
+                                            }else{
+                                                db_events[i].editable = false;
                                             }
                                             // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
                                         }
@@ -2344,6 +2552,14 @@ var base_url = 'http://localhost/project91/';
                                             }else{
                                                 db_events[i].icon = 'diamond';
                                             }
+                                            var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                                            var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                                            db_events[i].new_time = time11+'-'+time22;
+                                            if(db_events[i].draggable_event == "on"){
+                                                db_events[i].editable = true;
+                                            }else{
+                                                db_events[i].editable = false;
+                                            }
                                         }else{
                                             if(db_events[i].task_allDay == 'true')
                                             {
@@ -2359,6 +2575,14 @@ var base_url = 'http://localhost/project91/';
                                                 db_events[i].icon = 'edit';
                                             }else{
                                                 db_events[i].icon = 'diamond';
+                                            }
+                                            var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                                            var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                                            db_events[i].new_time = time11+'-'+time22;
+                                            if(db_events[i].draggable_event == "on"){
+                                                db_events[i].editable = true;
+                                            }else{
+                                                db_events[i].editable = false;
                                             }
                                             // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
                                         }
@@ -2380,11 +2604,13 @@ var base_url = 'http://localhost/project91/';
             events: defaultEvents,
             eventRender: function(event, element) {
                 if(event.icon){          
-                   element.find(".fc-time").prepend("<i class='fa fa-"+event.icon+"'></i>");
+                  // element.find(".fc-time").prepend("<i class='fa fa-"+event.icon+"'></i>");
+                    element.find(".fc-time").html("<i class='fa fa-"+event.icon+"'></i> "+event.new_time);
                 }
             },
             // timeFormat: 'hh:mm A', // uppercase H for 24-hour clock
             editable: false,
+            // editable: (draggable_event == "on") ? true:false,
             droppable: true, // this allows things to be dropped onto the calendar !!!
             eventLimit: 3, // allow "more" link when too many events
             selectable: true,
@@ -2518,6 +2744,14 @@ var base_url = 'http://localhost/project91/';
                                 }else{
                                     db_events[i].icon = 'diamond';
                                 }
+                                var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                                var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                                db_events[i].new_time = time11+'-'+time22;
+                                if(db_events[i].draggable_event == "on"){
+                                    db_events[i].editable = true;
+                                }else{
+                                    db_events[i].editable = false;
+                                }
                             }else{
                                 if(db_events[i].task_allDay == 'true')
                                 {
@@ -2533,6 +2767,14 @@ var base_url = 'http://localhost/project91/';
                                     db_events[i].icon = 'edit';
                                 }else{
                                     db_events[i].icon = 'diamond';
+                                }
+                                var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                                var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                                db_events[i].new_time = time11+'-'+time22;
+                                if(db_events[i].draggable_event == "on"){
+                                    db_events[i].editable = true;
+                                }else{
+                                    db_events[i].editable = false;
                                 }
                                 // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
                             }
@@ -2604,6 +2846,14 @@ var base_url = 'http://localhost/project91/';
                                 }else{
                                     db_events[i].icon = 'diamond';
                                 }
+                                var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                                var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                                db_events[i].new_time = time11+'-'+time22;
+                                if(db_events[i].draggable_event == "on"){
+                                    db_events[i].editable = true;
+                                }else{
+                                    db_events[i].editable = false;
+                                }
                             }else{
                                 if(db_events[i].task_allDay == 'true')
                                 {
@@ -2619,6 +2869,14 @@ var base_url = 'http://localhost/project91/';
                                     db_events[i].icon = 'edit';
                                 }else{
                                     db_events[i].icon = 'diamond';
+                                }
+                                var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                                var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                                db_events[i].new_time = time11+'-'+time22;
+                                if(db_events[i].draggable_event == "on"){
+                                    db_events[i].editable = true;
+                                }else{
+                                    db_events[i].editable = false;
                                 }
                                 // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
                             }
@@ -2690,6 +2948,14 @@ var base_url = 'http://localhost/project91/';
                                 }else{
                                     db_events[i].icon = 'diamond';
                                 }
+                                var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                                var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                                db_events[i].new_time = time11+'-'+time22;
+                                if(db_events[i].draggable_event == "on"){
+                                    db_events[i].editable = true;
+                                }else{
+                                    db_events[i].editable = false;
+                                }
                             }else{
                                 if(db_events[i].task_allDay == 'true')
                                 {
@@ -2705,6 +2971,14 @@ var base_url = 'http://localhost/project91/';
                                     db_events[i].icon = 'edit';
                                 }else{
                                     db_events[i].icon = 'diamond';
+                                }
+                                var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
+                                var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
+                                db_events[i].new_time = time11+'-'+time22;
+                                if(db_events[i].draggable_event == "on"){
+                                    db_events[i].editable = true;
+                                }else{
+                                    db_events[i].editable = false;
                                 }
                                 // db_events[i].end = db_events[i].task_start_date+' '+db_events[i].event_end_time;
                             }

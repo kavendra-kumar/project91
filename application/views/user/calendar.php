@@ -499,7 +499,7 @@ include 'sidebar.php';
 										<div class="cus_radioBTN">
 											<div class="selector">
 												<div class="selecotr-item" id="radioId1">
-													<input type="checkbox" id="radio1" name="custom_check[]" class="selector-item_radio"  value="Sun" checked>
+													<input type="checkbox" id="radio1" name="custom_check[]" class="selector-item_radio"  value="Sun">
 													<label for="radio1" class="selector-item_label">S</label>
 												</div>
 												<div class="selecotr-item" id="radioId2">
@@ -550,7 +550,7 @@ include 'sidebar.php';
 								<div class="col-md-6">
 									<div class="form-group">
 										<div class="input-group">
-										  <input type="text" name="event_start_date_nn" class="form-control" id="event_start_date_nn" value="" required="" onchange="customChange()">	
+										  <input type="text" name="event_start_date_nn" class="form-control" id="event_start_date_nn" data-value="2018-10-27" value="" required="" onchange="customChange()">	
 										  <div class="input-group-addon">
 											<i class="fa fa-calendar"></i>
 										  </div>	
@@ -1084,7 +1084,7 @@ include 'sidebar.php';
 								    <div class="col-md-12">
 									<div class="form-group">
 										<div class="input-group">
-										  <input type="text" name="event_start_end_date_new" class="form-control" id="event_start_end_date_new" value="event_start_end_date_new">	
+										  <input type="text" name="event_start_end_date_new" class="form-control" id="event_start_end_date_neww" value="event_start_end_date_new">	
 										  <div class="input-group-addon">
 										  	<i class="fa fa-calendar"></i>
 										  </div>	
@@ -1153,7 +1153,7 @@ include 'sidebar.php';
 											<span id="event_allDayErr" class="text-danger"></span>
 										</div>
 									</div>
-									<div class="col-md-6">
+									<div class="col-md-6" id="draggable_field">
 										<div class="form-group mt-2">
 											<input type="checkbox" name="draggable_event" id="draggable_event1" class="filled-in chk-col-success" checked="">
 											<label class="control-label" for="draggable_event1">Draggable Event</label>
@@ -2171,7 +2171,10 @@ function showPriority(i){
 		$('#task_priority_div').hide();
 	}
 	function customChange(){
+		console.log("customChangeFunction");
+		$('#custom_value').prop('disabled', false);
 		var event_repeat_option = $('#event_repeat_option').val();
+		console.log("Ddfd"+event_repeat_option);
 		if(event_repeat_option == "Custom"){
 			for($i =1;$i<=7;$i++){
 					$('#radioId'+$i).hide();
@@ -2190,6 +2193,7 @@ function showPriority(i){
 					currentDate = currentDate.addDays(1);
 				}
 				var arrayLength = dateArray.length;
+				console.log("array_leng"+arrayLength);
 				for (var i = 0; i < arrayLength; i++) {
 					let day_new_value = ['1', '2', '3', '4', '5', '6', '7'][new Date(dateArray[i]).getDay()];
 					$('#radioId'+day_new_value).show();
@@ -2245,6 +2249,7 @@ function showPriority(i){
 	}
 	function customChangeUpdate(){
 		console.log("Dfdfd");
+		$('.custom_value_update').prop('disabled', false);
 		var event_repeat_option = $('.event_repeat_optionn').val();
 		console.log("event_repeat_optionkkk");
 		console.log(event_repeat_option);
@@ -2344,7 +2349,7 @@ function showPriority(i){
 		$( "#event_start_end_date_new" ).datepicker({format: 'yyyy-mm-dd',autoclose: true});
 		$( "#event_start_date_nnn" ).datepicker({format: 'yyyy-mm-dd',autoclose: true});
 		$( "#event_end_date_nnn" ).datepicker({format: 'yyyy-mm-dd',autoclose: true});
-		$( "#event_start_end_date_new" ).datepicker({format: 'yyyy-mm-dd',autoclose: true});
+		$( "#event_start_end_date_neww" ).datepicker({format: 'yyyy-mm-dd',autoclose: true});
   	} );
 	
 </script>	
