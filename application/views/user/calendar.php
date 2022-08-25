@@ -644,7 +644,7 @@ include 'sidebar.php';
 									</div>
 								</div>
 								<div class="col-md-6">
-									<div class="form-group mt-2">
+									<div class="form-group mt-2" id="draggable_field_create">
 										<input type="checkbox" name="draggable_event" id="draggable_event" class="filled-in chk-col-success">
 										<label class="control-label" for="draggable_event">Draggable Event</label>
 										<span id="draggable_eventErr" class="text-danger"></span>
@@ -2037,6 +2037,11 @@ function showPriority(i){
 	// $('#event_start_end_date_div').show();
 	function showEndDate(value) 
 	{
+		if(value == "Daily" || value == "Does not repeat"){
+			$('#draggable_field_create').show();
+		}else{
+			$('#draggable_field_create').hide();
+		}
 		if(value == 'Custom'){
 			console.log("Fgf");
 			var start_date_selected = $('#event_start_date_nn').val();
@@ -2084,6 +2089,11 @@ function showPriority(i){
 	}
 	function showEndDateUpdate(value) 
 	{
+		if(value == "Daily" || value == "Does not repeat"){
+			$('#draggable_field').show();
+		}else{
+			$('#draggable_field').hide();
+		}
 		if(value == 'Custom'){
 			
 			var start_date_selected = $('#event_start_date_nnn').val();

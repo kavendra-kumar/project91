@@ -538,7 +538,12 @@ var base_url = 'https://project91.isynbus.com/';
             });
             this.$myModalUpdate.find('.modal-body').find('.update-next-event').unbind('click').click(function () {
                 console.log("hello js", $("input[name=update_check_value]:checked").val());
-                $('#draggable_field').hide();
+                
+                if(calEvent.event_repeat_option_type == "Daily" || calEvent.event_repeat_option_type == "Does not repeat"){
+                    $('#draggable_field').show();
+                }else{
+                    $('#draggable_field').hide();
+                }
                 var event_id = calEvent.event_id;
                 var update_event_id = $("input[name=update_check_value]:checked").val();
                 $('#task_priority_div_update').hide();
@@ -566,7 +571,6 @@ var base_url = 'https://project91.isynbus.com/';
                                 event_id:event_new_id 
                             }, 
                             success: function(data){
-                            $('#draggable_field').show();
                             var task_start_date = data.task_start_date;
                             var task_end_date = data.task_end_date;
                             ///////   code for hide custom field
@@ -856,14 +860,6 @@ var base_url = 'https://project91.isynbus.com/';
                                 }, 
                                 success: function(data){
                                 console.log("testtttt");
-                                $('#draggable_field').hide();
-                                if(calEvent.event_repeat_option_type == 'Does not repeat'){
-                                    $('#draggable_field').show();
-                                }else if(calEvent.event_repeat_option_type == 'Daily'){
-                                    $('#draggable_field').show();
-                                }else{
-                                    $('#draggable_field').hide();
-                                }
                                 var task_start_date = data.task_start_date;
                                 var task_end_date = data.task_end_date;
                                 
@@ -1130,7 +1126,6 @@ var base_url = 'https://project91.isynbus.com/';
                                 event_id:event_new_id 
                             }, 
                             success: function(data){
-                            $('#draggable_field').hide();
                             var task_start_date = data.task_start_date;
                             var task_end_date = data.task_end_date;
                             
