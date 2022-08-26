@@ -2199,6 +2199,12 @@ var base_url = 'https://project91.isynbus.com/';
                             var time11 = moment(db_events[i].event_start_time, 'HH:mm').format('hh:mm A');
                             var time22 = moment(db_events[i].event_end_time, 'HH:mm').format('hh:mm A');
                             db_events[i].new_time = time11+'-'+time22;
+                            // if(db_events[i].event_start_date == db_events[i].event_end_date){
+                            //     db_events[i].new_time = time11;
+                            // }else{
+                            //     db_events[i].new_time = time11+'-'+time22;
+                            // }
+                            
                             if(db_events[i].draggable_event == "on"){
                                 db_events[i].editable = true;
                             }else{
@@ -2599,8 +2605,8 @@ var base_url = 'https://project91.isynbus.com/';
             events: defaultEvents,
             eventRender: function(event, element) {
                 if(event.icon){          
-                  // element.find(".fc-time").prepend("<i class='fa fa-"+event.icon+"'></i>");
-                    element.find(".fc-time").html("<i class='fa fa-"+event.icon+"'></i> "+event.new_time);
+                   element.find(".fc-time").prepend("<i class='fa fa-"+event.icon+"'></i>");
+                   // element.find(".fc-time").html("<i class='fa fa-"+event.icon+"'></i> "+event.new_time);
                 }
             },
             // timeFormat: 'hh:mm A', // uppercase H for 24-hour clock
