@@ -2367,6 +2367,8 @@ class Front extends MY_Controller {
         $button = $this->input->post('button');
         $words = explode(' ', $month_year);
         $count_my = count($words);
+        // print_r($button);
+        // die;
         if($button == 'prev'){
           if($count_my == 2){
             $month_year = date("Y-m", strtotime($month_year. " -1 month"));
@@ -2476,6 +2478,7 @@ class Front extends MY_Controller {
           }else if($count_my == 3){
             $day_list = date("Y-m-d", strtotime($month_year. " -1 days"));
             $data = $this->Front_model->getCalendarDlEvents($student_id,$day_list);
+            $data_array = $data;
           }else if($count_my == 5){
             $d = $this->input->post('month_year'); //Jul 4 – 10, 2021
             $s = explode(" – ", $d);// Array ( [0] => Jul 4 [1] => 10, 2021 )
@@ -2488,6 +2491,7 @@ class Front extends MY_Controller {
             $date1 = date('Y-m-d', strtotime($date1. " -1 weeks"));
             $date2 = date('Y-m-d', strtotime($date2. " -1 weeks"));
             $data = $this->Front_model->getCalendarWeekEvents($student_id,$date1,$date2);
+            $data_array = $data;
           }else{
             $l = $this->input->post('month_year'); //May 30 – Jun 5, 2021
             $s = explode(" – ", $l);//Array ( [0] => May 30 [1] => Jun 5, 2021 )
@@ -2500,6 +2504,7 @@ class Front extends MY_Controller {
             $date1 = date('Y-m-d', strtotime($date1 . " -1 weeks"));
             $date2 = date('Y-m-d', strtotime($date2 . " -1 weeks"));
             $data = $this->Front_model->getCalendarWeekEvents($student_id,$date1,$date2);
+            $data_array = $data;
           }
         }else if($button == 'next'){
           if($count_my == 2){
@@ -2608,6 +2613,7 @@ class Front extends MY_Controller {
           }else if($count_my == 3){
             $day_list = date("Y-m-d", strtotime($month_year. " +1 days"));
             $data = $this->Front_model->getCalendarDlEvents($student_id,$day_list);
+            $data_array = $data;
           }else if($count_my == 5){
             $d = $this->input->post('month_year'); //Jul 4 – 10, 2021
             $s = explode(" – ", $d);//Array ( [0] => Jul 4 [1] => 10, 2021 )
@@ -2620,6 +2626,7 @@ class Front extends MY_Controller {
             $date1 = date('Y-m-d', strtotime($date1. " +1 weeks"));
             $date2 = date('Y-m-d', strtotime($date2. " +1 weeks"));
             $data = $this->Front_model->getCalendarWeekEvents($student_id,$date1,$date2);
+            $data_array = $data;
           }else{
             $l = $this->input->post('month_year'); //May 30 – Jun 5, 2021
             $s = explode(" – ", $l);//Array ( [0] => May 30 [1] => Jun 5, 2021 )
@@ -2632,6 +2639,7 @@ class Front extends MY_Controller {
             $date1 = date('Y-m-d', strtotime($date1 . " +1 weeks"));
             $date2 = date('Y-m-d', strtotime($date2 . " +1 weeks"));
             $data = $this->Front_model->getCalendarWeekEvents($student_id,$date1,$date2);
+            $data_array = $data;
           }
         }else{
           if($count_my == 2){
@@ -2767,7 +2775,7 @@ class Front extends MY_Controller {
             $date1 = date('Y-m-d', strtotime($date1));
             $date2 = date('Y-m-d', strtotime($date2));
             $data = $this->Front_model->getCalendarWeekEvents($student_id,$date1,$date2);
-            $data_array[] = $data;
+            $data_array = $data;
           }
         }
         header('Content-type: application/json');
