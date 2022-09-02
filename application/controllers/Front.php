@@ -570,7 +570,7 @@ class Front extends MY_Controller {
                     $interval = new DateInterval('P1D');
                   
                     $realEnd = new DateTime($end);
-                    $realEnd->add($interval);
+                   // $realEnd->add($interval);
 
                     $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
                   
