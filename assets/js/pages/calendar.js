@@ -2035,9 +2035,16 @@ var base_url = 'https://project91.isynbus.com/';
         $this.$categoryModal.modal({
             backdrop: 'static'
         }); 
-
+        var week_class = $('.fc-agendaWeek-button').hasClass('fc-state-active');
+        var day_class = $('.fc-agendaDay-button').hasClass('fc-state-active');
         var startd = $.fullCalendar.formatDate(start, "Y-MM-DD");
-        var ended = $.fullCalendar.formatDate(end.subtract(1, 'days'), "Y-MM-DD");
+        if(week_class == true || day_class == true){
+            var ended = $.fullCalendar.formatDate(end, "Y-MM-DD");
+        }else{
+            var ended = $.fullCalendar.formatDate(end.subtract(1, 'days'), "Y-MM-DD");
+        }
+        
+        //var ended = $.fullCalendar.formatDate(end, "Y-MM-DD");
         let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(startd).getDay()];
         let monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
