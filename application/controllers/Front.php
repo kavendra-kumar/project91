@@ -638,7 +638,8 @@ class Front extends MY_Controller {
                     {
                     $start=$event_start_date;
                     $end=$event_end_date;
-                    $format = 'Y-m-d';
+                    $format = 'Y-m-d';  
+                    
 
                     // Declare an empty array
                     $array = array();
@@ -648,7 +649,7 @@ class Front extends MY_Controller {
                     $interval = new DateInterval('P1D');
                   
                     $realEnd = new DateTime($end);
-                    $realEnd->add($interval);
+                    //$realEnd->add($interval);
 
                     $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
                   
@@ -1136,6 +1137,7 @@ class Front extends MY_Controller {
         try {
             $delete_check = $this->input->post('delete_check');
             $result = $this->Front_model->deleteEvent($this->input->post('event_id'),$delete_check);
+           // $result = $this->Front_model->deleteEventNew($this->input->post('event_id'),$delete_check,$this->input->post('event_start_date_nn'),$this->input->post('event_end_date_nn'));
             $unique_key = $result[0]->unique_key;
             $this->insert_draggable_event($unique_key);
           }
@@ -2324,7 +2326,7 @@ class Front extends MY_Controller {
                     $months = floor(($diff - $years * 365*60*60*24)/ (30*60*60*24)); 
                     $days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
                     $day = '+'.$days.' days';
-                    $stepVal = '+1 day';                  
+                    $stepVal = '+1 day';                   
                     while( $start_date <= $end_date ) {
                         $event_start_date = date($format, $start_date);
                         $event_end_date = date($format, strtotime($day, $start_date));

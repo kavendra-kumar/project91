@@ -299,11 +299,15 @@ include 'sidebar.php';
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title"></h4>
         </div>
-        <div class="modal-body">
+        <div class="modal-body">	
 			
 			<div class="modal-body">
 				<div id="update_event_one">
 					<input type="radio" id="update_check_value1" name="update_check_value" value="0" checked>
+					<label for="update_check_value1">Update this</label><br>
+				</div>
+				<div id="update_event_one_new">
+					<input type="radio" id="update_check_value1" name="update_check_value" value="1" checked>
 					<label for="update_check_value1">Update this</label><br>
 				</div>
 				<div id="update_event_two">
@@ -2320,7 +2324,7 @@ function showPriority(i){
         diff_update  = new Date(end_update - start_update),
         days_diff  = diff_update/1000/60/60/24;
         console.log("days_diff");
-        console.log(days_diff);
+        console.log(days_diff); 
 		if(days_diff < 2){
 			$(".custom_value_update").html("Custom (For enable please select correct date range)");
 			$('.custom_value_update').prop('disabled', true);

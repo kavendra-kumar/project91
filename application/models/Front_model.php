@@ -349,7 +349,7 @@ class Front_model extends CI_Model {
 		$this->db->group_end();
 		$query = $this->db->get('events');
 		return $query->result();
-	}
+	} 
 
 	function getCalendarWeekEvents($student_id,$date1,$date2)
 	{
@@ -394,9 +394,51 @@ class Front_model extends CI_Model {
 			$this->db->where('unique_key', $query->row()->unique_key);
 			$this->db->where('id >=',$id);
 			$query_result = $this->db->get('events');
+			// print_r($query_result->result());
+			// die;
 			//  end
 			$this->db->where('unique_key', $query->row()->unique_key);
 			$this->db->where('id >=',$id);
+			$this->db->delete('events');
+			return $query_result->result();
+			
+		}else{
+			$this->db->where('id', $id);
+			$query=$this->db->get('events');
+			$this->db->where('unique_key', $query->row()->unique_key);
+			$this->db->delete('events');
+			return $query->result();
+		}
+		
+	}
+	function deleteEventNew($id,$delete_check,$start_date,$end_date)
+	{
+		// $this->db->where('id', $id);
+		// $this->db->delete('events');
+		if($delete_check == 0){
+			$this->db->where('id', $id);
+			$query_result = $this->db->get('events');
+
+			$this->db->where('id', $id);
+			$this->db->delete('events');
+			return $query_result->result();
+		}else if($delete_check == 2){
+
+			$this->db->where('id', $id);
+			$query=$this->db->get('events');
+			//// get data
+			$this->db->where('unique_key', $query->row()->unique_key);
+			$this->db->where('event_start_date BETWEEN "'. date('Y-m-d', strtotime($start_date)). '" and "'. date('Y-m-d', strtotime($end_date)).'"');
+			$this->db->where('event_end_date BETWEEN "'. date('Y-m-d', strtotime($start_date)). '" and "'. date('Y-m-d', strtotime($end_date)).'"');
+			// $this->db->where('event_start_date >=', $start_date);
+			// $this->db->where('event_end_date <=', $end_date);
+			$query_result = $this->db->get('events');
+			print_r($start_date);
+			die;
+			//  end
+			$this->db->where('unique_key', $query->row()->unique_key);
+			$this->db->where('event_start_date >=', $start_date);
+			$this->db->where('event_end_date >=', $end_date);
 			$this->db->delete('events');
 			return $query_result->result();
 			

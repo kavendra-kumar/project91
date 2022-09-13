@@ -21,7 +21,7 @@ var base_url = 'https://project91.isynbus.com/';
         this.$myModal = $('#myModal'),
         this.$myModalUpdate = $('#myModalUpdate'),
         this.$updateEventModal = $('#update-event'),
-        this.$calendarObj = null
+        this.$calendarObj = null 
     };
 
     /* on drop */
@@ -1346,9 +1346,15 @@ var base_url = 'https://project91.isynbus.com/';
             $this.$viewEventModal.find('.modal-header').find('.edit-event').unbind('click').click(function () {
                 $('#update_event_two').show();
                 $('#update_event_three').show();
+                $('#update_event_one_new').hide();
+                console.log("fffffffffff");
+                console.log('calEvent');
+                console.log(calEvent);
                 $('#update_type_edit').html("Update recurring "+calEvent.created_type);
                 if(calEvent.array_count == 1){
                     $('#update_event_two').hide();
+                    $('#update_event_one').hide();
+                    $('#update_event_one_new').show();
                     $("#myModalUpdate").modal();
                     
                 }else{
