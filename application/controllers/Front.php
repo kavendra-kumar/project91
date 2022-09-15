@@ -490,6 +490,7 @@ class Front extends MY_Controller {
                                     'show_draggable_event' => 1,
                                     'status' => 'active',
                                     'date' => date('Y-m-d H:i:s'),
+                                    'id' => $this->input->post('delete_check') == 0 ? $this->input->post('event_id') :'',
                                     // 'event_repeat_option_type' => $this->input->post('event_repeat_option'),
                                     // 'created_type' => $this->input->post('created_type'),
                                     // 'task_priority' => $this->input->post('task_priority'),
@@ -526,6 +527,7 @@ class Front extends MY_Controller {
                                     'date' => date('Y-m-d H:i:s'),
                                     'created_type' => $this->input->post('created_type'),
                                     'task_priority' => $this->input->post('task_priority'),
+                                    'id' => $this->input->post('delete_check') == 0 ? $this->input->post('event_id') :'',
                                 );
 
                 }else{
@@ -553,6 +555,7 @@ class Front extends MY_Controller {
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
                                     'created_type' => $this->input->post('created_type'),
                                     'task_priority' => $this->input->post('task_priority'),
+                                    'id' => $this->input->post('delete_check') == 0 ? $this->input->post('event_id') :'',
                                 );
                 }
                 
@@ -629,6 +632,7 @@ class Front extends MY_Controller {
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
                                     'created_type' => $this->input->post('created_type'),
                                     'task_priority' => $this->input->post('task_priority'),
+                                    'id' => $this->input->post('delete_check') == 0 ? $this->input->post('event_id') :'',
                                  );
                         }
 
@@ -720,6 +724,7 @@ class Front extends MY_Controller {
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
                                     'created_type' => $this->input->post('created_type'),
                                     'task_priority' => $this->input->post('task_priority'),
+                                    'id' => $this->input->post('delete_check') == 0 ? $this->input->post('event_id') :'',
                                  );
                         }
 
@@ -821,6 +826,7 @@ class Front extends MY_Controller {
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
                                     'created_type' => $this->input->post('created_type'),
                                     'task_priority' => $this->input->post('task_priority'),
+                                    'id' => $this->input->post('delete_check') == 0 ? $this->input->post('event_id') :'',
                                  );
                         }
 
@@ -914,6 +920,7 @@ class Front extends MY_Controller {
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
                                     'created_type' => $this->input->post('created_type'),
                                     'task_priority' => $this->input->post('task_priority'),
+                                    'id' => $this->input->post('delete_check') == 0 ? $this->input->post('event_id') :'',
                                  );
                         }
 
@@ -1008,6 +1015,7 @@ class Front extends MY_Controller {
                                     'event_repeat_option_type' => $this->input->post('event_repeat_option'),
                                     'created_type' => $this->input->post('created_type'),
                                     'task_priority' => $this->input->post('task_priority'),
+                                    'id' => $this->input->post('delete_check') == 0 ? $this->input->post('event_id') :'',
                                  );
                         }
 
@@ -1135,11 +1143,17 @@ class Front extends MY_Controller {
     public function update_event_form() //Update Event Details
     {
         try {
+            
+            // $this->input->post()['rr'] = 'rrrr'; 
+            // print_r($this->input->post());
+            // $this->input->post()[] = array("b" => "x2", "c" => "p1");
+            // die;
             $delete_check = $this->input->post('delete_check');
             $result = $this->Front_model->deleteEvent($this->input->post('event_id'),$delete_check);
+            
            // $result = $this->Front_model->deleteEventNew($this->input->post('event_id'),$delete_check,$this->input->post('event_start_date_nn'),$this->input->post('event_end_date_nn'));
-            $unique_key = $result[0]->unique_key;
-            $this->insert_draggable_event($unique_key);
+           $unique_key = $result[0]->unique_key; 
+           $this->insert_draggable_event($unique_key);
           }
           
           //catch exception
