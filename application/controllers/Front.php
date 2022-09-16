@@ -1142,6 +1142,8 @@ class Front extends MY_Controller {
     }
     public function update_event_form() //Update Event Details
     {
+        // print($this->input->post('event_repeat_option'));
+        // die;
         try {
             
             // $this->input->post()['rr'] = 'rrrr'; 

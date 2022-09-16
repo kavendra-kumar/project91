@@ -26,6 +26,7 @@ var base_url = 'https://project91.isynbus.com/';
 
     /* on drop */
     CalendarApp.prototype.onDrop = function (eventObj, date, jsEvent, ui, resourceId) { 
+        
         var $this = this;
             // retrieve the dropped element's stored Event Object
             var originalEventObject = eventObj.data('eventObject');
@@ -896,28 +897,53 @@ var base_url = 'https://project91.isynbus.com/';
                                 days_diff  = diff_update/1000/60/60/24;
                                 console.log("days_diff");
                                 console.log(days_diff);
+                                // if(days_diff < 2){
+                                //     $(".custom_value_update").html("Custom (For enable please select correct date range)");
+                                //     $('.custom_value_update').prop('disabled', true);
+                                // }else{
+                                //     $(".custom_value_update").html("Custom");
+                                //     $('.custom_value_update').prop('disabled', false);
+                                // }
+                                // if(days_diff < 7){
+                                //     $(".weekday_value_update").html("Weekly on "+weekday+" (For enable please select correct date range)");
+                                //     $('.weekday_value_update').prop('disabled', true);
+                                // }else{
+                                //     $('.weekday_value_update').prop('disabled', false);
+                                // }
+                                // if(days_diff < 31){
+                                //     $(".monthly_value_update").html("Monthly on "+start_day_value+" (For enable please select correct date range)");
+                                //     $('.monthly_value_update').prop('disabled', true);
+                                // }else{
+                                //     $('.monthly_value_update').prop('disabled', false);
+                                // }
+                                // if(days_diff < 365){
+                                //     $(".yearly_value_update").html("Annually on "+start_day_value+" "+monthNames+" (For enable please select correct date range)");
+                                //     $('.yearly_value_update').prop('disabled', true);
+                                // }else{
+                                //     $('.yearly_value_update').prop('disabled', false);
+                                // }
                                 if(days_diff < 2){
                                     $(".custom_value_update").html("Custom (For enable please select correct date range)");
-                                    $('.custom_value_update').prop('disabled', true);
+                                    $('.custom_value_update').prop('disabled', false);
                                 }else{
                                     $(".custom_value_update").html("Custom");
                                     $('.custom_value_update').prop('disabled', false);
                                 }
                                 if(days_diff < 7){
                                     $(".weekday_value_update").html("Weekly on "+weekday+" (For enable please select correct date range)");
-                                    $('.weekday_value_update').prop('disabled', true);
+                                    $('.weekday_value_update').prop('disabled', false);
                                 }else{
                                     $('.weekday_value_update').prop('disabled', false);
                                 }
                                 if(days_diff < 31){
                                     $(".monthly_value_update").html("Monthly on "+start_day_value+" (For enable please select correct date range)");
-                                    $('.monthly_value_update').prop('disabled', true);
+                                    $('.monthly_value_update').prop('disabled', false);
                                 }else{
                                     $('.monthly_value_update').prop('disabled', false);
                                 }
                                 if(days_diff < 365){
                                     $(".yearly_value_update").html("Annually on "+start_day_value+" "+monthNames+" (For enable please select correct date range)");
-                                    $('.yearly_value_update').prop('disabled', true);
+                                    $('.yearly_value_update').prop('disabled', false);
                                 }else{
                                     $('.yearly_value_update').prop('disabled', false);
                                 }
@@ -2187,16 +2213,17 @@ var base_url = 'https://project91.isynbus.com/';
                     db_events.forEach(obj => renameKey(obj, 'event_color', 'className'));
                     db_events.forEach(obj => renameKey(obj, 'id', 'event_id'));
 
-                    var lim = db_events.length;
+                    var lim =  db_events.length;
                     for (var i = 0; i < lim; i++)
-                    {                        
+                    {
+                        
                         if(db_events[i].type == 'event'){
                             if(db_events[i].event_allDay == 'true')
                             {
                                 db_events[i].allDay = true;
                             }else{
                                 db_events[i].allDay = false;
-                            }                           
+                            }
 
                             db_events[i].start = db_events[i].event_start_date+' '+db_events[i].event_start_time;
                             db_events[i].end = db_events[i].event_end_date+' '+db_events[i].event_end_time;
@@ -2223,8 +2250,9 @@ var base_url = 'https://project91.isynbus.com/';
                             }else{
                                 db_events[i].editable = false;
                             }
-                            
+                            console.log("wwwwwwwwwwwwww");
                         }else{
+                            console.log("ggggggggggggggggg");
                             if(db_events[i].task_allDay == 'true')
                             {
                                 db_events[i].allDay = true;
@@ -2369,6 +2397,7 @@ var base_url = 'https://project91.isynbus.com/';
             maxTime: '24:30:00',
             defaultView: agenda_view,  
             handleWindowResize: true,   
+            showNonCurrentDates: false,
             allDayText: 'All day',
             default: true,
             // weekends:false,
