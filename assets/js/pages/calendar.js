@@ -539,7 +539,7 @@ var base_url = 'https://project91.isynbus.com/';
             });
             this.$myModalUpdate.find('.modal-body').find('.update-next-event').unbind('click').click(function () {
                 console.log("hello js", $("input[name=update_check_value]:checked").val());
-                
+                $('.custom-class-update').hide();
                 if(calEvent.event_repeat_option_type == "Daily" || calEvent.event_repeat_option_type == "Does not repeat"){
                     $('#draggable_field').show();
                 }else{
