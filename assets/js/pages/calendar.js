@@ -2220,6 +2220,10 @@ var base_url = 'https://project91.isynbus.com/';
                         if(db_events[i].type == 'event'){
                             if(db_events[i].event_allDay == 'true')
                             {
+                                var dateFormatTotime = new Date(db_events[i].event_end_date);
+                                var increasedDate = new Date(dateFormatTotime.getTime() +(1 *86400000));                                
+                                var end_date_new = moment(increasedDate, 'Y-MM-DD').format('YYYY-MM-DD');
+                                db_events[i].event_end_date = end_date_new;
                                 db_events[i].allDay = true;
                             }else{
                                 db_events[i].allDay = false;
@@ -2255,6 +2259,10 @@ var base_url = 'https://project91.isynbus.com/';
                             console.log("ggggggggggggggggg");
                             if(db_events[i].task_allDay == 'true')
                             {
+                                var dateFormatTotime = new Date(db_events[i].event_end_date);
+                                var increasedDate = new Date(dateFormatTotime.getTime() +(1 *86400000));                                
+                                var end_date_new = moment(increasedDate, 'Y-MM-DD').format('YYYY-MM-DD');
+                                db_events[i].event_end_date = end_date_new;
                                 db_events[i].allDay = true;
                             }else{
                                 db_events[i].allDay = false;
@@ -2463,6 +2471,10 @@ var base_url = 'https://project91.isynbus.com/';
                                         if(db_events[i].type == 'event'){
                                             if(db_events[i].event_allDay == 'true')
                                             {
+                                                var dateFormatTotime = new Date(db_events[i].event_end_date);
+                                                var increasedDate = new Date(dateFormatTotime.getTime() +(1 *86400000));                                
+                                                var end_date_new = moment(increasedDate, 'Y-MM-DD').format('YYYY-MM-DD');
+                                                db_events[i].event_end_date = end_date_new;
                                                 db_events[i].allDay = true;
                                             }else{
                                                 db_events[i].allDay = false;
@@ -2488,6 +2500,10 @@ var base_url = 'https://project91.isynbus.com/';
                                         }else{
                                             if(db_events[i].task_allDay == 'true')
                                             {
+                                                var dateFormatTotime = new Date(db_events[i].event_end_date);
+                                                var increasedDate = new Date(dateFormatTotime.getTime() +(1 *86400000));                                
+                                                var end_date_new = moment(increasedDate, 'Y-MM-DD').format('YYYY-MM-DD');
+                                                db_events[i].event_end_date = end_date_new;
                                                 db_events[i].allDay = true;
                                             }else{
                                                 db_events[i].allDay = false;
@@ -2581,6 +2597,10 @@ var base_url = 'https://project91.isynbus.com/';
                                         if(db_events[i].type == 'event'){
                                             if(db_events[i].event_allDay == 'true')
                                             {
+                                                var dateFormatTotime = new Date(db_events[i].event_end_date);
+                                                var increasedDate = new Date(dateFormatTotime.getTime() +(1 *86400000));                                
+                                                var end_date_new = moment(increasedDate, 'Y-MM-DD').format('YYYY-MM-DD');
+                                                db_events[i].event_end_date = end_date_new;
                                                 db_events[i].allDay = true;
                                             }else{
                                                 db_events[i].allDay = false;
@@ -2606,6 +2626,10 @@ var base_url = 'https://project91.isynbus.com/';
                                         }else{
                                             if(db_events[i].task_allDay == 'true')
                                             {
+                                                var dateFormatTotime = new Date(db_events[i].event_end_date);
+                                                var increasedDate = new Date(dateFormatTotime.getTime() +(1 *86400000));                                
+                                                var end_date_new = moment(increasedDate, 'Y-MM-DD').format('YYYY-MM-DD');
+                                                db_events[i].event_end_date = end_date_new;
                                                 db_events[i].allDay = true;
                                             }else{
                                                 db_events[i].allDay = false;
@@ -2773,6 +2797,10 @@ var base_url = 'https://project91.isynbus.com/';
                             if(db_events[i].type == 'event'){
                                 if(db_events[i].event_allDay == 'true')
                                 {
+                                    var dateFormatTotime = new Date(db_events[i].event_end_date);
+                                    var increasedDate = new Date(dateFormatTotime.getTime() +(1 *86400000));                                
+                                    var end_date_new = moment(increasedDate, 'Y-MM-DD').format('YYYY-MM-DD');
+                                    db_events[i].event_end_date = end_date_new;
                                     db_events[i].allDay = true;
                                 }else{
                                     db_events[i].allDay = false;
@@ -2798,6 +2826,10 @@ var base_url = 'https://project91.isynbus.com/';
                             }else{
                                 if(db_events[i].task_allDay == 'true')
                                 {
+                                    var dateFormatTotime = new Date(db_events[i].event_end_date);
+                                    var increasedDate = new Date(dateFormatTotime.getTime() +(1 *86400000));                                
+                                    var end_date_new = moment(increasedDate, 'Y-MM-DD').format('YYYY-MM-DD');
+                                    db_events[i].event_end_date = end_date_new;
                                     db_events[i].allDay = true;
                                 }else{
                                     db_events[i].allDay = false;
@@ -2875,6 +2907,10 @@ var base_url = 'https://project91.isynbus.com/';
                             if(db_events[i].type == 'event'){
                                 if(db_events[i].event_allDay == 'true')
                                 {
+                                    var dateFormatTotime = new Date(db_events[i].event_end_date);
+                                    var increasedDate = new Date(dateFormatTotime.getTime() +(1 *86400000));                                
+                                    var end_date_new = moment(increasedDate, 'Y-MM-DD').format('YYYY-MM-DD');
+                                    db_events[i].event_end_date = end_date_new;
                                     db_events[i].allDay = true;
                                 }else{
                                     db_events[i].allDay = false;
@@ -2900,6 +2936,10 @@ var base_url = 'https://project91.isynbus.com/';
                             }else{
                                 if(db_events[i].task_allDay == 'true')
                                 {
+                                    var dateFormatTotime = new Date(db_events[i].event_end_date);
+                                    var increasedDate = new Date(dateFormatTotime.getTime() +(1 *86400000));                                
+                                    var end_date_new = moment(increasedDate, 'Y-MM-DD').format('YYYY-MM-DD');
+                                    db_events[i].event_end_date = end_date_new;
                                     db_events[i].allDay = true;
                                 }else{
                                     db_events[i].allDay = false;
@@ -2977,6 +3017,10 @@ var base_url = 'https://project91.isynbus.com/';
                             if(db_events[i].type == 'event'){
                                 if(db_events[i].event_allDay == 'true')
                                 {
+                                    var dateFormatTotime = new Date(db_events[i].event_end_date);
+                                    var increasedDate = new Date(dateFormatTotime.getTime() +(1 *86400000));                                
+                                    var end_date_new = moment(increasedDate, 'Y-MM-DD').format('YYYY-MM-DD');
+                                    db_events[i].event_end_date = end_date_new;
                                     db_events[i].allDay = true;
                                 }else{
                                     db_events[i].allDay = false;
@@ -3002,6 +3046,10 @@ var base_url = 'https://project91.isynbus.com/';
                             }else{
                                 if(db_events[i].task_allDay == 'true')
                                 {
+                                    var dateFormatTotime = new Date(db_events[i].event_end_date);
+                                    var increasedDate = new Date(dateFormatTotime.getTime() +(1 *86400000));                                
+                                    var end_date_new = moment(increasedDate, 'Y-MM-DD').format('YYYY-MM-DD');
+                                    db_events[i].event_end_date = end_date_new;
                                     db_events[i].allDay = true;
                                 }else{
                                     db_events[i].allDay = false;
