@@ -539,6 +539,7 @@ var base_url = 'https://project91.isynbus.com/';
             });
             this.$myModalUpdate.find('.modal-body').find('.update-next-event').unbind('click').click(function () {
                 console.log("hello js", $("input[name=update_check_value]:checked").val());
+                $this.$updatecategoryForm.find('#event_start_end_dateErr').html('');
                 $('.custom-class-update').hide();
                 if(calEvent.event_repeat_option_type == "Daily" || calEvent.event_repeat_option_type == "Does not repeat"){
                     $('#draggable_field').show();
@@ -745,8 +746,21 @@ var base_url = 'https://project91.isynbus.com/';
                             $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select correct date range');
                             return false;
                         }
-
+                        var formDataaa = new FormData(this);
+                        console.log(formDataaa.get("event_repeat_option"));
+                        if(formDataaa.get("event_repeat_option")){
+                        }else{
+                            $this.$updateEventModal.find('#event_repeat_optionErr').html('Please select correct event type');
+                            return false;
+                        }
                         if(event_repeat_option_value == "Custom"){
+                            var formDataa = new FormData(this);
+                            console.log(formDataa.get("event_repeat_option[]"));
+                            if(formDataa.get("custom_check[]")){
+                            }else{
+                                $this.$updateEventModal.find('#custom_checkErr_update').html('Please select days');
+                                return false;
+                            }
                             var start_update = new Date(input_sdate),
                             end_update   = new Date(input_edate),
                             diff_update  = new Date(end_update - start_update),
@@ -755,8 +769,26 @@ var base_url = 'https://project91.isynbus.com/';
                             //     $this.$updateEventModal.find('#event_start_end_dateErr').html('Please select at least 7 days ');
                             //     return false;
                             // }
-                        }
+                            if($('input[name="custom_check[]"]:checked').length <=2){
+                                $this.$updateEventModal.find('#custom_checkErr_update').html('Please select at least 3 days');
+                                return false;
+                            }else{
+                                $this.$categoryForm.find('#custom_checkErr_update').html('');
                         
+                            }
+                        }
+                        if(event_repeat_option_value == "Every Weekday"){
+                            var start_update = new Date(input_sdate),
+                            end_update   = new Date(input_edate),
+                            diff_update  = new Date(end_update - start_update),
+                            days_update  = diff_update/1000/60/60/24;
+                            if(days_update<= 1){
+                                $this.$updatecategoryForm.find('#event_start_end_dateErr').html('Please select at least 3 days ');
+                                return false;
+                            }else{
+                                $this.$updatecategoryForm.find('#event_start_end_dateErr').html('');
+                            }
+                        }
                         var op_sdate = new Date(input_sdate+' '+input_stime);
                         var op_edate = new Date(input_edate+' '+input_etime);
                         if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
@@ -2057,6 +2089,7 @@ var base_url = 'https://project91.isynbus.com/';
     
     /* on select */
     CalendarApp.prototype.onSelect = function (start, end, allDay) {
+        $('#event_start_end_dateErr').html('');
         $('#cus_radioBTN').hide();
         $('#custom_value').prop('disabled', false);
         $('#weekday_value').prop('disabled', false);
@@ -2146,6 +2179,13 @@ var base_url = 'https://project91.isynbus.com/';
             var start = '11:00 AM';
             var end = '12:00 PM';
         }
+        $('#radioId1').hide();
+        $('#radioId2').hide();
+        $('#radioId3').hide();
+        $('#radioId4').hide();
+        $('#radioId5').hide();
+        $('#radioId6').hide();
+        $('#radioId7').hide();
 
         $this.$categoryModal.find("select[name=event_start_time]").val(start);
         $this.$categoryModal.find("select[name=event_start_time]").select2().trigger('change');
@@ -3112,15 +3152,43 @@ var base_url = 'https://project91.isynbus.com/';
                 $this.$categoryForm.find('#event_start_end_dateErr').html('Please select correct date range');
                 return false;
             }
-            if(event_repeat_option_value == "Custom"){
+            if(event_repeat_option_value == "Custom"){ 
+                //var custom_check_val =$this.$categoryForm.find("input[name=custom_check[]]").val();
+                var formDataa = new FormData(this);
+                if(formDataa.get("custom_check[]")){
+                }else{
+                    $this.$categoryForm.find('#custom_checkErr').html('Please select days');
+                    return false;
+                }
                 var start = new Date(input_sdate),
                 end   = new Date(input_edate),
                 diff  = new Date(end - start),
                 days  = diff/1000/60/60/24;
-                // if(days<= 7){
-                //     $this.$categoryForm.find('#event_start_end_dateErr').html('Please select at least 7 days ');
-                //     return false;
-                // }
+                if(days<= 5){
+                    // $this.$categoryForm.find('#event_start_end_dateErr').html('Please select at least 7 days ');
+                    // return false;
+                    if($('input[name="custom_check[]"]:checked').length <=2){
+                        $this.$categoryForm.find('#custom_checkErr').html('Please select at least 3 days');
+                        return false;
+                    }
+                }else{
+                    $this.$categoryForm.find('#custom_checkErr').html('');
+
+                }
+            }
+            if(event_repeat_option_value == "Every Weekday"){
+                var start = new Date(input_sdate),
+                end   = new Date(input_edate),
+                diff  = new Date(end - start),
+                days  = diff/1000/60/60/24;
+                console.log("days");
+                console.log(days);
+                if(days<= 1){
+                    $this.$categoryForm.find('#event_start_end_dateErr').html('Please select at least 3 days ');
+                    return false;
+                }else{
+                    $this.$categoryForm.find('#event_start_end_dateErr').html('');
+                }
             }
             var input_stime=$this.$categoryForm.find("select[name=event_start_time]").val();
             var input_etime=$this.$categoryForm.find("select[name=event_end_time]").val();
@@ -3129,7 +3197,7 @@ var base_url = 'https://project91.isynbus.com/';
             var op_edate = new Date(input_edate+' '+input_etime);
             if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
             {
-                var formData = new FormData(this);             
+                var formData = new FormData(this);
                 $.ajax({
                     url: base_url+'front/insert_draggable_event',
                     type:"POST",

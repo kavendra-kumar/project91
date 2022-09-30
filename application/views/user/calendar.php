@@ -531,6 +531,7 @@ include 'sidebar.php';
 													<label for="radio7" class="selector-item_label">S</label>
 												</div>
 											</div>
+											<span id="custom_checkErr" class="text-danger"></span>
 										</div>
 										</div>
 									</div>
@@ -1042,6 +1043,7 @@ include 'sidebar.php';
 														<label for="radioupdate_Sat" class="selector-item_label">S</label>
 													</div>
 												</div>
+												<span id="custom_checkErr_update" class="text-danger"></span>
 											</div>
 											</div>
 										</div>
@@ -1080,7 +1082,7 @@ include 'sidebar.php';
 												<i class="fa fa-calendar"></i>
 											  </div>	
 											</div>
-											<span id="event_start_end_dateErr" class="text-danger"></span>
+											<!-- <span id="event_start_end_dateErr" class="text-danger"></span> -->
 										 </div>
 									</div>
 								</div>

@@ -393,6 +393,11 @@ class Front extends MY_Controller {
     {
         // print_r($this->input->post());
         // die;
+        if($this->input->post('event_repeat_option') == 'Daily' || $this->input->post('event_repeat_option') == 'Does not repeat'){
+            $_POST['draggable_event'] = $this->input->post('draggable_event');
+        }else{
+            $_POST['draggable_event'] = '';
+        }
         if($this->input->post('event_allDay') == 'on'){
             $event_reminder = $this->input->post('event_reminder_new');
         }else{
