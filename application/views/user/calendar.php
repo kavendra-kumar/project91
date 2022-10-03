@@ -2062,6 +2062,9 @@ function showPriority(i){
 				$('#event_start_end_date_select').show();
 				$('#event_start_end_date_div').hide();  
 				$('.custom-class').css('display','block');
+				for($i =1;$i<=7;$i++){
+					$('#radioId'+$i).show();
+				}
 			}else{
 				for($i =1;$i<=7;$i++){
 					$('#radioId'+$i).hide();
