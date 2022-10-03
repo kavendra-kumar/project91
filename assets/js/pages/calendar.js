@@ -794,6 +794,13 @@ var base_url = 'https://project91.isynbus.com/';
                         if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
                             {
                                 var formData = new FormData(this);
+                                var event_repeat_option = formData.get("event_repeat_option");
+                                if(event_repeat_option == 'Does not repeat' || event_repeat_option == 'Daily' ||event_repeat_option == 'Every Weekday' ||event_repeat_option == 'Custom' || event_repeat_option == 'Weekly' || event_repeat_option == 'Monthly' || event_repeat_option == 'Yearly'){
+                                }else{
+                                    console.log("fffffffff");
+                                    $this.$updatecategoryForm.find('#event_repeat_optionErr').html('Please select correct event type');
+                                    return false;
+                                }
                                 formData.append('delete_check', '1');              
                                 $.ajax({
                                     url: base_url+'front/update_event_form',
@@ -1086,7 +1093,14 @@ var base_url = 'https://project91.isynbus.com/';
                             var op_edate = new Date(input_edate+' '+input_etime);
                             if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
                                 {
-                                    var formData = new FormData(this); 
+                                    var formData = new FormData(this);
+                                    var event_repeat_option = formData.get("event_repeat_option");
+                                    if(event_repeat_option == 'Does not repeat' || event_repeat_option == 'Daily' ||event_repeat_option == 'Every Weekday' ||event_repeat_option == 'Custom' || event_repeat_option == 'Weekly' || event_repeat_option == 'Monthly' || event_repeat_option == 'Yearly'){
+                                    }else{
+                                        console.log("fffffffff");
+                                        $this.$updatecategoryForm.find('#event_repeat_optionErr').html('Please select correct event type');
+                                        return false;
+                                    }
                                     formData.append('delete_check', '0');             
                                     $.ajax({
                                         url: base_url+'front/update_event_form',
@@ -1310,6 +1324,13 @@ var base_url = 'https://project91.isynbus.com/';
                         if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
                             {
                                 var formData = new FormData(this);
+                                var event_repeat_option = formData.get("event_repeat_option");
+                                if(event_repeat_option == 'Does not repeat' || event_repeat_option == 'Daily' ||event_repeat_option == 'Every Weekday' ||event_repeat_option == 'Custom' || event_repeat_option == 'Weekly' || event_repeat_option == 'Monthly' || event_repeat_option == 'Yearly'){
+                                }else{
+                                    console.log("fffffffff");
+                                    $this.$updatecategoryForm.find('#event_repeat_optionErr').html('Please select correct event type');
+                                    return false;
+                                }
                                 formData.append('delete_check', '2');             
                                 $.ajax({
                                     url: base_url+'front/update_event_form',
@@ -3197,7 +3218,18 @@ var base_url = 'https://project91.isynbus.com/';
             var op_edate = new Date(input_edate+' '+input_etime);
             if((!input_allday.is(":checked") && op_sdate < op_edate) || (input_allday.is(":checked")))
             {
+                
                 var formData = new FormData(this);
+
+                    var formData = new FormData(this);
+                    var event_repeat_option = formData.get("event_repeat_option");
+                    if(event_repeat_option == 'Does not repeat' || event_repeat_option == 'Daily' ||event_repeat_option == 'Every Weekday' ||event_repeat_option == 'Custom' || event_repeat_option == 'Weekly' || event_repeat_option == 'Monthly' || event_repeat_option == 'Yearly'){
+                    }else{
+                        console.log("fffffffff");
+                        $this.$categoryForm.find('#event_repeat_optionErr').html('Please select correct event type');
+                        return false;
+                    }
+
                 $.ajax({
                     url: base_url+'front/insert_draggable_event',
                     type:"POST",
